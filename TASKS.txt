@@ -1,0 +1,104 @@
+Access: https://cashboi.xyz/Login
+ID: 01683470965
+Pass: 22446688
+
+1) Current Software theke Akta Ecommerce Landing Page Toiri hoy (ata akhon korai ase Just Commment diye hide kora ase) DONE
+
+Demo Link: https://sunshine.com.bd/app/store/2/Rohiom%20store   // Ai rokom hoy but amader domain https://cashboi.xyz
+
+atar Template Design ta Change hoye  (amader Paid HTML template kina ase) /// Home page design ta ai rokom chassi
+
+https://mironmahmud.com/greeny/assets/ltr/index.html
+
+Html Template Source Code dibo, apner proyjon porle
+
+Pages: greeny HTML theme sathe  current nicher spage gulu connect kore dibe  gulu
+
+Home Page
+
+Product Details Page
+
+Checkout Page
+
+2) Bkash Payment Gateway ad kore Dite hobe // user der Monthly or Yearly Subscription paynet naoyer jonno NOT-DONE
+
+Bkash Payment gateway id pass:
+
+https://pgw-integration.bkash.com/#/merchant/signin
+
+01714044180
+
+Sunshine!@#123
+
+software a Bkash payment Gateway ad page  link
+
+https://cashboi.xyz/pay
+
+Bkash Developer Helpline: https://developer.bka.sh/docs/product-overview
+
+*** amake Knock dyen Bkash Developer sathe connect kore dibo
+
+3) SMS api ad kora ase just test kore sms Text gulu Change kre dite hobe
+
+https://ismsplus.sslwireless.com/dashboard#/
+
+sunshine.com.bd@gmail.com
+
+Sunshine!@#123
+
+NONSUNSHINEIT (Non Masking)
+
+Non masking SMS API ad kore den + test kore den Hit hosse kina // api lagle notun kore Generate kore Nyen
+
+Sms Send
+
+1) Registration korle DONE
+
+2) Password Reset korle DONE
+
+3) Online a Order Pele DONE
+
+4) Daily Report User Wise Mobile Sms jabe auto 10 PM DONE
+
+5) Monthly Package Subsction chalu hole + bondo hole NOT-DONE
+
+4) Pathao Courier + Steed fast Courier Payment api (Online Order or Menual Order gulu ) NOT-DONE
+
+5) Ecommerce Website jonno akta Pixel setup opton kore dite hobe user wise landing page api NOT-DONE
+
+6) Table Gulu fast Loading jonno Data table kaj kore dite hobe DONE
+
+landing page / Store URL ai rokm hobe
+
+https://cashboi.xyz/shop/rohimstore
+
+Demo user Panel:
+
+https://cashboi.xyz/Login
+
+Id:   01683470965
+Pass: 22446688
+
+Cpanel access:
+
+https://cashboi.xyz:2083/
+
+or, 
+
+url: http://115.187.18.152:2083/
+user: cashboix
+password: 4PX!@RBcy8z%
+
+Reference Demo dekhar Link: https://merchant.zatiqeasy.com/onboarding
+
+apner number ba Email diye Registration koreNyen
+
+Time and Budget
+
+Development Time: 5-7 Days 
+
+Budget: 10000 Taka
+
+Advance Payment: 5000 Taka With Work Start
+
+Due Payment: 5000 Taka Final Delivery Time..

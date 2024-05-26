@@ -1,0 +1,175 @@
+
+
+    /*body {*/
+    /*	font-family: "Kalpurush";*/
+    /*	font-size: 17px;*/
+    /*	color: #000*/
+    /*}*/
+
+.test-font {
+    font-family:"LiShorifJonota" !important;
+}
+
+#banner-text{
+	font-family: "Kalpurush";
+	font-size: 40px;
+	color: #000;
+	font-weight: 600;
+	
+}
+
+.title-1 {
+	font-family: "Kalpurush";
+	font-size: 20px;
+}
+
+.font2-light {
+	font-family: "Kalpurush";
+	color: #000;
+	font-size: 16px;
+}
+
+@media only screen and (min-width: 900px) {
+	.pl-0 {
+	padding-left: 0 !important;
+	}
+
+	.pr-0 {
+		padding-right: 0 !important;
+	}
+
+}
+
+
+.section-title {
+	font-family: "Kalpurush";
+	font-size: 35px;
+	line-height: 4.5rem;
+}
+
+.br-10 {
+	border-radius: 10px;
+}
+
+.feature-content.wow.animated {
+    margin-top: 45px;
+}
+
+
+.more-about-img {
+    margin-bottom: 30px;
+}
+
+.more-about-img img {
+    width: 69px;
+    margin: auto;
+}
+
+.more-about .title-1 {
+	font-size: 25px;
+	margin-bottom: 20px;
+}
+
+.more-about.clrbg-before {
+    margin-top: 20px;
+}
+
+.ask span {
+	cursor: pointer;
+}
+
+.footer-widget h2 {
+	font-size: 20px;
+	text-align: left;
+	
+}
+
+.footer-widget h2 b {
+	border-bottom: 3px solid #fac014;
+	padding-bottom: 15px;
+}
+
+.footer-widget ul {
+	text-align: left;
+	margin-top: 50px;
+}
+
+.footer-widget {
+	text-align: left;
+}
+
+
+.line-divider {
+	height: 3px;
+	background-color: #ed1c24;
+	width: 15%;
+	text-align: center;
+}
+
+.about-wrap .title-1 {
+	font-size: 25px;
+}
+
+@media only screen and (max-width: 768px) {
+	.text-right {
+		text-align: right;
+	}
+
+	.title-wrap.ask h4 {
+		line-height: 3.5rem;
+	}
+
+
+}
+
+.privacy-policy-content ol li {
+    margin: 15px 0;
+    font-family: kalpurush;
+    font-size: 18px;
+    color: #000;
+}
+
+@media only screen and (max-width: 540px) {
+   
+    .download-app, .download-app h2{
+        text-align:center;
+    }
+    
+    .footer-widget ul li a {
+        font-size:13px;
+    }
+
+    
+}
+
+
+h2.section-title.no-margin.login-form-title {
+    color: #fff;
+    background: #25247b;
+    font-size: 28px;
+    text-align: center;
+    padding: 5px 15px;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 15px;
+    letter-spacing: 0;
+}
+
+.user-login-form {
+    padding: 10px;
+    background: #ececec;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #000;
+}
+.mobile-logs {
+    display:none;
+}
+
+@media only screen and (max-width:540px){
+    .mobile-logs {
+       position: absolute;
+        display: inline-block;
+        right: 15px;
+        top: 18%
+    }
+
+}
