@@ -284,122 +284,246 @@ public function save_account_setting()
     }
 }
 
-public function all_transaction_report()
-  {
-  $data = ['title' => 'Ledger Book'];
+// public function all_transaction_report()
+//   {
+//   $data = ['title' => 'Ledger Book'];
 
-  if(isset($_GET['search']))
-    {
-    $report = $_GET['reports'];
+//   if(isset($_GET['search']))
+//     {
+//     $report = $_GET['reports'];
         
-    if($report == 'dailyReports')
-      {
-      $sdate = date("Y-m-d", strtotime($_GET['sdate']));
-      $edate = date("Y-m-d", strtotime($_GET['edate']));
-      $dparticular = $_GET['dparticular'];
-      $data['sdate'] = $sdate;
-      $data['edate'] = $edate;
-      $data['report'] = $report;
-      $data['dparticular'] = $dparticular;
+//     if($report == 'dailyReports')
+//       {
+//       $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//       $edate = date("Y-m-d", strtotime($_GET['edate']));
+//       $dparticular = $_GET['dparticular'];
+//       $data['sdate'] = $sdate;
+//       $data['edate'] = $edate;
+//       $data['report'] = $report;
+//       $data['dparticular'] = $dparticular;
 
       
-      $data['pruchase'] = $this->pm->get_all_dpurchase_data($sdate,$edate,$dparticular);
-      $data['sale'] = $this->pm->get_all_dsale_data($sdate,$edate,$dparticular);
-      // $data['service'] = $this->pm->get_all_service_data($sdate,$edate,$dparticular);
-      $data['voucher'] = $this->pm->get_all_dvoucher_data($sdate,$edate,$dparticular);
-      }
-    else if ($report == 'monthlyReports')
-      {
-      $month = $_GET['month'];
-      $data['month'] = $month;
-      $year = $_GET['year'];
-      $data['year'] = $year;
-      $mparticular = $_GET['mparticular'];
+//       $data['pruchase'] = $this->pm->get_all_dpurchase_data($sdate,$edate,$dparticular);
+//       $data['sale'] = $this->pm->get_all_dsale_data($sdate,$edate,$dparticular);
+//       // $data['service'] = $this->pm->get_all_service_data($sdate,$edate,$dparticular);
+//       $data['voucher'] = $this->pm->get_all_dvoucher_data($sdate,$edate,$dparticular);
+//       }
+//     else if ($report == 'monthlyReports')
+//       {
+//       $month = $_GET['month'];
+//       $data['month'] = $month;
+//       $year = $_GET['year'];
+//       $data['year'] = $year;
+//       $mparticular = $_GET['mparticular'];
 
-            //var_dump($data['month']); exit();
-      if($month == 1)
-        {
-        $name = 'January';
-        }
-      elseif ($month == 2)
-        {
-        $name = 'February';
-        }
-      elseif ($month == 3)
-        {
-        $name = 'March';
-        }
-      elseif ($month == 4)
-        {
-        $name = 'April';
-        }
-      elseif ($month == 5)
-        {
-        $name = 'May';
-        }
-      elseif ($month == 6)
-        {
-        $name = 'June';
-        }
-      elseif ($month == 7)
-        {
-        $name = 'July';
-        }
-      elseif ($month == 8)
-        {
-        $name = 'August';
-        }
-      elseif ($month == 9)
-        {
-        $name = 'September';
-        }
-      elseif ($month == 10)
-        {
-        $name = 'October';
-        }
-      elseif ($month == 11)
-        {
-        $name = 'November';
-        }
-      else
-        {
-        $name = 'December';
-        }
+//             //var_dump($data['month']); exit();
+//       if($month == 1)
+//         {
+//         $name = 'January';
+//         }
+//       elseif ($month == 2)
+//         {
+//         $name = 'February';
+//         }
+//       elseif ($month == 3)
+//         {
+//         $name = 'March';
+//         }
+//       elseif ($month == 4)
+//         {
+//         $name = 'April';
+//         }
+//       elseif ($month == 5)
+//         {
+//         $name = 'May';
+//         }
+//       elseif ($month == 6)
+//         {
+//         $name = 'June';
+//         }
+//       elseif ($month == 7)
+//         {
+//         $name = 'July';
+//         }
+//       elseif ($month == 8)
+//         {
+//         $name = 'August';
+//         }
+//       elseif ($month == 9)
+//         {
+//         $name = 'September';
+//         }
+//       elseif ($month == 10)
+//         {
+//         $name = 'October';
+//         }
+//       elseif ($month == 11)
+//         {
+//         $name = 'November';
+//         }
+//       else
+//         {
+//         $name = 'December';
+//         }
 
-      $data['name'] = $name;
-      $data['report'] = $report;
-      $data['mparticular'] = $mparticular;
+//       $data['name'] = $name;
+//       $data['report'] = $report;
+//       $data['mparticular'] = $mparticular;
       
-      $data['pruchase'] = $this->pm->get_all_mpurchase_data($month,$year,$mparticular);
-      $data['sale'] = $this->pm->get_all_msale_data($month,$year,$mparticular);
-      // $data['service'] = $this->pm->get_all_mservice_data($month,$year,$mparticular);
-      $data['voucher'] = $this->pm->get_all_mvoucher_data($month,$year,$mparticular);
-      }
-    else if ($report == 'yearlyReports')
-      {
-      $year = $_GET['ryear'];
-      $rparticular = $_GET['rparticular'];
-      $data['year'] = $year;
-      $data['rparticular'] = $rparticular;
-      $data['report'] = $report;
+//       $data['pruchase'] = $this->pm->get_all_mpurchase_data($month,$year,$mparticular);
+//       $data['sale'] = $this->pm->get_all_msale_data($month,$year,$mparticular);
+//       // $data['service'] = $this->pm->get_all_mservice_data($month,$year,$mparticular);
+//       $data['voucher'] = $this->pm->get_all_mvoucher_data($month,$year,$mparticular);
+//       }
+//     else if ($report == 'yearlyReports')
+//       {
+//       $year = $_GET['ryear'];
+//       $rparticular = $_GET['rparticular'];
+//       $data['year'] = $year;
+//       $data['rparticular'] = $rparticular;
+//       $data['report'] = $report;
       
-      $data['pruchase'] = $this->pm->get_all_ypurchase_data($year,$rparticular);
-      $data['sale'] = $this->pm->get_all_ysale_data($year,$rparticular);
-      // $data['service'] = $this->pm->get_all_yservice_data($year,$rparticular);
-      $data['voucher'] = $this->pm->get_all_yvoucher_data($year,$rparticular);
-      }
+//       $data['pruchase'] = $this->pm->get_all_ypurchase_data($year,$rparticular);
+//       $data['sale'] = $this->pm->get_all_ysale_data($year,$rparticular);
+//       // $data['service'] = $this->pm->get_all_yservice_data($year,$rparticular);
+//       $data['voucher'] = $this->pm->get_all_yvoucher_data($year,$rparticular);
+//       }
+//     }
+//   else
+//     {
+//     $data['pruchase'] = $this->pm->get_all_purchase_data();
+//     $data['sale'] = $this->pm->get_all_sale_data();
+//     // $data['service'] = $this->pm->get_all_service_data();
+//     $data['voucher'] = $this->pm->get_all_voucher_data();
+//     }
+
+//   $this->load->view('ledgerbook',$data);
+// }
+
+public function all_transaction_report()
+{
+    $data = ['title' => 'Ledger Book'];
+
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    // Initialize variables
+    $purchase = [];
+    $sale = [];
+    $voucher = [];
+    $total_records = 0;
+
+    if (isset($_GET['search'])) {
+        $report = $_GET['reports'];
+
+        if ($report == 'dailyReports') {
+            $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+            $edate = date("Y-m-d", strtotime($_GET['edate']));
+            $dparticular = $_GET['dparticular'];
+            $data['sdate'] = $sdate;
+            $data['edate'] = $edate;
+            $data['report'] = $report;
+            $data['dparticular'] = $dparticular;
+
+            // Fetch total records for each type
+            $total_purchase_records = count($this->pm->get_all_dpurchase_data($sdate, $edate, $dparticular));
+            $total_sale_records = count($this->pm->get_all_dsale_data($sdate, $edate, $dparticular));
+            $total_voucher_records = count($this->pm->get_all_dvoucher_data($sdate, $edate, $dparticular));
+
+            // Fetch paginated data
+            $purchase = $this->pm->get_all_dpurchase_data($sdate, $edate, $dparticular, $limit, $offset);
+            $sale = $this->pm->get_all_dsale_data($sdate, $edate, $dparticular, $limit, $offset);
+            $voucher = $this->pm->get_all_dvoucher_data($sdate, $edate, $dparticular, $limit, $offset);
+
+            // Calculate total records
+            $total_records = $total_purchase_records + $total_sale_records + $total_voucher_records;
+        } elseif ($report == 'monthlyReports') {
+            $month = $_GET['month'];
+            $year = $_GET['year'];
+            $mparticular = $_GET['mparticular'];
+            $data['month'] = $month;
+            $data['year'] = $year;
+            $data['report'] = $report;
+            $data['name'] = date("F", mktime(0, 0, 0, $month, 10)); // Get month name
+            $data['mparticular'] = $mparticular;
+
+            // Fetch total records for each type
+            $total_purchase_records = count($this->pm->get_all_mpurchase_data($month, $year, $mparticular));
+            $total_sale_records = count($this->pm->get_all_msale_data($month, $year, $mparticular));
+            $total_voucher_records = count($this->pm->get_all_mvoucher_data($month, $year, $mparticular));
+
+            // Fetch paginated data
+            $purchase = $this->pm->get_all_mpurchase_data($month, $year, $mparticular, $limit, $offset);
+            $sale = $this->pm->get_all_msale_data($month, $year, $mparticular, $limit, $offset);
+            $voucher = $this->pm->get_all_mvoucher_data($month, $year, $mparticular, $limit, $offset);
+
+            // Calculate total records
+            $total_records = $total_purchase_records + $total_sale_records + $total_voucher_records;
+        } elseif ($report == 'yearlyReports') {
+            $year = $_GET['ryear'];
+            $rparticular = $_GET['rparticular'];
+            $data['year'] = $year;
+            $data['rparticular'] = $rparticular;
+            $data['report'] = $report;
+
+            // Fetch total records for each type
+            $total_purchase_records = count($this->pm->get_all_ypurchase_data($year, $rparticular));
+            $total_sale_records = count($this->pm->get_all_ysale_data($year, $rparticular));
+            $total_voucher_records = count($this->pm->get_all_yvoucher_data($year, $rparticular));
+
+            // Fetch paginated data
+            $purchase = $this->pm->get_all_ypurchase_data($year, $rparticular, $limit, $offset);
+            $sale = $this->pm->get_all_ysale_data($year, $rparticular, $limit, $offset);
+            $voucher = $this->pm->get_all_yvoucher_data($year, $rparticular, $limit, $offset);
+
+            // Calculate total records
+            $total_records = $total_purchase_records + $total_sale_records + $total_voucher_records;
+        }
+    } else {
+        // Fetch total records for each type
+        $total_purchase_records = count($this->pm->get_all_purchase_data());
+        $total_sale_records = count($this->pm->get_all_sale_data());
+        $total_voucher_records = count($this->pm->get_all_voucher_data());
+
+        // Fetch paginated data
+        $purchase = $this->pm->get_all_purchase_data($limit, $offset);
+        $sale = $this->pm->get_all_sale_data($limit, $offset);
+        $voucher = $this->pm->get_all_voucher_data($limit, $offset);
+
+        // Calculate total records
+        $total_records = $total_purchase_records + $total_sale_records + $total_voucher_records;
     }
-  else
-    {
-    $data['pruchase'] = $this->pm->get_all_purchase_data();
-    $data['sale'] = $this->pm->get_all_sale_data();
-    // $data['service'] = $this->pm->get_all_service_data();
-    $data['voucher'] = $this->pm->get_all_voucher_data();
-    }
 
-  $this->load->view('ledgerbook',$data);
+    $data['purchase'] = $purchase;
+    $data['sale'] = $sale;
+    $data['voucher'] = $voucher;
+
+    // Calculate total pages
+    $total_pages = ceil($total_records / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('ledgerbook', $data);
 }
-
 
         ################################################
         #   /* Pages  end*/                            #

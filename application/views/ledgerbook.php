@@ -187,10 +187,10 @@
                                 $debit=0;
                                 $balance=0;
                             ?>
-                          <?php if ($pruchase != null) { ?>
+                          <?php if ($purchase != null) { ?>
                           <?php
                           $i = 0;
-                          foreach ($pruchase as $value){
+                          foreach ($purchase as $value){
                           $i++;
                           ?>
                           <tr>
@@ -292,6 +292,8 @@
                             </tr>
                         </tfoot>
                       </table>
+                      <!-- Pagination -->
+                      <?php echo $pagination_html; ?>
                     </div>
                   </div>
                   <div class="form-group col-md-12 col-sm-12 col-12" style="text-align: center; margin-top: 20px">

@@ -373,110 +373,193 @@ public function update_emp_attendance($id)
 
 
 
-public function emp_attendance_report()
-  {
-  $data['title'] = 'Attendance Report';
-  $where = array(
-      'compid' => $_SESSION['compid']
-        );
-  $data['employee'] = $this->pm->get_data('employees',$where);
+// public function emp_attendance_report()
+//   {
+//   $data['title'] = 'Attendance Report';
+//   $where = array(
+//       'compid' => $_SESSION['compid']
+//         );
+//   $data['employee'] = $this->pm->get_data('employees',$where);
   
-  if(isset($_GET['search']))
-    {
-    $report = $_GET['reports'];
+//   if(isset($_GET['search']))
+//     {
+//     $report = $_GET['reports'];
         
-    if($report == 'dailyReports')
-      {
-      $sdate = date("Y-m-d", strtotime($_GET['sdate']));
-      $edate = date("Y-m-d", strtotime($_GET['edate']));
-      $empid = $_GET['demployee'];
-      $data['sdate'] = $sdate;
-      $data['edate'] = $edate;
-      $data['report'] = $report;
+//     if($report == 'dailyReports')
+//       {
+//       $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//       $edate = date("Y-m-d", strtotime($_GET['edate']));
+//       $empid = $_GET['demployee'];
+//       $data['sdate'] = $sdate;
+//       $data['edate'] = $edate;
+//       $data['report'] = $report;
       
-      $data['attendance'] = $this->pm->get_emp_dattendance_data($empid,$sdate,$edate);
-      }
-    else if ($report == 'monthlyReports')
-      {
-      $month = $_GET['month'];
-      $data['month'] = $month;
-      $year = $_GET['year'];
-      $data['year'] = $year;
-            //var_dump($data['month']); exit();
-      if($month == 1)
-        {
-        $name = 'January';
-        }
-      elseif ($month == 2)
-        {
-        $name = 'February';
-        }
-      elseif ($month == 3)
-        {
-        $name = 'March';
-        }
-      elseif ($month == 4)
-        {
-        $name = 'April';
-        }
-      elseif ($month == 5)
-        {
-        $name = 'May';
-        }
-      elseif ($month == 6)
-        {
-        $name = 'June';
-        }
-      elseif ($month == 7)
-        {
-        $name = 'July';
-        }
-      elseif ($month == 8)
-        {
-        $name = 'August';
-        }
-      elseif ($month == 9)
-        {
-        $name = 'September';
-        }
-      elseif ($month == 10)
-        {
-        $name = 'October';
-        }
-      elseif ($month == 11)
-        {
-        $name = 'November';
-        }
-      else
-        {
-        $name = 'December';
-        }
+//       $data['attendance'] = $this->pm->get_emp_dattendance_data($empid,$sdate,$edate);
+//       }
+//     else if ($report == 'monthlyReports')
+//       {
+//       $month = $_GET['month'];
+//       $data['month'] = $month;
+//       $year = $_GET['year'];
+//       $data['year'] = $year;
+//             //var_dump($data['month']); exit();
+//       if($month == 1)
+//         {
+//         $name = 'January';
+//         }
+//       elseif ($month == 2)
+//         {
+//         $name = 'February';
+//         }
+//       elseif ($month == 3)
+//         {
+//         $name = 'March';
+//         }
+//       elseif ($month == 4)
+//         {
+//         $name = 'April';
+//         }
+//       elseif ($month == 5)
+//         {
+//         $name = 'May';
+//         }
+//       elseif ($month == 6)
+//         {
+//         $name = 'June';
+//         }
+//       elseif ($month == 7)
+//         {
+//         $name = 'July';
+//         }
+//       elseif ($month == 8)
+//         {
+//         $name = 'August';
+//         }
+//       elseif ($month == 9)
+//         {
+//         $name = 'September';
+//         }
+//       elseif ($month == 10)
+//         {
+//         $name = 'October';
+//         }
+//       elseif ($month == 11)
+//         {
+//         $name = 'November';
+//         }
+//       else
+//         {
+//         $name = 'December';
+//         }
 
-      $data['name'] = $name;
-      $data['report'] = $report;
-      $empid = $_GET['memployee'];
-      $data['attendance'] = $this->pm->get_emp_mattendance_data($empid,$year,$month);
-      }
-    else if ($report == 'yearlyReports')
-      {
-      $year = $_GET['ryear'];
-      $data['year'] = $year;
-      $data['report'] = $report;
-      $empid = $_GET['yemployee'];
+//       $data['name'] = $name;
+//       $data['report'] = $report;
+//       $empid = $_GET['memployee'];
+//       $data['attendance'] = $this->pm->get_emp_mattendance_data($empid,$year,$month);
+//       }
+//     else if ($report == 'yearlyReports')
+//       {
+//       $year = $_GET['ryear'];
+//       $data['year'] = $year;
+//       $data['report'] = $report;
+//       $empid = $_GET['yemployee'];
       
-      $data['attendance'] = $this->pm->get_emp_yattendance_data($empid,$year);
-      }
-    }
-  else
+//       $data['attendance'] = $this->pm->get_emp_yattendance_data($empid,$year);
+//       }
+//     }
+//   else
+//     {
+//     $data['attendance'] = $this->pm->get_emp_attendance_data();
+//     }
+
+//     //var_dump($data['attendance']); exit();
+//   $this->load->view('hradmin/attendance_report',$data);
+// }
+
+public function emp_attendance_report()
+{
+    $data['title'] = 'Attendance Report';
+    $where = array(
+        'compid' => $_SESSION['compid']
+    );
+    $data['employee'] = $this->pm->get_data('employees', $where);
+
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    if(isset($_GET['search']))
     {
-    $data['attendance'] = $this->pm->get_emp_attendance_data();
+        $report = $_GET['reports'];
+        
+        if($report == 'dailyReports')
+        {
+            $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+            $edate = date("Y-m-d", strtotime($_GET['edate']));
+            $empid = $_GET['demployee'];
+            $data['sdate'] = $sdate;
+            $data['edate'] = $edate;
+            $data['report'] = $report;
+            
+            $data['attendance'] = $this->pm->get_emp_dattendance_data($empid, $sdate, $edate, $offset, $limit);
+        }
+        elseif ($report == 'monthlyReports')
+        {
+            $month = $_GET['month'];
+            $data['month'] = $month;
+            $year = $_GET['year'];
+            $data['year'] = $year;
+            
+            // Your month name logic here
+            
+            $data['name'] = $name;
+            $data['report'] = $report;
+            $empid = $_GET['memployee'];
+            $data['attendance'] = $this->pm->get_emp_mattendance_data($empid, $year, $month, $offset, $limit);
+        }
+        elseif ($report == 'yearlyReports')
+        {
+            $year = $_GET['ryear'];
+            $data['year'] = $year;
+            $data['report'] = $report;
+            $empid = $_GET['yemployee'];
+            
+            $data['attendance'] = $this->pm->get_emp_yattendance_data($empid, $year, $offset, $limit);
+        }
+    }
+    else
+    {
+        $data['attendance'] = $this->pm->get_emp_attendance_data($offset, $limit);
     }
 
-    //var_dump($data['attendance']); exit();
-  $this->load->view('hradmin/attendance_report',$data);
+    // Count total attendance for pagination
+    $total_attendance = count($data['attendance']);
+
+    // Calculate total pages
+    $total_pages = ceil($total_attendance / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('hradmin/attendance_report', $data);
 }
-
-
 
 
 }

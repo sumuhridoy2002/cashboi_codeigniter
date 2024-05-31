@@ -175,7 +175,7 @@
                     </div>
                     
                     <div class="" >
-                      <table id="table2" class="table table-bordered" >
+                      <table id="example" class="table table-bordered" >
                         <thead>
                           <tr>
                             <th style="width: 5%;">#SN.</th>
@@ -218,6 +218,7 @@
                           </tr>
                         </tbody>
                       </table>
+                      <?php echo $pagination_html; ?>
                     </div>
                     <div class="row no-print" >
                       <div class="col-12" style="text-align: center;">
@@ -238,9 +239,10 @@
 
 
     <script type="text/javascript">
-        $('#table2').dataTable( {
-  "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, 10] ]
-} );
+//         var dataTable = $('#table2').dataTable( {
+//   "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, 10] ]
+// } );
+dataTable.page.len(25).draw();
     </script>
     <script type="text/javascript">
       $(document).ready(function() {

@@ -176,6 +176,7 @@
                     <?php } ?>
                   </tbody>
                 </table>
+                <?php echo $pagination_html; ?>
               </div>
             </div>
           </div>

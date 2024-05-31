@@ -654,38 +654,97 @@ public function delete_products($pid)
     redirect('Product');
 }
 
+// public function product_reports()
+//     {
+//     $data['title'] = 'Stock Report'; 
+
+//     $other = array(
+//         'group_by' => 'products.productID',
+//         'join' => 'left'         
+//             );
+//     $where = array(
+//        'stock.compid' => $_SESSION['compid']    
+//             );
+//     $field = array(
+//         'stock' => 'any_value(stock.stockID) as stockID,any_value(stock.compid) as compid,any_value(stock.totalPices) as totalPices,any_value(stock.regby) as regby,any_value(stock.regdate) as regdate,any_value(stock.upby) as upby,any_value(stock.update) as update,any_value(stock.product) as product',
+//         'products' => 'any_value(products.productName) as productName,any_value(products.productcode) as productcode,any_value(products.pprice) as pprice',
+//         'purchase_product'  => '(sum(purchase_product.pprice)/ count(purchase_product.pp_id)) as avg_purchase',
+        
+//             );
+//     $join = array(
+//         'products' => 'products.productID = stock.product',
+//         'purchase_product'  => 'purchase_product.productID	 = products.productID',
+
+//             );
+
+//     //$data['stock'] = $this->pm->get_data('stock',$where,$field,$join,$other);
+//     $data['stock'] = $this->pm->get_stock_product();
+//     $data['service'] = $this->pm->get_data('service_info');
+//     // echo "<pre>";
+//     // print_r($data['service']);
+//     // die();
+//     $data['company'] = $this->pm->company_details();
+//     //var_dump($data['products']); exit();
+//     $this->load->view('products/product_report',$data);
+// }
+
 public function product_reports()
-    {
+{
     $data['title'] = 'Stock Report'; 
+
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
 
     $other = array(
         'group_by' => 'products.productID',
         'join' => 'left'         
-            );
+    );
     $where = array(
-       'stock.compid' => $_SESSION['compid']    
-            );
+        'stock.compid' => $_SESSION['compid']    
+    );
     $field = array(
         'stock' => 'any_value(stock.stockID) as stockID,any_value(stock.compid) as compid,any_value(stock.totalPices) as totalPices,any_value(stock.regby) as regby,any_value(stock.regdate) as regdate,any_value(stock.upby) as upby,any_value(stock.update) as update,any_value(stock.product) as product',
         'products' => 'any_value(products.productName) as productName,any_value(products.productcode) as productcode,any_value(products.pprice) as pprice',
         'purchase_product'  => '(sum(purchase_product.pprice)/ count(purchase_product.pp_id)) as avg_purchase',
-        
-            );
+    );
     $join = array(
         'products' => 'products.productID = stock.product',
-        'purchase_product'  => 'purchase_product.productID	 = products.productID',
-
-            );
+        'purchase_product'  => 'purchase_product.productID = products.productID',
+    );
 
     //$data['stock'] = $this->pm->get_data('stock',$where,$field,$join,$other);
-    $data['stock'] = $this->pm->get_stock_product();
+    $data['stock'] = $this->pm->get_stock_product($limit, $offset);
     $data['service'] = $this->pm->get_data('service_info');
-    // echo "<pre>";
-    // print_r($data['service']);
-    // die();
     $data['company'] = $this->pm->company_details();
-    //var_dump($data['products']); exit();
-    $this->load->view('products/product_report',$data);
+
+    // Fetch total records
+    $total_records = count($this->pm->get_stock_product());
+
+    // Calculate total pages
+    $total_pages = ceil($total_records / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('products/product_report', $data);
 }
 
 public function save_product_store()
@@ -1011,33 +1070,76 @@ public function add_product()
         }
 }
 
+// public function low_product_stock_reports()
+//     {
+//     $data['title'] = 'Stock Report'; 
+
+//     $other = array(
+//        'join' => 'left'         
+//             );
+    
+//     $where = array(
+//         'stock.compid' => $_SESSION['compid'],
+//     );
+    
+//     $field = array(
+//         'stock' => 'stock.*',
+//         'products' => 'products.productName,products.productcode,products.pprice,alertqty'
+//             );
+//     $join = array(
+//         'products' => 'products.productID = stock.product'
+//             );
+
+//     // $data['stock'] = $this->pm->get_data('stock',$where,$field,$join,$other);
+//     // $data['company'] = $this->pm->company_details();
+//     //var_dump($data['products']); exit();
+    
+    
+
+//     $all_stock = $this->pm->get_data('stock', $where, $field, $join);
+//     $low_stock = array();
+
+//     foreach ($all_stock as $stock) {
+//         if ($stock['totalPices'] < $stock['alertqty']) {
+//             $low_stock[] = $stock;
+//         }
+//     }
+
+//     $data['stock'] = $low_stock;
+//     $data['company'] = $this->pm->company_details();
+
+//     // Add this line to get the count of low stock products
+//     $data['low_stock_count'] = count($low_stock);
+    
+    
+//     // 
+//     $this->load->view('products/low_product_stock',$data);
+// }
+
 public function low_product_stock_reports()
-    {
+{
     $data['title'] = 'Stock Report'; 
 
-    $other = array(
-       'join' => 'left'         
-            );
-    
     $where = array(
         'stock.compid' => $_SESSION['compid'],
     );
     
-    $field = array(
+    $fields = array(
         'stock' => 'stock.*',
-        'products' => 'products.productName,products.productcode,products.pprice,alertqty'
-            );
+        'products' => 'products.productName,products.productcode,products.pprice,products.alertqty'
+    );
+    
     $join = array(
         'products' => 'products.productID = stock.product'
-            );
+    );
 
-    // $data['stock'] = $this->pm->get_data('stock',$where,$field,$join,$other);
-    // $data['company'] = $this->pm->company_details();
-    //var_dump($data['products']); exit();
-    
-    
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
 
-    $all_stock = $this->pm->get_data('stock', $where, $field, $join);
+    // Fetch all stock to filter
+    $all_stock = $this->pm->get_data('stock', $where, $fields, $join);
     $low_stock = array();
 
     foreach ($all_stock as $stock) {
@@ -1046,15 +1148,37 @@ public function low_product_stock_reports()
         }
     }
 
-    $data['stock'] = $low_stock;
-    $data['company'] = $this->pm->company_details();
+    // Paginate low stock results
+    $total_low_stock = count($low_stock);
+    $paginated_low_stock = array_slice($low_stock, $offset, $limit);
 
-    // Add this line to get the count of low stock products
-    $data['low_stock_count'] = count($low_stock);
-    
-    
-    // 
-    $this->load->view('products/low_product_stock',$data);
+    $data['stock'] = $paginated_low_stock;
+    $data['company'] = $this->pm->company_details();
+    $data['low_stock_count'] = $total_low_stock;
+
+    // Calculate total pages
+    $total_pages = ceil($total_low_stock / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('products/low_product_stock', $data);
 }
 
 public function stock_in_hand()
@@ -1111,8 +1235,5 @@ public function create_product_barcode($id)
 	// var_dump($data['product']); exit();
   $this->load->view('products/product_barcode',$data);
 }
-
-
-
 
 }

@@ -60,17 +60,22 @@ Sms Send
 
 4) Daily Report User Wise Mobile Sms jabe auto 10 PM DONE
 
-5) Monthly Package Subsction chalu hole + bondo hole NOT-DONE
+5) Monthly Package Subsction chalu hole + bondo hole DONE
 
 4) Pathao Courier + Steed fast Courier Payment api (Online Order or Menual Order gulu ) NOT-DONE
 
-5) Ecommerce Website jonno akta Pixel setup opton kore dite hobe user wise landing page api NOT-DONE
+5) Ecommerce Website jonno akta Pixel setup opton kore dite hobe user wise landing page api DONE
 
 6) Table Gulu fast Loading jonno Data table kaj kore dite hobe DONE
 
 landing page / Store URL ai rokm hobe
 
 https://cashboi.xyz/shop/rohimstore
+
+https://steadfast.com.bd/login#
+01683470965
+123456
+cashboi.xyz@gmail.com
 
 Demo user Panel:
 
@@ -102,3 +107,43 @@ Budget: 10000 Taka
 Advance Payment: 5000 Taka With Work Start
 
 Due Payment: 5000 Taka Final Delivery Time..
+
+1) BKASH_USER_NAME
+2) BKASH_PASSWORD
+3) BKASH_APP_KEY
+4) BKASH_APP_SECRET
+
+1) PATHAO_USER_NAME
+2) PATHAO_PASSWORD
+3) PATHAO_CLIENT_ID
+4) PATHAO_CLIENT_SECRET
+
+1) STEADFAST_API_KEY
+2) STEADFAST_API_SECRET
+
+1) FACEBOOK_PIXEL_ID
+
+ALTER TABLE `com_profile` ADD `BKASH_USER_NAME` VARCHAR(255) NULL DEFAULT NULL AFTER `regdt`, ADD `BKASH_PASSWORD` VARCHAR(255) NULL DEFAULT NULL AFTER `BKASH_USER_NAME`, ADD `BKASH_APP_KEY` VARCHAR(255) NULL DEFAULT NULL AFTER `BKASH_PASSWORD`, ADD `BKASH_APP_SECRET` VARCHAR(255) NULL DEFAULT NULL AFTER `BKASH_APP_KEY`, ADD `PATHAO_USER_NAME` VARCHAR(255) NULL DEFAULT NULL AFTER `BKASH_APP_SECRET`, ADD `PATHAO_PASSWORD` VARCHAR(255) NULL DEFAULT NULL AFTER `PATHAO_USER_NAME`, ADD `PATHAO_CLIENT_ID` VARCHAR(255) NULL DEFAULT NULL AFTER `PATHAO_PASSWORD`, ADD `PATHAO_CLIENT_SECRET` VARCHAR(255) NULL DEFAULT NULL AFTER `PATHAO_CLIENT_ID`, ADD `STEADFAST_API_KEY` VARCHAR(255) NULL DEFAULT NULL AFTER `PATHAO_CLIENT_SECRET`, ADD `STEADFAST_API_SECRET` VARCHAR(255) NULL DEFAULT NULL AFTER `STEADFAST_API_KEY`, ADD `FACEBOOK_PIXEL_ID` VARCHAR(255) NULL DEFAULT NULL AFTER `STEADFAST_API_SECRET`;
+
+https://www.facebook.com/business/help/952192354843755?id=1205376682832142
+https://developers.facebook.com/docs/meta-pixel/implementation/conversion-tracking
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1404104700280095');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1404104700280095&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+PIXEL ID = 1404104700280095

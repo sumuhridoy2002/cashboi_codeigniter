@@ -79,7 +79,7 @@
                           <button class="btn btn-info" onclick='addToCart("<?= $product['productID'] ?>", "<?= $product['productName'] ?>", "<?= $product['sprice'] ?>")' data-productid="<?php echo $product['productID']; ?>" data-productname="<?php echo $product['productName']; ?>" data-productprice="<?php echo $product['sprice']; ?>">add to cart</button>
                         </div>
                         <div class="col-lg-12 col-md-12 col-12" style="padding-top: 20px;">
-                          <a href="<?php echo base_url().'checkOut/'.$store['sid']; ?>" class="btn btn-secondary">add to cart</a>
+                          <a href="<?php echo base_url().'checkOut/'.$store['sid']; ?>" class="btn btn-secondary">Go to checkout</a>
                         </div>
                       </div>
                     </div>
@@ -237,6 +237,25 @@
         .then(data => {
           document.getElementById('total_items').textContent = JSON.parse(data).total_items
           document.getElementById('total_price').textContent = JSON.parse(data).total_price
+
+          <?php if(!empty($store['FACEBOOK_PIXEL_ID'])) { ?>
+            console.log("FACEBOOK_PIXEL_ID", "<?= $store['FACEBOOK_PIXEL_ID']; ?>")
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', "<?= $store['FACEBOOK_PIXEL_ID']; ?>");
+            fbq('track', 'AddToCart', {
+              content_ids: [pid],
+              content_type: 'product',
+              value: pprice,
+              currency: 'USD'
+            });
+          <?php } ?>
 
           const message = new SpeechSynthesisUtterance("পণ্যটি সফলভাবে কার্টে যোগ করা হয়েছে")
           message.lang = "bn-BD"

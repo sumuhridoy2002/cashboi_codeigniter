@@ -265,172 +265,358 @@ public function delete_salary($id)
     redirect('empPayment');
 }
 
-public function employeePayReport()
-  {
-  $data = ['title' => 'Payment Reports'];
-  $bwhere = array('compid'=> $_SESSION['compid']);
+// public function employeePayReport()
+//   {
+//   $data = ['title' => 'Payment Reports'];
+//   $bwhere = array('compid'=> $_SESSION['compid']);
 
-  if(isset($_GET['search']))
-  {
-  $report = $_GET['reports'];
+//   if(isset($_GET['search']))
+//   {
+//   $report = $_GET['reports'];
   
-  if($report == 'dailyReports')
-      {
-      $sdate = date("Y-m-d", strtotime($_GET['sdate']));
-      $edate = date("Y-m-d", strtotime($_GET['edate']));
-      $data['sdate'] = $sdate;
-      $data['edate'] = $edate;
-      $data['report'] = $report;
-      $demployee = $_GET['demployee'];
+//   if($report == 'dailyReports')
+//       {
+//       $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//       $edate = date("Y-m-d", strtotime($_GET['edate']));
+//       $data['sdate'] = $sdate;
+//       $data['edate'] = $edate;
+//       $data['report'] = $report;
+//       $demployee = $_GET['demployee'];
 
-      $where = array(
-        'employee_payment.compid' => $_SESSION['compid'],
-        'DATE(employee_payment.regdate) >=' => $sdate,
-        'DATE(employee_payment.regdate) <=' => $edate,
-        'employee_payment.empid' => $_GET['demployee']
-            );
-    $allwhere = array(
-        'DATE(employee_payment.regdate) >=' => $sdate,
-        'DATE(employee_payment.regdate) <=' => $edate,
-        'employee_payment.compid' => $_SESSION['compid']
-          );
-    $ewhere = array(
-      'employees.compid' => $_SESSION['compid']
-          );
-    $field = array(
-        'employee_payment' => 'employee_payment.*',
-        'employees' => 'employees.employeeName'
-            );
-    $join = array(
-        'employees' => 'employee_payment.empid = employees.employeeID'
-            );
-    $other = array(
-        'order_by' => 'empPid',
-        'join' => 'left'
-            );
-    $data['employee'] = $this->pm->get_data('employees',$ewhere);
-    if($demployee != 'All'){
-      $data['employees'] = $this->pm->get_data('employee_payment',$where,$field,$join,$other);
-    }else{
-      $data['employees'] = $this->pm->get_data('employee_payment',$allwhere,$field,$join,$other);
-    }
-      }
-  else if ($report == 'monthlyReports')
-      {
-      $month = $_GET['month'];
-      $data['month'] = $month;
-      $year = $_GET['year'];
-      $data['year'] = $year;
-      $yemployee = $_GET['memployee'];
+//       $where = array(
+//         'employee_payment.compid' => $_SESSION['compid'],
+//         'DATE(employee_payment.regdate) >=' => $sdate,
+//         'DATE(employee_payment.regdate) <=' => $edate,
+//         'employee_payment.empid' => $_GET['demployee']
+//             );
+//     $allwhere = array(
+//         'DATE(employee_payment.regdate) >=' => $sdate,
+//         'DATE(employee_payment.regdate) <=' => $edate,
+//         'employee_payment.compid' => $_SESSION['compid']
+//           );
+//     $ewhere = array(
+//       'employees.compid' => $_SESSION['compid']
+//           );
+//     $field = array(
+//         'employee_payment' => 'employee_payment.*',
+//         'employees' => 'employees.employeeName'
+//             );
+//     $join = array(
+//         'employees' => 'employee_payment.empid = employees.employeeID'
+//             );
+//     $other = array(
+//         'order_by' => 'empPid',
+//         'join' => 'left'
+//             );
+//     $data['employee'] = $this->pm->get_data('employees',$ewhere);
+//     if($demployee != 'All'){
+//       $data['employees'] = $this->pm->get_data('employee_payment',$where,$field,$join,$other);
+//     }else{
+//       $data['employees'] = $this->pm->get_data('employee_payment',$allwhere,$field,$join,$other);
+//     }
+//       }
+//   else if ($report == 'monthlyReports')
+//       {
+//       $month = $_GET['month'];
+//       $data['month'] = $month;
+//       $year = $_GET['year'];
+//       $data['year'] = $year;
+//       $yemployee = $_GET['memployee'];
 
-      $data['report'] = $report;
-      $data['title'] = 'Payment Reports';
+//       $data['report'] = $report;
+//       $data['title'] = 'Payment Reports';
 
-      $where = array(
-          'employee_payment.compid' => $_SESSION['compid'],
-          'employee_payment.year' => $year,
-          'employee_payment.month' => $month,
-          'employee_payment.empid' => $_GET['memployee']
-              );
-      $allwhere = array(
-            'employee_payment.year' => $year,
-            'employee_payment.month' => $month,
-            'employee_payment.compid' => $_SESSION['compid']
+//       $where = array(
+//           'employee_payment.compid' => $_SESSION['compid'],
+//           'employee_payment.year' => $year,
+//           'employee_payment.month' => $month,
+//           'employee_payment.empid' => $_GET['memployee']
+//               );
+//       $allwhere = array(
+//             'employee_payment.year' => $year,
+//             'employee_payment.month' => $month,
+//             'employee_payment.compid' => $_SESSION['compid']
+//             );
+//       $ewhere = array(
+//         'employees.compid' => $_SESSION['compid']
+//             );
+//       $field = array(
+//           'employee_payment' => 'employee_payment.*',
+//           'employees' => 'employees.employeeName'
+//               );
+//       $join = array(
+//           'employees' => 'employee_payment.empid = employees.employeeID'
+//               );
+//       $other = array(
+//           'order_by' => 'empPid',
+//           'join' => 'left'
+//               );
+//       $data['employee'] = $this->pm->get_data('employees',$ewhere);
+//       if($yemployee != 'All'){
+//         $data['employees'] = $this->pm->get_data('employee_payment',$where,$field,$join,$other);
+//       }else{
+//         $data['employees'] = $this->pm->get_data('employee_payment',$allwhere,$field,$join,$other);
+//       }
+//       }
+//   else if ($report == 'yearlyReports')
+//       {
+//       $year = $_GET['ryear'];
+//       $data['year'] = $year;
+//       $data['report'] = $report;
+//       $yemployee = $_GET['yemployee'];
+//       // var_dump($yemployee);
+//       // die();
+
+//       $data['title'] = 'Payment Reports';
+
+//       $where = array(
+//           'employee_payment.compid' => $_SESSION['compid'],
+//           'employee_payment.year' => $_GET['ryear'],
+//           'employee_payment.empid' => $_GET['yemployee']
+//               );
+//       $allwhere = array(
+//         'employee_payment.year' => $_GET['ryear'],
+//         'employee_payment.compid' => $_SESSION['compid']
+//             );
+//       $ewhere = array(
+//         'employees.compid' => $_SESSION['compid']
+//             );
+//       $field = array(
+//           'employee_payment' => 'employee_payment.*',
+//           'employees' => 'employees.employeeName'
+//               );
+//       $join = array(
+//           'employees' => 'employee_payment.empid = employees.employeeID'
+//               );
+//       $other = array(
+//           'order_by' => 'empPid',
+//           'join' => 'left'
+//               );
+//       $data['employee'] = $this->pm->get_data('employees',$ewhere);
+//       if($yemployee != 'All'){
+//         $data['employees'] = $this->pm->get_data('employee_payment',$where,$field,$join,$other);
+//       }else{
+//         $data['employees'] = $this->pm->get_data('employee_payment',$allwhere,$field,$join,$other);
+//       }
+
+//       }
+//   }
+//   else
+//     {
+//         $data['title'] = 'Payment Reports';
+
+//         $where = array(
+//             'employee_payment.compid' => $_SESSION['compid']
+//                 );
+//         $ewhere = array(
+//           'employees.compid' => $_SESSION['compid']
+//               );
+//         $field = array(
+//             'employee_payment' => 'employee_payment.*',
+//             'employees' => 'employees.employeeName'
+//                 );
+//         $join = array(
+//             'employees' => 'employee_payment.empid = employees.employeeID'
+//                 );
+//         $other = array(
+//             'order_by' => 'empPid',
+//             'join' => 'left'
+//                 );
+
+//         $data['employee'] = $this->pm->get_data('employees',$ewhere);
+//         $data['employees'] = $this->pm->get_data('employee_payment',$where,$field,$join,$other);
+//     }
+
+//   $this->load->view('employeePayment/employeePaymentReport',$data);
+// }
+
+public function employeePayReport()
+{
+    $data = ['title' => 'Payment Reports'];
+    $bwhere = array('compid'=> $_SESSION['compid']);
+
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    if (isset($_GET['search'])) {
+        $report = $_GET['reports'];
+        
+        if ($report == 'dailyReports') {
+            $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+            $edate = date("Y-m-d", strtotime($_GET['edate']));
+            $data['sdate'] = $sdate;
+            $data['edate'] = $edate;
+            $data['report'] = $report;
+            $demployee = $_GET['demployee'];
+
+            $where = array(
+                'employee_payment.compid' => $_SESSION['compid'],
+                'DATE(employee_payment.regdate) >=' => $sdate,
+                'DATE(employee_payment.regdate) <=' => $edate,
+                'employee_payment.empid' => $_GET['demployee']
             );
-      $ewhere = array(
-        'employees.compid' => $_SESSION['compid']
+            $allwhere = array(
+                'DATE(employee_payment.regdate) >=' => $sdate,
+                'DATE(employee_payment.regdate) <=' => $edate,
+                'employee_payment.compid' => $_SESSION['compid']
             );
-      $field = array(
-          'employee_payment' => 'employee_payment.*',
-          'employees' => 'employees.employeeName'
-              );
-      $join = array(
-          'employees' => 'employee_payment.empid = employees.employeeID'
-              );
-      $other = array(
-          'order_by' => 'empPid',
-          'join' => 'left'
-              );
-      $data['employee'] = $this->pm->get_data('employees',$ewhere);
-      if($yemployee != 'All'){
-        $data['employees'] = $this->pm->get_data('employee_payment',$where,$field,$join,$other);
-      }else{
-        $data['employees'] = $this->pm->get_data('employee_payment',$allwhere,$field,$join,$other);
-      }
-      }
-  else if ($report == 'yearlyReports')
-      {
-      $year = $_GET['ryear'];
-      $data['year'] = $year;
-      $data['report'] = $report;
-      $yemployee = $_GET['yemployee'];
-      // var_dump($yemployee);
-      // die();
-
-      $data['title'] = 'Payment Reports';
-
-      $where = array(
-          'employee_payment.compid' => $_SESSION['compid'],
-          'employee_payment.year' => $_GET['ryear'],
-          'employee_payment.empid' => $_GET['yemployee']
-              );
-      $allwhere = array(
-        'employee_payment.year' => $_GET['ryear'],
-        'employee_payment.compid' => $_SESSION['compid']
+            $ewhere = array(
+                'employees.compid' => $_SESSION['compid']
             );
-      $ewhere = array(
-        'employees.compid' => $_SESSION['compid']
+            $field = array(
+                'employee_payment' => 'employee_payment.*',
+                'employees' => 'employees.employeeName'
             );
-      $field = array(
-          'employee_payment' => 'employee_payment.*',
-          'employees' => 'employees.employeeName'
-              );
-      $join = array(
-          'employees' => 'employee_payment.empid = employees.employeeID'
-              );
-      $other = array(
-          'order_by' => 'empPid',
-          'join' => 'left'
-              );
-      $data['employee'] = $this->pm->get_data('employees',$ewhere);
-      if($yemployee != 'All'){
-        $data['employees'] = $this->pm->get_data('employee_payment',$where,$field,$join,$other);
-      }else{
-        $data['employees'] = $this->pm->get_data('employee_payment',$allwhere,$field,$join,$other);
-      }
+            $join = array(
+                'employees' => 'employee_payment.empid = employees.employeeID'
+            );
+            $other = array(
+                'order_by' => 'empPid',
+                'join' => 'left'
+            );
 
-      }
-  }
-  else
-    {
-        $data['title'] = 'Payment Reports';
+            $data['employee'] = $this->pm->get_data('employees', $ewhere);
+            if ($demployee != 'All') {
+                $data['employees'] = $this->pm->get_data('employee_payment', $where, $field, $join, $other, $limit, $offset);
+                $total_records = count($this->pm->get_data('employee_payment', $where, $field, $join, $other));
+            } else {
+                $data['employees'] = $this->pm->get_data('employee_payment', $allwhere, $field, $join, $other, $limit, $offset);
+                $total_records = count($this->pm->get_data('employee_payment', $allwhere, $field, $join, $other));
+            }
+        } elseif ($report == 'monthlyReports') {
+            $month = $_GET['month'];
+            $data['month'] = $month;
+            $year = $_GET['year'];
+            $data['year'] = $year;
+            $yemployee = $_GET['memployee'];
 
+            $data['report'] = $report;
+            $data['title'] = 'Payment Reports';
+
+            $where = array(
+                'employee_payment.compid' => $_SESSION['compid'],
+                'employee_payment.year' => $year,
+                'employee_payment.month' => $month,
+                'employee_payment.empid' => $_GET['memployee']
+            );
+            $allwhere = array(
+                'employee_payment.year' => $year,
+                'employee_payment.month' => $month,
+                'employee_payment.compid' => $_SESSION['compid']
+            );
+            $ewhere = array(
+                'employees.compid' => $_SESSION['compid']
+            );
+            $field = array(
+                'employee_payment' => 'employee_payment.*',
+                'employees' => 'employees.employeeName'
+            );
+            $join = array(
+                'employees' => 'employee_payment.empid = employees.employeeID'
+            );
+            $other = array(
+                'order_by' => 'empPid',
+                'join' => 'left'
+            );
+
+            $data['employee'] = $this->pm->get_data('employees', $ewhere);
+            if ($yemployee != 'All') {
+                $data['employees'] = $this->pm->get_data('employee_payment', $where, $field, $join, $other, $limit, $offset);
+                $total_records = count($this->pm->get_data('employee_payment', $where, $field, $join, $other));
+            } else {
+                $data['employees'] = $this->pm->get_data('employee_payment', $allwhere, $field, $join, $other, $limit, $offset);
+                $total_records = count($this->pm->get_data('employee_payment', $allwhere, $field, $join, $other));
+            }
+        } elseif ($report == 'yearlyReports') {
+            $year = $_GET['ryear'];
+            $data['year'] = $year;
+            $data['report'] = $report;
+            $yemployee = $_GET['yemployee'];
+
+            $data['title'] = 'Payment Reports';
+
+            $where = array(
+                'employee_payment.compid' => $_SESSION['compid'],
+                'employee_payment.year' => $_GET['ryear'],
+                'employee_payment.empid' => $_GET['yemployee']
+            );
+            $allwhere = array(
+                'employee_payment.year' => $_GET['ryear'],
+                'employee_payment.compid' => $_SESSION['compid']
+            );
+            $ewhere = array(
+                'employees.compid' => $_SESSION['compid']
+            );
+            $field = array(
+                'employee_payment' => 'employee_payment.*',
+                'employees' => 'employees.employeeName'
+            );
+            $join = array(
+                'employees' => 'employee_payment.empid = employees.employeeID'
+            );
+            $other = array(
+                'order_by' => 'empPid',
+                'join' => 'left'
+            );
+
+            $data['employee'] = $this->pm->get_data('employees', $ewhere);
+            if ($yemployee != 'All') {
+                $data['employees'] = $this->pm->get_data('employee_payment', $where, $field, $join, $other, $limit, $offset);
+                $total_records = count($this->pm->get_data('employee_payment', $where, $field, $join, $other));
+            } else {
+                $data['employees'] = $this->pm->get_data('employee_payment', $allwhere, $field, $join, $other, $limit, $offset);
+                $total_records = count($this->pm->get_data('employee_payment', $allwhere, $field, $join, $other));
+            }
+        }
+    } else {
         $where = array(
             'employee_payment.compid' => $_SESSION['compid']
-                );
+        );
         $ewhere = array(
-          'employees.compid' => $_SESSION['compid']
-              );
+            'employees.compid' => $_SESSION['compid']
+        );
         $field = array(
             'employee_payment' => 'employee_payment.*',
             'employees' => 'employees.employeeName'
-                );
+        );
         $join = array(
             'employees' => 'employee_payment.empid = employees.employeeID'
-                );
+        );
         $other = array(
             'order_by' => 'empPid',
             'join' => 'left'
-                );
+        );
 
-        $data['employee'] = $this->pm->get_data('employees',$ewhere);
-        $data['employees'] = $this->pm->get_data('employee_payment',$where,$field,$join,$other);
+        $data['employee'] = $this->pm->get_data('employees', $ewhere);
+        $data['employees'] = $this->pm->get_data('employee_payment', $where, $field, $join, $other, $limit, $offset);
+        $total_records = count($this->pm->get_data('employee_payment', $where, $field, $join, $other));
     }
 
-  $this->load->view('employeePayment/employeePaymentReport',$data);
+    // Calculate total pages
+    $total_pages = ceil($total_records / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active';
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('employeePayment/employeePaymentReport', $data);
 }
-
-
-
 
 }

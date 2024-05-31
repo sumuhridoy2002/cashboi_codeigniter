@@ -77,6 +77,8 @@
                         <?php } ?> 
                       </tbody>
                     </table>
+                    <!-- Pagination -->
+                    <?php echo $pagination_html; ?>
                   </div>
                 </div>
                 <div class="row no-print" >

@@ -174,6 +174,7 @@
                       <th><?php echo number_format($tca, 2); ?></th>
                     </tfoot>
                   </table>
+                  <?php echo $pagination_html; ?>
                 </div>
               </div>
               <div class="form-group col-md-12 col-sm-12 col-12" style="text-align: center; margin-top: 20px">

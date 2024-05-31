@@ -205,6 +205,8 @@
                           </tr>
                         </tbody>
                       </table>
+                      <!-- Pagination -->
+                    <?php echo $pagination_html; ?>
                     </div>
                     <div class="row no-print" >
                       <div class="col-12" style="text-align: center;">

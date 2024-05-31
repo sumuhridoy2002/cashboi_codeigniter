@@ -9,10 +9,10 @@
         background-color: #fff; 
         padding: 3px; 
         border-radius: 0.3rem; 
-        box-shadow: 4px 1px 14px 0px #a2a2a2;"
+        box-shadow: 4px 1px 14px 0px #a2a2a2;
     }
     .bill_logo:hover{
-        box-shadow: 4px 1px 14px 0px #ffadad;"
+        box-shadow: 4px 1px 14px 0px #ffadad;
     }
 </style>
 

@@ -737,19 +737,128 @@ public function sale_purchase_profit_report()
     $this->load->view('vouchers/sale_purchase_profit_report',$data);
 }
 
+// public function voucher_report()
+//     {
+//     $data = [
+//         'title' => 'Voucher Report'
+//             ];
+//     $data['company'] = $this->pm->company_details();
+
+//     if(isset($_GET['search']))
+//         {
+//         $report = $_GET['reports'];
+        
+//         if($report == 'dailyReports')
+//             {
+//             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//             $edate = date("Y-m-d", strtotime($_GET['edate']));
+//             $data['sdate'] = $sdate;
+//             $data['edate'] = $edate;
+//             $data['report'] = $report;
+
+//             $vtype = $_GET['dvtype'];
+
+//             $data['voucher'] = $this->pm->get_dall_voucher_data($sdate,$edate,$vtype);
+//             }
+//         else if ($report == 'monthlyReports')
+//             {
+//             $month = $_GET['month'];
+//             $data['month'] = $month;
+//             $year = $_GET['year'];
+//             $data['year'] = $year;
+//             //var_dump($data['month']); exit();
+//             if($month == 01)
+//                 {
+//                 $name = 'January';
+//                 }
+//             elseif ($month == 02)
+//                 {
+//                 $name = 'February';
+//                 }
+//             elseif ($month == 03)
+//                 {
+//                 $name = 'March';
+//                 }
+//             elseif ($month == 04)
+//                 {
+//                 $name = 'April';
+//                 }
+//             elseif ($month == 05)
+//                 {
+//                 $name = 'May';
+//                 }
+//             elseif ($month == 06)
+//                 {
+//                 $name = 'June';
+//                 }
+//             elseif ($month == 07)
+//                 {
+//                 $name = 'July';
+//                 }
+//             elseif ($month == 8)
+//                 {
+//                 $name = 'August';
+//                 }
+//             elseif ($month == 9)
+//                 {
+//                 $name = 'September';
+//                 }
+//             elseif ($month == 10)
+//                 {
+//                 $name = 'October';
+//                 }
+//             elseif ($month == 11)
+//                 {
+//                 $name = 'November';
+//                 }
+//             else
+//                 {
+//                 $name = 'December';
+//                 }
+//             $data['name'] = $name;
+//             $data['report'] = $report;
+
+//             $vtype = $_GET['mvtype'];
+
+//             $data['voucher'] = $this->pm->get_mall_voucher_data($month,$year,$vtype);
+//             }
+//         else if ($report == 'yearlyReports')
+//             {
+//             $year = $_GET['ryear'];
+//             $data['year'] = $year;
+//             $data['report'] = $report;
+
+//             $vtype = $_GET['yvtype'];
+
+//             $data['voucher'] = $this->pm->get_yall_voucher_data($year,$vtype);
+//             }
+//         }
+//     else
+//         {
+//         $data['voucher'] = $this->pm->get_voucher_data();
+//         }
+
+//     $this->load->view('vouchers/voucher_reports',$data);
+// }
+
 public function voucher_report()
-    {
+{
     $data = [
         'title' => 'Voucher Report'
-            ];
+    ];
     $data['company'] = $this->pm->company_details();
 
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
     if(isset($_GET['search']))
-        {
+    {
         $report = $_GET['reports'];
         
         if($report == 'dailyReports')
-            {
+        {
             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
             $edate = date("Y-m-d", strtotime($_GET['edate']));
             $data['sdate'] = $sdate;
@@ -758,87 +867,73 @@ public function voucher_report()
 
             $vtype = $_GET['dvtype'];
 
-            $data['voucher'] = $this->pm->get_dall_voucher_data($sdate,$edate,$vtype);
-            }
+            // Fetch total records for the selected voucher type
+            $total_records = count($this->pm->get_dall_voucher_data($sdate, $edate, $vtype));
+
+            // Fetch paginated data
+            $data['voucher'] = $this->pm->get_dall_voucher_data($sdate, $edate, $vtype, $limit, $offset);
+        }
         else if ($report == 'monthlyReports')
-            {
+        {
             $month = $_GET['month'];
             $data['month'] = $month;
             $year = $_GET['year'];
             $data['year'] = $year;
-            //var_dump($data['month']); exit();
-            if($month == 01)
-                {
-                $name = 'January';
-                }
-            elseif ($month == 02)
-                {
-                $name = 'February';
-                }
-            elseif ($month == 03)
-                {
-                $name = 'March';
-                }
-            elseif ($month == 04)
-                {
-                $name = 'April';
-                }
-            elseif ($month == 05)
-                {
-                $name = 'May';
-                }
-            elseif ($month == 06)
-                {
-                $name = 'June';
-                }
-            elseif ($month == 07)
-                {
-                $name = 'July';
-                }
-            elseif ($month == 8)
-                {
-                $name = 'August';
-                }
-            elseif ($month == 9)
-                {
-                $name = 'September';
-                }
-            elseif ($month == 10)
-                {
-                $name = 'October';
-                }
-            elseif ($month == 11)
-                {
-                $name = 'November';
-                }
-            else
-                {
-                $name = 'December';
-                }
-            $data['name'] = $name;
-            $data['report'] = $report;
+
+            // Fetch total records for the selected month and year
+            $total_records = count($this->pm->get_mall_voucher_data($month, $year, $vtype));
 
             $vtype = $_GET['mvtype'];
 
-            $data['voucher'] = $this->pm->get_mall_voucher_data($month,$year,$vtype);
-            }
+            // Fetch paginated data
+            $data['voucher'] = $this->pm->get_mall_voucher_data($month, $year, $vtype, $limit, $offset);
+        }
         else if ($report == 'yearlyReports')
-            {
+        {
             $year = $_GET['ryear'];
             $data['year'] = $year;
-            $data['report'] = $report;
+
+            // Fetch total records for the selected year
+            $total_records = count($this->pm->get_yall_voucher_data($year, $vtype));
 
             $vtype = $_GET['yvtype'];
 
-            $data['voucher'] = $this->pm->get_yall_voucher_data($year,$vtype);
-            }
+            // Fetch paginated data
+            $data['voucher'] = $this->pm->get_yall_voucher_data($year, $vtype, $limit, $offset);
         }
+    }
     else
-        {
-        $data['voucher'] = $this->pm->get_voucher_data();
-        }
+    {
+        // Fetch total records for all vouchers
+        $total_records = count($this->pm->get_voucher_data());
 
-    $this->load->view('vouchers/voucher_reports',$data);
+        // Fetch paginated data
+        $data['voucher'] = $this->pm->get_voucher_data($limit, $offset);
+    }
+
+    // Calculate total pages
+    $total_pages = ceil($total_records / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('vouchers/voucher_reports', $data);
 }
 
 public function voucher_export_action()
@@ -1368,77 +1463,48 @@ public function save_bill_payment()
 }
 
 public function save_user_payment()
-  {
+{
   $info = $this->input->post();
-  
-  $where = array(
-    'uid' => $info['uid'],
-        );
-  $payment = $this->db->select('*')
-                  ->from('user_payments')
-                  ->where('uid',$info['uid'])
-                  ->where('pstatus',1)
-                  ->order_by('up_id','desc')
-                  ->get()
-                  ->row();
-  $user = $this->pm->get_data('users',$where);
-  
-  if($payment)
-    {
-    $pcdate = date('Y-m-d h:i:s',strtotime($payment->pdate));
-    }
-  else
-    {
-    $trdate = date('Y-m-d h:i:s',strtotime($user[0]['regdate']));
-    $pcdate = date('Y-m-d h:i:s',strtotime($trdate. ' + 30 days'));
-    }
+  $where = ['uid' => $info['uid']];
+  $payment = $this->db->select('*')->from('user_payments')->where('uid', $info['uid'])->where('pstatus', 1)->order_by('up_id', 'desc')->get()->row();
+  $user = $this->pm->get_data('users', $where);
+  if($payment) $pcdate = date('Y-m-d h:i:s', strtotime($payment->pdate));
+  else {
+    $trdate = date('Y-m-d h:i:s', strtotime($user[0]['regdate']));
+    $pcdate = date('Y-m-d h:i:s', strtotime($trdate. ' + 30 days'));
+  }
     
-  if($info['ptime'] == 1)
-    {
-    $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 1 months'));
-    }
-  elseif($info['ptime'] == 2)
-    {
-    $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 3 months'));
-    }
-  elseif($info['ptime'] == 3)
-    {
-    $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 6 months'));
-    }
-  elseif($info['ptime'] == 4)
-    {
-    $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 1 year'));
-    }
+  if($info['ptime'] == 1) $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 1 months'));
+  elseif($info['ptime'] == 2) $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 3 months'));
+  elseif($info['ptime'] == 3) $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 6 months'));
+  elseif($info['ptime'] == 4) $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 1 year'));
   
-  $data = array(
-      'compid'  => $user[0]['compid'],
-      'package' => $info['utype'],
-      'amount'  => $info['amount'], 
-      'uid'     => $info['uid'],
-      'ptime'   => $info['ptime'],
-      'pstatus' => 1,
-      'pdate'   => $pdate,
-      'regby'   => $_SESSION['uid']
-          );
-  //var_dump($data); exit();
-  $result = $this->pm->insert_data('user_payments',$data);
-  
-  if($result)
-      {
-      $sdata = [
-        'exception' =>'<div class="alert alert-success alert-dismissible">
-          <h4><i class="icon fa fa-check"></i> Bill payment add Successfully !</h4>
-          </div>'
-              ];  
-      }
-  else
-      {
-      $sdata = [
-        'exception' =>'<div class="alert alert-danger alert-dismissible">
-          <h4><i class="icon fa fa-ban"></i> Failed !</h4>
-          </div>'
-              ];
-      }
+  # Send SMS
+  $message = urlencode("We have received your subscription bill.");
+  $to = urlencode($user[0]->mobile);
+  $token = urlencode("yfynrvxm-erdvybul-5lkgcewi-ivyfmpg8-r220zvby");
+
+  $url = "https://smsplus.sslwireless.com/api/v3/send-sms?api_token=$token&sid=NONSUNSHINEIT&sms=$message&msisdn=$to&csms_id=1";
+            
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL,$url);
+  curl_setopt($ch, CURLOPT_ENCODING, '');
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $sms_result = curl_exec($ch);
+
+  $data = [
+    'compid'  => $user[0]['compid'],
+    'package' => $info['utype'],
+    'amount'  => $info['amount'], 
+    'uid'     => $info['uid'],
+    'ptime'   => $info['ptime'],
+    'pstatus' => 1,
+    'pdate'   => $pdate,
+    'regby'   => $_SESSION['uid']
+  ];
+  $result = $this->pm->insert_data('user_payments', $data);
+  if($result) $sdata = [ 'exception' =>'<div class="alert alert-success alert-dismissible"><h4><i class="icon fa fa-check"></i> Bill payment add Successfully !</h4></div>' ];
+  else $sdata = [ 'exception' =>'<div class="alert alert-danger alert-dismissible"><h4><i class="icon fa fa-ban"></i> Failed !</h4></div>' ];
   $this->session->set_userdata($sdata);
   redirect('uPayment');
 }

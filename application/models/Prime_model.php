@@ -494,436 +494,652 @@ public function current_password_check($cpassword)
                 ->row();
 }
 
-public function get_sales_data()
-  {
-  $query = $this->db->select('
-                          sales.*,
-                          customers.cus_id,
-                          customers.customerName,
-                          users.empid,
-                          users.name')
-                  ->from('sales')
-                  ->join('customers','customers.customerID = sales.customerID','left')
-                  ->join('users','users.uid = sales.regby','left')
-                  ->where('sales.compid',$_SESSION['compid'])
-                  ->get()
-                  ->result();
-  return $query;  
-}
+// public function get_sales_data()
+//   {
+//   $query = $this->db->select('
+//                           sales.*,
+//                           customers.cus_id,
+//                           customers.customerName,
+//                           users.empid,
+//                           users.name')
+//                   ->from('sales')
+//                   ->join('customers','customers.customerID = sales.customerID','left')
+//                   ->join('users','users.uid = sales.regby','left')
+//                   ->where('sales.compid',$_SESSION['compid'])
+//                   ->get()
+//                   ->result();
+//   return $query;  
+// }
 
-public function get_dsales_data($sdate,$edate,$customer,$employee)
-  {
-  if ($customer == 'All' && $employee == 'All')
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('sales.saleDate >=',$sdate)
-                    ->where('sales.saleDate <=',$edate)
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-    }
-  else if ($customer == 'All')
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('sales.saleDate >=',$sdate)
-                    ->where('sales.saleDate <=',$edate)
-                    ->where('sales.regby',$employee)
-                    ->get()
-                    ->result();
-    }
-  else if ($employee == 'All')
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('sales.saleDate >=',$sdate)
-                    ->where('sales.saleDate <=',$edate)
-                    ->where('sales.customerID',$customer)
-                    ->get()
-                    ->result();
-    }
-  else
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('sales.saleDate >=',$sdate)
-                    ->where('sales.saleDate <=',$edate)
-                    ->where('sales.customerID',$customer)
-                    ->where('sales.regby',$employee)
-                    ->get()
-                    ->result();
-    }
-  return $query;  
-}
+// public function get_dsales_data($sdate,$edate,$customer,$employee)
+//   {
+//   if ($customer == 'All' && $employee == 'All')
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('sales.saleDate >=',$sdate)
+//                     ->where('sales.saleDate <=',$edate)
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//     }
+//   else if ($customer == 'All')
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('sales.saleDate >=',$sdate)
+//                     ->where('sales.saleDate <=',$edate)
+//                     ->where('sales.regby',$employee)
+//                     ->get()
+//                     ->result();
+//     }
+//   else if ($employee == 'All')
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('sales.saleDate >=',$sdate)
+//                     ->where('sales.saleDate <=',$edate)
+//                     ->where('sales.customerID',$customer)
+//                     ->get()
+//                     ->result();
+//     }
+//   else
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('sales.saleDate >=',$sdate)
+//                     ->where('sales.saleDate <=',$edate)
+//                     ->where('sales.customerID',$customer)
+//                     ->where('sales.regby',$employee)
+//                     ->get()
+//                     ->result();
+//     }
+//   return $query;  
+// }
 
-public function get_msales_data($month,$year,$customer,$employee)
-  {
-  if ($customer == 'All' && $employee == 'All')
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('MONTH(sales.saleDate)',$month)
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-    }
-  else if ($customer == 'All')
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('MONTH(sales.saleDate)',$month)
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sales.regby',$employee)
-                    ->get()
-                    ->result();
-    }
-  else if ($employee == 'All')
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('MONTH(sales.saleDate)',$month)
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sales.customerID',$customer)
-                    ->get()
-                    ->result();
-    }
-  else
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('MONTH(sales.saleDate)',$month)
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sales.customerID',$customer)
-                    ->where('sales.regby',$employee)
-                    ->get()
-                    ->result();
-    }
-  return $query;  
-}
+// public function get_msales_data($month,$year,$customer,$employee)
+//   {
+//   if ($customer == 'All' && $employee == 'All')
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('MONTH(sales.saleDate)',$month)
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//     }
+//   else if ($customer == 'All')
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('MONTH(sales.saleDate)',$month)
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sales.regby',$employee)
+//                     ->get()
+//                     ->result();
+//     }
+//   else if ($employee == 'All')
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('MONTH(sales.saleDate)',$month)
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sales.customerID',$customer)
+//                     ->get()
+//                     ->result();
+//     }
+//   else
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('MONTH(sales.saleDate)',$month)
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sales.customerID',$customer)
+//                     ->where('sales.regby',$employee)
+//                     ->get()
+//                     ->result();
+//     }
+//   return $query;  
+// }
 
-public function get_ysales_data($year,$customer,$employee)
-  {
-  if ($customer == 'All' && $employee == 'All')
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-    }
-  else if ($customer == 'All')
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sales.regby',$employee)
-                    ->get()
-                    ->result();
-    }
-  else if ($employee == 'All')
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sales.customerID',$customer)
-                    ->get()
-                    ->result();
-    }
-  else
-    {
-    $query = $this->db->select('
-                            sales.*,
-                            customers.cus_id,
-                            customers.customerName,
-                            users.empid,
-                            users.name')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->join('users','users.uid = sales.regby','left')
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sales.customerID',$customer)
-                    ->where('sales.regby',$employee)
-                    ->get()
-                    ->result();
-    }
-  return $query;  
-}
+// public function get_ysales_data($year,$customer,$employee)
+//   {
+//   if ($customer == 'All' && $employee == 'All')
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//     }
+//   else if ($customer == 'All')
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sales.regby',$employee)
+//                     ->get()
+//                     ->result();
+//     }
+//   else if ($employee == 'All')
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sales.customerID',$customer)
+//                     ->get()
+//                     ->result();
+//     }
+//   else
+//     {
+//     $query = $this->db->select('
+//                             sales.*,
+//                             customers.cus_id,
+//                             customers.customerName,
+//                             users.empid,
+//                             users.name')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->join('users','users.uid = sales.regby','left')
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sales.customerID',$customer)
+//                     ->where('sales.regby',$employee)
+//                     ->get()
+//                     ->result();
+//     }
+//   return $query;  
+// }
 
-public function get_purchses_data()
-  {
-  $query = $this->db->select('
-                          purchase.*,
-                          suppliers.sup_id,
-                          suppliers.supplierName,users.name')
-                  ->from('purchase')
-                  ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                  ->join('users','users.uid = purchase.regby','left')
-                  ->where('purchase.compid',$_SESSION['compid'])
-                  ->get()
-                  ->result();
-  return $query;
-}
+public function get_sales_data($limit = null, $offset = null)
+{
+    $this->db->select('
+                        sales.*,
+                        customers.cus_id,
+                        customers.customerName,
+                        users.empid,
+                        users.name')
+              ->from('sales')
+              ->join('customers', 'customers.customerID = sales.customerID', 'left')
+              ->join('users', 'users.uid = sales.regby', 'left')
+              ->where('sales.compid', $_SESSION['compid']);
 
-public function get_dpurchses_data($sdate,$edate,$supplier,$user)
-  {
-    if ($supplier == 'All' && $user == 'All')
-      {
-        $query = $this->db->select('
-                          purchase.*,
-                          suppliers.sup_id,
-                          suppliers.supplierName,users.name,users.uid')
-                  ->from('purchase')
-                  ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                  ->join('users','users.uid = purchase.regby','left')
-                  ->where('purchase.purchaseDate >=',$sdate)
-                  ->where('purchase.purchaseDate <=',$edate)                
-                  ->where('purchase.compid',$_SESSION['compid'])
-                  ->get()
-                  ->result();
-      }
-    else if($user != 'All' && $supplier == 'All'){
-        $query = $this->db->select('
-                          purchase.*,
-                          suppliers.sup_id,
-                          suppliers.supplierName,users.name,users.uid')
-                  ->from('purchase')
-                  ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                  ->join('users','users.uid = purchase.regby','left')
-                  ->where('purchase.purchaseDate >=',$sdate)
-                  ->where('purchase.purchaseDate <=',$edate)               
-                  ->where('purchase.regby',$user)
-                  ->get()
-                  ->result();
-      }
-      else if($user != 'All' && $supplier != 'All'){
-        $query = $this->db->select('
-                            purchase.*,
-                            suppliers.sup_id,
-                            suppliers.supplierName,users.name,users.uid')
-                    ->from('purchase')
-                    ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                    ->join('users','users.uid = purchase.regby','left')
-                    ->where('purchase.purchaseDate >=',$sdate)
-                    ->where('purchase.purchaseDate <=',$edate)                 
-                    ->where('purchase.regby',$user)
-                    ->where('purchase.supplier',$supplier)
-                    ->get()
-                    ->result();
-        }else{
-        $query = $this->db->select('
-                          purchase.*,
-                          suppliers.sup_id,
-                          suppliers.supplierName,users.name,users.uid')
-                  ->from('purchase')
-                  ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                  ->join('users','users.uid = purchase.regby','left')
-                  ->where('purchase.purchaseDate >=',$sdate)
-                  ->where('purchase.purchaseDate <=',$edate)
-                  ->where('purchase.supplier',$supplier)
-                  ->get()
-                  ->result();
-      }
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
     return $query;  
 }
 
-public function get_mpurchses_data($month,$year,$supplier,$user)
-  {
-  if ($supplier == 'All' && $user == 'All')
-    {
-      $query = $this->db->select('
-                        purchase.*,
-                        suppliers.sup_id,
-                        suppliers.supplierName,users.name,users.uid')
-                ->from('purchase')
-                ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                ->join('users','users.uid = purchase.regby','left')
-                ->where('MONTH(purchaseDate)',$month)
-                ->where('YEAR(purchaseDate)',$year)                
-                ->where('purchase.compid',$_SESSION['compid'])
-                ->get()
-                ->result();
+public function get_dsales_data($sdate, $edate, $customer, $employee, $limit = null, $offset = null)
+{
+    $this->db->select('
+                        sales.*,
+                        customers.cus_id,
+                        customers.customerName,
+                        users.empid,
+                        users.name')
+              ->from('sales')
+              ->join('customers', 'customers.customerID = sales.customerID', 'left')
+              ->join('users', 'users.uid = sales.regby', 'left')
+              ->where('sales.saleDate >=', $sdate)
+              ->where('sales.saleDate <=', $edate);
+
+    if ($customer != 'All') {
+        $this->db->where('sales.customerID', $customer);
     }
-  else if($user != 'All' && $supplier == 'All'){
-      $query = $this->db->select('
-                        purchase.*,
-                        suppliers.sup_id,
-                        suppliers.supplierName,users.name,users.uid')
-                ->from('purchase')
-                ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                ->join('users','users.uid = purchase.regby','left')
-                ->where('MONTH(purchaseDate)',$month)
-                ->where('YEAR(purchaseDate)',$year)                
-                ->where('purchase.regby',$user)
-                ->get()
-                ->result();
+    if ($employee != 'All') {
+        $this->db->where('sales.regby', $employee);
     }
-    else if($user != 'All' && $supplier != 'All'){
-      $query = $this->db->select('
-                          purchase.*,
-                          suppliers.sup_id,
-                          suppliers.supplierName,users.name,users.uid')
-                  ->from('purchase')
-                  ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                  ->join('users','users.uid = purchase.regby','left')
-                  ->where('MONTH(purchaseDate)',$month)
-                  ->where('YEAR(purchaseDate)',$year)                  
-                  ->where('purchase.regby',$user)
-                  ->where('purchase.supplier',$supplier)
-                  ->get()
-                  ->result();
-      }else{
-      $query = $this->db->select('
-                        purchase.*,
-                        suppliers.sup_id,
-                        suppliers.supplierName,users.name,users.uid')
-                ->from('purchase')
-                ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                ->join('users','users.uid = purchase.regby','left')
-                ->where('MONTH(purchaseDate)',$month)
-                ->where('YEAR(purchaseDate)',$year)
-                ->where('purchase.supplier',$supplier)
-                ->get()
-                ->result();
+    $this->db->where('sales.compid', $_SESSION['compid']);
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
     }
-  return $query;  
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_ypurchses_data($year,$supplier,$user)
-  {
-  if ($supplier == 'All' && $user == 'All')
-    {
-      $query = $this->db->select('
+public function get_msales_data($month, $year, $customer, $employee, $limit = null, $offset = null)
+{
+    $this->db->select('
+                        sales.*,
+                        customers.cus_id,
+                        customers.customerName,
+                        users.empid,
+                        users.name')
+              ->from('sales')
+              ->join('customers', 'customers.customerID = sales.customerID', 'left')
+              ->join('users', 'users.uid = sales.regby', 'left')
+              ->where('MONTH(sales.saleDate)', $month)
+              ->where('YEAR(sales.saleDate)', $year);
+
+    if ($customer != 'All') {
+        $this->db->where('sales.customerID', $customer);
+    }
+    if ($employee != 'All') {
+        $this->db->where('sales.regby', $employee);
+    }
+    $this->db->where('sales.compid', $_SESSION['compid']);
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_ysales_data($year, $customer, $employee, $limit = null, $offset = null)
+{
+    $this->db->select('
+                        sales.*,
+                        customers.cus_id,
+                        customers.customerName,
+                        users.empid,
+                        users.name')
+              ->from('sales')
+              ->join('customers', 'customers.customerID = sales.customerID', 'left')
+              ->join('users', 'users.uid = sales.regby', 'left')
+              ->where('YEAR(sales.saleDate)', $year);
+
+    if ($customer != 'All') {
+        $this->db->where('sales.customerID', $customer);
+    }
+    if ($employee != 'All') {
+        $this->db->where('sales.regby', $employee);
+    }
+    $this->db->where('sales.compid', $_SESSION['compid']);
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+// public function get_purchses_data()
+//   {
+//   $query = $this->db->select('
+//                           purchase.*,
+//                           suppliers.sup_id,
+//                           suppliers.supplierName,users.name')
+//                   ->from('purchase')
+//                   ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                   ->join('users','users.uid = purchase.regby','left')
+//                   ->where('purchase.compid',$_SESSION['compid'])
+//                   ->get()
+//                   ->result();
+//   return $query;
+// }
+
+// public function get_dpurchses_data($sdate,$edate,$supplier,$user)
+//   {
+//     if ($supplier == 'All' && $user == 'All')
+//       {
+//         $query = $this->db->select('
+//                           purchase.*,
+//                           suppliers.sup_id,
+//                           suppliers.supplierName,users.name,users.uid')
+//                   ->from('purchase')
+//                   ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                   ->join('users','users.uid = purchase.regby','left')
+//                   ->where('purchase.purchaseDate >=',$sdate)
+//                   ->where('purchase.purchaseDate <=',$edate)                
+//                   ->where('purchase.compid',$_SESSION['compid'])
+//                   ->get()
+//                   ->result();
+//       }
+//     else if($user != 'All' && $supplier == 'All'){
+//         $query = $this->db->select('
+//                           purchase.*,
+//                           suppliers.sup_id,
+//                           suppliers.supplierName,users.name,users.uid')
+//                   ->from('purchase')
+//                   ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                   ->join('users','users.uid = purchase.regby','left')
+//                   ->where('purchase.purchaseDate >=',$sdate)
+//                   ->where('purchase.purchaseDate <=',$edate)               
+//                   ->where('purchase.regby',$user)
+//                   ->get()
+//                   ->result();
+//       }
+//       else if($user != 'All' && $supplier != 'All'){
+//         $query = $this->db->select('
+//                             purchase.*,
+//                             suppliers.sup_id,
+//                             suppliers.supplierName,users.name,users.uid')
+//                     ->from('purchase')
+//                     ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                     ->join('users','users.uid = purchase.regby','left')
+//                     ->where('purchase.purchaseDate >=',$sdate)
+//                     ->where('purchase.purchaseDate <=',$edate)                 
+//                     ->where('purchase.regby',$user)
+//                     ->where('purchase.supplier',$supplier)
+//                     ->get()
+//                     ->result();
+//         }else{
+//         $query = $this->db->select('
+//                           purchase.*,
+//                           suppliers.sup_id,
+//                           suppliers.supplierName,users.name,users.uid')
+//                   ->from('purchase')
+//                   ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                   ->join('users','users.uid = purchase.regby','left')
+//                   ->where('purchase.purchaseDate >=',$sdate)
+//                   ->where('purchase.purchaseDate <=',$edate)
+//                   ->where('purchase.supplier',$supplier)
+//                   ->get()
+//                   ->result();
+//       }
+//     return $query;  
+// }
+
+// public function get_mpurchses_data($month,$year,$supplier,$user)
+//   {
+//   if ($supplier == 'All' && $user == 'All')
+//     {
+//       $query = $this->db->select('
+//                         purchase.*,
+//                         suppliers.sup_id,
+//                         suppliers.supplierName,users.name,users.uid')
+//                 ->from('purchase')
+//                 ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                 ->join('users','users.uid = purchase.regby','left')
+//                 ->where('MONTH(purchaseDate)',$month)
+//                 ->where('YEAR(purchaseDate)',$year)                
+//                 ->where('purchase.compid',$_SESSION['compid'])
+//                 ->get()
+//                 ->result();
+//     }
+//   else if($user != 'All' && $supplier == 'All'){
+//       $query = $this->db->select('
+//                         purchase.*,
+//                         suppliers.sup_id,
+//                         suppliers.supplierName,users.name,users.uid')
+//                 ->from('purchase')
+//                 ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                 ->join('users','users.uid = purchase.regby','left')
+//                 ->where('MONTH(purchaseDate)',$month)
+//                 ->where('YEAR(purchaseDate)',$year)                
+//                 ->where('purchase.regby',$user)
+//                 ->get()
+//                 ->result();
+//     }
+//     else if($user != 'All' && $supplier != 'All'){
+//       $query = $this->db->select('
+//                           purchase.*,
+//                           suppliers.sup_id,
+//                           suppliers.supplierName,users.name,users.uid')
+//                   ->from('purchase')
+//                   ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                   ->join('users','users.uid = purchase.regby','left')
+//                   ->where('MONTH(purchaseDate)',$month)
+//                   ->where('YEAR(purchaseDate)',$year)                  
+//                   ->where('purchase.regby',$user)
+//                   ->where('purchase.supplier',$supplier)
+//                   ->get()
+//                   ->result();
+//       }else{
+//       $query = $this->db->select('
+//                         purchase.*,
+//                         suppliers.sup_id,
+//                         suppliers.supplierName,users.name,users.uid')
+//                 ->from('purchase')
+//                 ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                 ->join('users','users.uid = purchase.regby','left')
+//                 ->where('MONTH(purchaseDate)',$month)
+//                 ->where('YEAR(purchaseDate)',$year)
+//                 ->where('purchase.supplier',$supplier)
+//                 ->get()
+//                 ->result();
+//     }
+//   return $query;  
+// }
+
+// public function get_ypurchses_data($year,$supplier,$user)
+//   {
+//   if ($supplier == 'All' && $user == 'All')
+//     {
+//       $query = $this->db->select('
+//                         purchase.*,
+//                         suppliers.sup_id,
+//                         suppliers.supplierName,users.name,users.uid')
+//                 ->from('purchase')
+//                 ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                 ->join('users','users.uid = purchase.regby','left')
+//                 ->where('YEAR(purchaseDate)',$year)
+//                 ->where('purchase.compid',$_SESSION['compid'])
+//                 ->get()
+//                 ->result();
+//     }
+//   else if($user != 'All' && $supplier == 'All'){
+//       $query = $this->db->select('
+//                         purchase.*,
+//                         suppliers.sup_id,
+//                         suppliers.supplierName,users.name,users.uid')
+//                 ->from('purchase')
+//                 ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                 ->join('users','users.uid = purchase.regby','left')
+//                 ->where('YEAR(purchaseDate)',$year)
+//                 ->where('purchase.regby',$user)
+//                 ->get()
+//                 ->result();
+//     }
+//     else if($user != 'All' && $supplier != 'All'){
+//       $query = $this->db->select('
+//                           purchase.*,
+//                           suppliers.sup_id,
+//                           suppliers.supplierName,users.name,users.uid')
+//                   ->from('purchase')
+//                   ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                   ->join('users','users.uid = purchase.regby','left')
+//                   ->where('YEAR(purchaseDate)',$year)
+//                   ->where('purchase.regby',$user)
+//                   ->where('purchase.supplier',$supplier)
+//                   ->get()
+//                   ->result();
+//       }else{
+//       $query = $this->db->select('
+//                         purchase.*,
+//                         suppliers.sup_id,
+//                         suppliers.supplierName,users.name,users.uid')
+//                 ->from('purchase')
+//                 ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
+//                 ->join('users','users.uid = purchase.regby','left')
+//                 ->where('YEAR(purchaseDate)',$year)
+//                 ->where('purchase.supplier',$supplier)
+//                 ->get()
+//                 ->result();
+//     }
+//   return $query;  
+// }
+
+public function get_purchses_data($limit = null, $offset = null)
+{
+    $this->db->select('
                         purchase.*,
                         suppliers.sup_id,
-                        suppliers.supplierName,users.name,users.uid')
-                ->from('purchase')
-                ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                ->join('users','users.uid = purchase.regby','left')
-                ->where('YEAR(purchaseDate)',$year)
-                ->where('purchase.compid',$_SESSION['compid'])
-                ->get()
-                ->result();
+                        suppliers.supplierName,
+                        users.name')
+              ->from('purchase')
+              ->join('suppliers', 'suppliers.supplierID = purchase.supplier', 'left')
+              ->join('users', 'users.uid = purchase.regby', 'left')
+              ->where('purchase.compid', $_SESSION['compid']);
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
     }
-  else if($user != 'All' && $supplier == 'All'){
-      $query = $this->db->select('
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_dpurchses_data($sdate, $edate, $supplier, $user, $limit = null, $offset = null)
+{
+    $this->db->select('
                         purchase.*,
                         suppliers.sup_id,
-                        suppliers.supplierName,users.name,users.uid')
-                ->from('purchase')
-                ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                ->join('users','users.uid = purchase.regby','left')
-                ->where('YEAR(purchaseDate)',$year)
-                ->where('purchase.regby',$user)
-                ->get()
-                ->result();
+                        suppliers.supplierName,
+                        users.name, users.uid')
+              ->from('purchase')
+              ->join('suppliers', 'suppliers.supplierID = purchase.supplier', 'left')
+              ->join('users', 'users.uid = purchase.regby', 'left')
+              ->where('purchase.purchaseDate >=', $sdate)
+              ->where('purchase.purchaseDate <=', $edate)
+              ->where('purchase.compid', $_SESSION['compid']);
+
+    if ($supplier != 'All') {
+        $this->db->where('purchase.supplier', $supplier);
     }
-    else if($user != 'All' && $supplier != 'All'){
-      $query = $this->db->select('
-                          purchase.*,
-                          suppliers.sup_id,
-                          suppliers.supplierName,users.name,users.uid')
-                  ->from('purchase')
-                  ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                  ->join('users','users.uid = purchase.regby','left')
-                  ->where('YEAR(purchaseDate)',$year)
-                  ->where('purchase.regby',$user)
-                  ->where('purchase.supplier',$supplier)
-                  ->get()
-                  ->result();
-      }else{
-      $query = $this->db->select('
+    if ($user != 'All') {
+        $this->db->where('purchase.regby', $user);
+    }
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_mpurchses_data($month, $year, $supplier, $user, $limit = null, $offset = null)
+{
+    $this->db->select('
                         purchase.*,
                         suppliers.sup_id,
-                        suppliers.supplierName,users.name,users.uid')
-                ->from('purchase')
-                ->join('suppliers','suppliers.supplierID = purchase.supplier','left')
-                ->join('users','users.uid = purchase.regby','left')
-                ->where('YEAR(purchaseDate)',$year)
-                ->where('purchase.supplier',$supplier)
-                ->get()
-                ->result();
+                        suppliers.supplierName,
+                        users.name, users.uid')
+              ->from('purchase')
+              ->join('suppliers', 'suppliers.supplierID = purchase.supplier', 'left')
+              ->join('users', 'users.uid = purchase.regby', 'left')
+              ->where('MONTH(purchaseDate)', $month)
+              ->where('YEAR(purchaseDate)', $year)
+              ->where('purchase.compid', $_SESSION['compid']);
+
+    if ($supplier != 'All') {
+        $this->db->where('purchase.supplier', $supplier);
     }
-  return $query;  
+    if ($user != 'All') {
+        $this->db->where('purchase.regby', $user);
+    }
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_ypurchses_data($year, $supplier, $user, $limit = null, $offset = null)
+{
+    $this->db->select('
+                        purchase.*,
+                        suppliers.sup_id,
+                        suppliers.supplierName,
+                        users.name, users.uid')
+              ->from('purchase')
+              ->join('suppliers', 'suppliers.supplierID = purchase.supplier', 'left')
+              ->join('users', 'users.uid = purchase.regby', 'left')
+              ->where('YEAR(purchaseDate)', $year)
+              ->where('purchase.compid', $_SESSION['compid']);
+
+    if ($supplier != 'All') {
+        $this->db->where('purchase.supplier', $supplier);
+    }
+    if ($user != 'All') {
+        $this->db->where('purchase.regby', $user);
+    }
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
 public function total_sales_amount()
@@ -1564,91 +1780,91 @@ public function return_ycust_ledger_data($customer,$year)
   return $query;  
 }
 
-public function get_voucher_data()
-  {
-  $query = $this->db->select("*")
-                  ->from('vaucher')
-                  ->where('compid',$_SESSION['compid'])
-                  ->get()
-                  ->result();
-  return $query;  
-}
+// public function get_voucher_data()
+//   {
+//   $query = $this->db->select("*")
+//                   ->from('vaucher')
+//                   ->where('compid',$_SESSION['compid'])
+//                   ->get()
+//                   ->result();
+//   return $query;  
+// }
 
-public function get_dall_voucher_data($sdate,$edate,$vtype)
-  {
-  if($vtype == 'All')
-    {
-    $query = $this->db->select("*")
-                    ->from('vaucher')
-                    ->where('voucherdate >=', $sdate)
-                    ->where('voucherdate <=', $edate)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-    }
-  else
-    {
-    $query = $this->db->select("*")
-                    ->from('vaucher')
-                    ->where('voucherdate >=', $sdate)
-                    ->where('voucherdate <=', $edate)
-                    ->where('vauchertype',$vtype)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-    }
-  return $query;  
-}
+// public function get_dall_voucher_data($sdate,$edate,$vtype)
+//   {
+//   if($vtype == 'All')
+//     {
+//     $query = $this->db->select("*")
+//                     ->from('vaucher')
+//                     ->where('voucherdate >=', $sdate)
+//                     ->where('voucherdate <=', $edate)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//     }
+//   else
+//     {
+//     $query = $this->db->select("*")
+//                     ->from('vaucher')
+//                     ->where('voucherdate >=', $sdate)
+//                     ->where('voucherdate <=', $edate)
+//                     ->where('vauchertype',$vtype)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//     }
+//   return $query;  
+// }
 
-public function get_mall_voucher_data($month,$year,$vtype)
-  {
-  if($vtype == 'All')
-    {
-    $query = $this->db->select("*")
-                    ->from('vaucher')
-                    ->where('MONTH(voucherdate)',$month)
-                    ->where('YEAR(voucherdate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-    }
-  else
-    {
-    $query = $this->db->select("*")
-                    ->from('vaucher')
-                    ->where('MONTH(voucherdate)',$month)
-                    ->where('YEAR(voucherdate)',$year)
-                    ->where('vauchertype',$vtype)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-    }
-  return $query;  
-}
+// public function get_mall_voucher_data($month,$year,$vtype)
+//   {
+//   if($vtype == 'All')
+//     {
+//     $query = $this->db->select("*")
+//                     ->from('vaucher')
+//                     ->where('MONTH(voucherdate)',$month)
+//                     ->where('YEAR(voucherdate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//     }
+//   else
+//     {
+//     $query = $this->db->select("*")
+//                     ->from('vaucher')
+//                     ->where('MONTH(voucherdate)',$month)
+//                     ->where('YEAR(voucherdate)',$year)
+//                     ->where('vauchertype',$vtype)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//     }
+//   return $query;  
+// }
 
-public function get_yall_voucher_data($year,$vtype)
-  {
-  if($vtype == 'All')
-    {
-    $query = $this->db->select("*")
-                    ->from('vaucher')
-                    ->where('YEAR(voucherdate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-    }
-  else
-    {
-    $query = $this->db->select("*")
-                    ->from('vaucher')
-                    ->where('YEAR(voucherdate)',$year)
-                    ->where('vauchertype',$vtype)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-    }
-  return $query;  
-}
+// public function get_yall_voucher_data($year,$vtype)
+//   {
+//   if($vtype == 'All')
+//     {
+//     $query = $this->db->select("*")
+//                     ->from('vaucher')
+//                     ->where('YEAR(voucherdate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//     }
+//   else
+//     {
+//     $query = $this->db->select("*")
+//                     ->from('vaucher')
+//                     ->where('YEAR(voucherdate)',$year)
+//                     ->where('vauchertype',$vtype)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//     }
+//   return $query;  
+// }
 
 public function today_sales_amount()
   {
@@ -1882,115 +2098,238 @@ public function get_all_product_data($pType)
   return $query;  
 }
 
-public function get_sales_product_data()
-  {
-  $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+
+
+
+
+// public function get_sales_product_data()
+//   {
+//   $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+//                     ->from('sale_product')
+//                     ->join('sales','sales.saleID = sale_product.saleID', 'left')
+//                     ->join('products','products.productID = sale_product.productID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid', $_SESSION['compid'])
+//                     ->order_by('sale_product.saleID', 'DESC' ) 
+//                     // ->limit(10000)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_dsales_product_data($sdate,$edate,$pid)
+//   {
+//   if($pid == 'All')
+//     {
+//     $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+//                     ->from('sale_product')
+//                     ->join('sales','sales.saleID = sale_product.saleID', 'left')
+//                     ->join('products','products.productID = sale_product.productID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid', $_SESSION['compid'])
+//                     ->where('sales.saleDate >=',$sdate)
+//                     ->where('sales.saleDate <=',$edate)
+//                     ->get()
+//                     ->result();
+//     }
+//   else
+//     {
+//     $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+//                     ->from('sale_product')
+//                     ->join('sales','sales.saleID = sale_product.saleID', 'left')
+//                     ->join('products','products.productID = sale_product.productID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid', $_SESSION['compid'])
+//                     ->where('sales.saleDate >=',$sdate)
+//                     ->where('sales.saleDate <=',$edate)
+//                     ->where('sale_product.productID',$pid)
+//                     ->get()
+//                     ->result();
+//     }
+//   return $query;  
+// }
+
+// public function get_msales_product_data($month,$year,$pid)
+//   {
+//   if($pid == 'All')
+//     {
+//     $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+//                     ->from('sale_product')
+//                     ->join('sales','sales.saleID = sale_product.saleID', 'left')
+//                     ->join('products','products.productID = sale_product.productID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid', $_SESSION['compid'])
+//                     ->where('MONTH(sales.saleDate)',$month)
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->get()
+//                     ->result();
+//     }
+//   else
+//     {
+//     $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+//                     ->from('sale_product')
+//                     ->join('sales','sales.saleID = sale_product.saleID', 'left')
+//                     ->join('products','products.productID = sale_product.productID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid', $_SESSION['compid'])
+//                     ->where('MONTH(sales.saleDate)',$month)
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sale_product.productID',$pid)
+//                     ->get()
+//                     ->result();
+//     }
+//   return $query;  
+// }
+
+// public function get_ysales_product_data($year,$pid)
+//   {
+//   if($pid == 'All')
+//     {
+//     $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+//                     ->from('sale_product')
+//                     ->join('sales','sales.saleID = sale_product.saleID', 'left')
+//                     ->join('products','products.productID = sale_product.productID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid', $_SESSION['compid'])
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->get()
+//                     ->result();
+//     }
+//   else
+//     {
+//     $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+//                     ->from('sale_product')
+//                     ->join('sales','sales.saleID = sale_product.saleID', 'left')
+//                     ->join('products','products.productID = sale_product.productID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid', $_SESSION['compid'])
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->where('sale_product.productID',$pid)
+//                     ->get()
+//                     ->result();
+//     }
+//   return $query;  
+// }
+
+public function get_ysales_product_data($year, $pid, $limit, $offset)
+{
+    if($pid == 'All')
+    {
+        $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+                    ->from('sale_product')
+                    ->join('sales','sales.saleID = sale_product.saleID', 'left')
+                    ->join('products','products.productID = sale_product.productID', 'left')
+                    ->join('customers','customers.customerID = sales.customerID', 'left')
+                    ->where('sales.compid', $_SESSION['compid'])
+                    ->where('YEAR(sales.saleDate)',$year)
+                    ->limit($limit, $offset)
+                    ->get()
+                    ->result();
+    }
+    else
+    {
+        $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+                    ->from('sale_product')
+                    ->join('sales','sales.saleID = sale_product.saleID', 'left')
+                    ->join('products','products.productID = sale_product.productID', 'left')
+                    ->join('customers','customers.customerID = sales.customerID', 'left')
+                    ->where('sales.compid', $_SESSION['compid'])
+                    ->where('YEAR(sales.saleDate)',$year)
+                    ->where('sale_product.productID',$pid)
+                    ->limit($limit, $offset)
+                    ->get()
+                    ->result();
+    }
+    return $query;  
+}
+
+public function get_sales_product_data($limit, $offset)
+{
+    $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
                     ->from('sale_product')
                     ->join('sales','sales.saleID = sale_product.saleID', 'left')
                     ->join('products','products.productID = sale_product.productID', 'left')
                     ->join('customers','customers.customerID = sales.customerID', 'left')
                     ->where('sales.compid', $_SESSION['compid'])
                     ->order_by('sale_product.saleID', 'DESC' ) 
-                    // ->limit(10000)
+                    ->limit($limit, $offset)
                     ->get()
                     ->result();
 
-  return $query;  
+    return $query;  
 }
 
-public function get_dsales_product_data($sdate,$edate,$pid)
-  {
-  if($pid == 'All')
+public function get_dsales_product_data($sdate, $edate, $pid, $limit, $offset)
+{
+    if($pid == 'All')
     {
-    $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
-                    ->from('sale_product')
-                    ->join('sales','sales.saleID = sale_product.saleID', 'left')
-                    ->join('products','products.productID = sale_product.productID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid', $_SESSION['compid'])
-                    ->where('sales.saleDate >=',$sdate)
-                    ->where('sales.saleDate <=',$edate)
-                    ->get()
-                    ->result();
+        $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+                        ->from('sale_product')
+                        ->join('sales','sales.saleID = sale_product.saleID', 'left')
+                        ->join('products','products.productID = sale_product.productID', 'left')
+                        ->join('customers','customers.customerID = sales.customerID', 'left')
+                        ->where('sales.compid', $_SESSION['compid'])
+                        ->where('sales.saleDate >=',$sdate)
+                        ->where('sales.saleDate <=',$edate)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
     }
-  else
+    else
     {
-    $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
-                    ->from('sale_product')
-                    ->join('sales','sales.saleID = sale_product.saleID', 'left')
-                    ->join('products','products.productID = sale_product.productID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid', $_SESSION['compid'])
-                    ->where('sales.saleDate >=',$sdate)
-                    ->where('sales.saleDate <=',$edate)
-                    ->where('sale_product.productID',$pid)
-                    ->get()
-                    ->result();
+        $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+                        ->from('sale_product')
+                        ->join('sales','sales.saleID = sale_product.saleID', 'left')
+                        ->join('products','products.productID = sale_product.productID', 'left')
+                        ->join('customers','customers.customerID = sales.customerID', 'left')
+                        ->where('sales.compid', $_SESSION['compid'])
+                        ->where('sales.saleDate >=',$sdate)
+                        ->where('sales.saleDate <=',$edate)
+                        ->where('sale_product.productID',$pid)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
     }
-  return $query;  
+    return $query;  
 }
 
-public function get_msales_product_data($month,$year,$pid)
-  {
-  if($pid == 'All')
+public function get_msales_product_data($month, $year, $pid, $limit, $offset)
+{
+    if($pid == 'All')
     {
-    $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
-                    ->from('sale_product')
-                    ->join('sales','sales.saleID = sale_product.saleID', 'left')
-                    ->join('products','products.productID = sale_product.productID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid', $_SESSION['compid'])
-                    ->where('MONTH(sales.saleDate)',$month)
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->get()
-                    ->result();
+        $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+                        ->from('sale_product')
+                        ->join('sales','sales.saleID = sale_product.saleID', 'left')
+                        ->join('products','products.productID = sale_product.productID', 'left')
+                        ->join('customers','customers.customerID = sales.customerID', 'left')
+                        ->where('sales.compid', $_SESSION['compid'])
+                        ->where('MONTH(sales.saleDate)',$month)
+                        ->where('YEAR(sales.saleDate)',$year)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
     }
-  else
+    else
     {
-    $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
-                    ->from('sale_product')
-                    ->join('sales','sales.saleID = sale_product.saleID', 'left')
-                    ->join('products','products.productID = sale_product.productID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid', $_SESSION['compid'])
-                    ->where('MONTH(sales.saleDate)',$month)
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sale_product.productID',$pid)
-                    ->get()
-                    ->result();
+        $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
+                        ->from('sale_product')
+                        ->join('sales','sales.saleID = sale_product.saleID', 'left')
+                        ->join('products','products.productID = sale_product.productID', 'left')
+                        ->join('customers','customers.customerID = sales.customerID', 'left')
+                        ->where('sales.compid', $_SESSION['compid'])
+                        ->where('MONTH(sales.saleDate)',$month)
+                        ->where('YEAR(sales.saleDate)',$year)
+                        ->where('sale_product.productID',$pid)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
     }
-  return $query;  
+    return $query;  
 }
 
-public function get_ysales_product_data($year,$pid)
-  {
-  if($pid == 'All')
-    {
-    $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
-                    ->from('sale_product')
-                    ->join('sales','sales.saleID = sale_product.saleID', 'left')
-                    ->join('products','products.productID = sale_product.productID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid', $_SESSION['compid'])
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->get()
-                    ->result();
-    }
-  else
-    {
-    $query = $this->db->select('sale_product.*,sales.invoice_no,sales.saleDate,products.productName,products.productcode,customers.customerName,customers.mobile')
-                    ->from('sale_product')
-                    ->join('sales','sales.saleID = sale_product.saleID', 'left')
-                    ->join('products','products.productID = sale_product.productID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid', $_SESSION['compid'])
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->where('sale_product.productID',$pid)
-                    ->get()
-                    ->result();
-    }
-  return $query;  
-}
+
+
 
 public function get_dspurchase_data($sdate,$edate,$sid)
   {
@@ -3244,709 +3583,1038 @@ public function user_aorder_ledger()
   return $query;  
 }
 
-public function sales_adata()
-  {
-  $query = $this->db->select('*')
-                  ->from('sales')
-                  ->where('compid',$_SESSION['compid'])
-                  ->get()
-                  ->result();
-  return $query;  
+// public function sales_adata()
+//   {
+//   $query = $this->db->select('*')
+//                   ->from('sales')
+//                   ->where('compid',$_SESSION['compid'])
+//                   ->get()
+//                   ->result();
+//   return $query;  
+// }
+
+// public function sales_ddata($sdate,$edate)
+//   {
+//     $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('saleDate >=',$sdate)
+//                     ->where('saleDate <=',$edate)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//   return $query;  
+// }
+
+// public function sales_mdata($month,$year)
+//   {
+//     $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('MONTH(saleDate)',$month)
+//                     ->where('YEAR(saleDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+//   return $query;  
+// }
+
+// public function sales_ydata($year)
+//   {
+//     $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('YEAR(saleDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function sales_due_adata()
+//   {
+//   $query = $this->db->select('sales.*,customers.customerName,customers.mobile,')
+//                   ->from('sales')
+//                   ->join('customers','customers.customerID = sales.customerID','left')
+//                   ->where('totalAmount > paidAmount')
+//                   ->where('sales.compid',$_SESSION['compid'])
+//                   ->get()
+//                   ->result();
+//   return $query;  
+// }
+
+// public function sales_due_ddata($sdate,$edate)
+//   {
+//     $query = $this->db->select('sales.*,customers.customerName,customers.mobile,')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->where('totalAmount > paidAmount')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('saleDate >=',$sdate)
+//                     ->where('saleDate <=',$edate)
+//                     ->get()
+//                     ->result();
+//   return $query;  
+// }
+
+// public function sales_due_mdata($month,$year)
+//   {
+//     $query = $this->db->select('sales.*,customers.customerName,customers.mobile,')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->where('totalAmount > paidAmount')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('MONTH(saleDate)',$month)
+//                     ->where('YEAR(saleDate)',$year)
+//                     ->get()
+//                     ->result();
+//   return $query;  
+// }
+
+// public function sales_due_ydata($year)
+//   {
+//     $query = $this->db->select('sales.*,customers.customerName,customers.mobile,')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID','left')
+//                     ->where('totalAmount > paidAmount')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('YEAR(saleDate)',$year)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_top_sales_product_data()
+//     {
+//     $query = $this->db->select('sma_units.unitName,categories.categoryName,sales.compid,products.productName,products.image,products.productcode,SUM(sale_product.quantity) as total')
+//                     ->from('sale_product')
+//                     ->join('products','products.productID = sale_product.productID','left')
+//                     ->join('sma_units','products.unit = sma_units.id','left')
+//                     ->join('categories','categories.categoryID = products.categoryID','left')
+//                     ->join('sales','sales.saleID = sale_product.saleID','left')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->group_by('sale_product.productID')
+//                     ->order_by('total','DESC')
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+public function get_top_sales_product_data($limit = null, $offset = null)
+{
+    $this->db->select('sma_units.unitName, categories.categoryName, sales.compid, products.productName, products.image, products.productcode, SUM(sale_product.quantity) as total')
+             ->from('sale_product')
+             ->join('products', 'products.productID = sale_product.productID', 'left')
+             ->join('sma_units', 'products.unit = sma_units.id', 'left')
+             ->join('categories', 'categories.categoryID = products.categoryID', 'left')
+             ->join('sales', 'sales.saleID = sale_product.saleID', 'left')
+             ->where('sales.compid', $_SESSION['compid'])
+             ->group_by('sale_product.productID')
+             ->order_by('total', 'DESC');
+
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
 }
 
-public function sales_ddata($sdate,$edate)
-  {
-    $query = $this->db->select('*')
-                    ->from('sales')
-                    ->where('saleDate >=',$sdate)
-                    ->where('saleDate <=',$edate)
-                    ->where('compid',$_SESSION['compid'])
+// public function get_cost_report_data()
+//   {
+//   $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+//                 ->from('vaucher')
+//                 ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
+//                 ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
+//                 ->where('vaucher.vauchertype','Debit Voucher')
+//                 ->where('vaucher.compid',$_SESSION['compid'])
+//                 ->group_by('vaucher.invoice')
+//                 ->get()
+//                 ->result();
+//   return $query; 
+// }
+
+// public function get_dcost_report_data($sdate,$edate,$vtype)
+//   {
+//       if($vtype=='All'){
+//           $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+//                 ->from('vaucher')
+//                 ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
+//                 ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
+//                 ->where('vaucher.vauchertype','Debit Voucher')
+//                 ->where('DATE(voucherdate) >=',$sdate)
+//                 ->where('DATE(voucherdate) <=',$edate)
+//                 ->where('vaucher.compid',$_SESSION['compid'])
+//                 ->group_by('vaucher.invoice')
+//                 ->get()
+//                 ->result();
+//       }
+//       else{
+//         $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+//                         ->from('vaucher')
+//                         ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
+//                         ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
+//                         ->where('vaucher.vauchertype','Debit Voucher')
+//                         ->where('DATE(voucherdate) >=',$sdate)
+//                         ->where('DATE(voucherdate) <=',$edate)
+//                         ->where('cost_type.ct_id',$vtype)
+//                         ->where('vaucher.compid',$_SESSION['compid'])
+//                         ->group_by('vaucher.invoice')
+//                         ->get()
+//                         ->result();
+//       }
+//   return $query; 
+// }
+
+// public function get_mcost_report_data($month,$year,$vtype)
+//   {
+//       if($vtype=='All'){
+//           $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+//                 ->from('vaucher')
+//                 ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
+//                 ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
+//                 ->where('vaucher.vauchertype','Debit Voucher')
+//                 ->where('MONTH(vaucher.voucherdate)',$month)
+//                 ->where('YEAR(vaucher.voucherdate)',$year)
+//                 // ->where('vaucher.costType',$vtype)
+//                 ->where('vaucher.compid',$_SESSION['compid'])
+//                 ->group_by('vaucher.invoice')
+//                 ->get()
+//                 ->result();
+//       }
+//       else{
+//       $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+//                     ->from('vaucher')
+//                     ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
+//                     ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
+//                     ->where('vaucher.vauchertype','Debit Voucher')
+//                     ->where('MONTH(vaucher.voucherdate)',$month)
+//                     ->where('YEAR(vaucher.voucherdate)',$year)
+//                     ->where('cost_type.ct_id',$vtype)
+//                     ->where('vaucher.compid',$_SESSION['compid'])
+//                     ->group_by('vaucher.invoice')
+//                     ->get()
+//                     ->result();
+//       }
+//   return $query; 
+// }
+
+// public function get_ycost_report_data($year,$vtype)
+//   {
+//    if($vtype=='All'){   
+//       $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+//                     ->from('vaucher')
+//                     ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
+//                     ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
+//                     ->where('vaucher.vauchertype','Debit Voucher')
+//                     ->where('YEAR(vaucher.voucherdate)',$year)
+//                     // ->where('vaucher.costType',$vtype)
+//                     ->where('vaucher.compid',$_SESSION['compid'])
+//                     ->group_by('vaucher.invoice')
+//                     ->get()
+//                     ->result();
+//    }
+//    else{
+//       $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+//                     ->from('vaucher')
+//                     ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
+//                     ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
+//                     ->where('vaucher.vauchertype','Debit Voucher')
+//                     ->where('YEAR(vaucher.voucherdate)',$year)
+//                     ->where('cost_type.ct_id',$vtype)
+//                     ->where('vaucher.compid',$_SESSION['compid'])
+//                     ->group_by('vaucher.invoice')
+//                     ->get()
+//                     ->result();
+//    }
+//   return $query; 
+// }
+
+
+
+
+public function get_cost_report_data($limit, $offset)
+{
+    $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+                    ->from('vaucher')
+                    ->join('vaucher_particular', 'vaucher_particular.vuid = vaucher.vuid', 'left')
+                    ->join('cost_type', 'cost_type.ct_id = vaucher_particular.vutid', 'left')
+                    ->where('vaucher.vauchertype', 'Debit Voucher')
+                    ->where('vaucher.compid', $_SESSION['compid'])
+                    ->group_by('vaucher.invoice')
+                    ->limit($limit, $offset)
                     ->get()
                     ->result();
-  return $query;  
+    return $query;
 }
 
-public function sales_mdata($month,$year)
-  {
-    $query = $this->db->select('*')
-                    ->from('sales')
-                    ->where('MONTH(saleDate)',$month)
-                    ->where('YEAR(saleDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-  return $query;  
-}
-
-public function sales_ydata($year)
-  {
-    $query = $this->db->select('*')
-                    ->from('sales')
-                    ->where('YEAR(saleDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function sales_due_adata()
-  {
-  $query = $this->db->select('sales.*,customers.customerName,customers.mobile,')
-                  ->from('sales')
-                  ->join('customers','customers.customerID = sales.customerID','left')
-                  ->where('totalAmount > paidAmount')
-                  ->where('sales.compid',$_SESSION['compid'])
-                  ->get()
-                  ->result();
-  return $query;  
-}
-
-public function sales_due_ddata($sdate,$edate)
-  {
-    $query = $this->db->select('sales.*,customers.customerName,customers.mobile,')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->where('totalAmount > paidAmount')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('saleDate >=',$sdate)
-                    ->where('saleDate <=',$edate)
-                    ->get()
-                    ->result();
-  return $query;  
-}
-
-public function sales_due_mdata($month,$year)
-  {
-    $query = $this->db->select('sales.*,customers.customerName,customers.mobile,')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->where('totalAmount > paidAmount')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('MONTH(saleDate)',$month)
-                    ->where('YEAR(saleDate)',$year)
-                    ->get()
-                    ->result();
-  return $query;  
-}
-
-public function sales_due_ydata($year)
-  {
-    $query = $this->db->select('sales.*,customers.customerName,customers.mobile,')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID','left')
-                    ->where('totalAmount > paidAmount')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('YEAR(saleDate)',$year)
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_top_sales_product_data()
-    {
-    $query = $this->db->select('sma_units.unitName,categories.categoryName,sales.compid,products.productName,products.image,products.productcode,SUM(sale_product.quantity) as total')
-                    ->from('sale_product')
-                    ->join('products','products.productID = sale_product.productID','left')
-                    ->join('sma_units','products.unit = sma_units.id','left')
-                    ->join('categories','categories.categoryID = products.categoryID','left')
-                    ->join('sales','sales.saleID = sale_product.saleID','left')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->group_by('sale_product.productID')
-                    ->order_by('total','DESC')
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-
-
-
-
-public function get_cost_report_data()
-  {
-  $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
-                ->from('vaucher')
-                ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
-                ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
-                ->where('vaucher.vauchertype','Debit Voucher')
-                ->where('vaucher.compid',$_SESSION['compid'])
-                ->group_by('vaucher.invoice')
-                ->get()
-                ->result();
-                // $query2=$this->db->last_query($query);
-                // var_dump($query2);
-                // die();
-  return $query; 
-}
-
-public function get_dcost_report_data($sdate,$edate,$vtype)
-  {
-      if($vtype=='All'){
-          $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
-                ->from('vaucher')
-                ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
-                ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
-                ->where('vaucher.vauchertype','Debit Voucher')
-                ->where('DATE(voucherdate) >=',$sdate)
-                ->where('DATE(voucherdate) <=',$edate)
-                // ->where('vaucher.costType',$vtype)
-                ->where('vaucher.compid',$_SESSION['compid'])
-                ->group_by('vaucher.invoice')
-                ->get()
-                ->result();
-      }
-      else{
+public function get_dcost_report_data($sdate, $edate, $vtype, $limit, $offset)
+{
+    if ($vtype == 'All') {
         $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
                         ->from('vaucher')
-                        ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
-                        ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
-                        ->where('vaucher.vauchertype','Debit Voucher')
-                        ->where('DATE(voucherdate) >=',$sdate)
-                        ->where('DATE(voucherdate) <=',$edate)
-                        ->where('cost_type.ct_id',$vtype)
-                        ->where('vaucher.compid',$_SESSION['compid'])
+                        ->join('vaucher_particular', 'vaucher_particular.vuid = vaucher.vuid', 'left')
+                        ->join('cost_type', 'cost_type.ct_id = vaucher_particular.vutid', 'left')
+                        ->where('vaucher.vauchertype', 'Debit Voucher')
+                        ->where('DATE(voucherdate) >=', $sdate)
+                        ->where('DATE(voucherdate) <=', $edate)
+                        ->where('vaucher.compid', $_SESSION['compid'])
                         ->group_by('vaucher.invoice')
+                        ->limit($limit, $offset)
                         ->get()
                         ->result();
-      }
-  return $query; 
+    } else {
+        $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+                        ->from('vaucher')
+                        ->join('vaucher_particular', 'vaucher_particular.vuid = vaucher.vuid', 'left')
+                        ->join('cost_type', 'cost_type.ct_id = vaucher_particular.vutid', 'left')
+                        ->where('vaucher.vauchertype', 'Debit Voucher')
+                        ->where('DATE(voucherdate) >=', $sdate)
+                        ->where('DATE(voucherdate) <=', $edate)
+                        ->where('cost_type.ct_id', $vtype)
+                        ->where('vaucher.compid', $_SESSION['compid'])
+                        ->group_by('vaucher.invoice')
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
+    }
+    return $query;
 }
 
-public function get_mcost_report_data($month,$year,$vtype)
-  {
-      if($vtype=='All'){
-          $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
-                ->from('vaucher')
-                ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
-                ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
-                ->where('vaucher.vauchertype','Debit Voucher')
-                ->where('MONTH(vaucher.voucherdate)',$month)
-                ->where('YEAR(vaucher.voucherdate)',$year)
-                // ->where('vaucher.costType',$vtype)
-                ->where('vaucher.compid',$_SESSION['compid'])
-                ->group_by('vaucher.invoice')
-                ->get()
-                ->result();
-      }
-      else{
-      $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
-                    ->from('vaucher')
-                    ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
-                    ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
-                    ->where('vaucher.vauchertype','Debit Voucher')
-                    ->where('MONTH(vaucher.voucherdate)',$month)
-                    ->where('YEAR(vaucher.voucherdate)',$year)
-                    ->where('cost_type.ct_id',$vtype)
-                    ->where('vaucher.compid',$_SESSION['compid'])
-                    ->group_by('vaucher.invoice')
-                    ->get()
-                    ->result();
-      }
-  return $query; 
+public function get_mcost_report_data($month, $year, $vtype, $limit, $offset)
+{
+    if ($vtype == 'All') {
+        $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+                        ->from('vaucher')
+                        ->join('vaucher_particular', 'vaucher_particular.vuid = vaucher.vuid', 'left')
+                        ->join('cost_type', 'cost_type.ct_id = vaucher_particular.vutid', 'left')
+                        ->where('vaucher.vauchertype', 'Debit Voucher')
+                        ->where('MONTH(vaucher.voucherdate)', $month)
+                        ->where('YEAR(vaucher.voucherdate)', $year)
+                        ->where('vaucher.compid', $_SESSION['compid'])
+                        ->group_by('vaucher.invoice')
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
+    } else {
+        $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+                        ->from('vaucher')
+                        ->join('vaucher_particular', 'vaucher_particular.vuid = vaucher.vuid', 'left')
+                        ->join('cost_type', 'cost_type.ct_id = vaucher_particular.vutid', 'left')
+                        ->where('vaucher.vauchertype', 'Debit Voucher')
+                        ->where('MONTH(vaucher.voucherdate)', $month)
+                        ->where('YEAR(vaucher.voucherdate)', $year)
+                        ->where('cost_type.ct_id', $vtype)
+                        ->where('vaucher.compid', $_SESSION['compid'])
+                        ->group_by('vaucher.invoice')
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
+    }
+    return $query;
 }
 
-public function get_ycost_report_data($year,$vtype)
-  {
-   if($vtype=='All'){   
-      $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
-                    ->from('vaucher')
-                    ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
-                    ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
-                    ->where('vaucher.vauchertype','Debit Voucher')
-                    ->where('YEAR(vaucher.voucherdate)',$year)
-                    // ->where('vaucher.costType',$vtype)
-                    ->where('vaucher.compid',$_SESSION['compid'])
-                    ->group_by('vaucher.invoice')
-                    ->get()
-                    ->result();
-   }
-   else{
-      $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
-                    ->from('vaucher')
-                    ->join('vaucher_particular','vaucher_particular.vuid = vaucher.vuid','left')
-                    ->join('cost_type','cost_type.ct_id = vaucher_particular.vutid','left')
-                    ->where('vaucher.vauchertype','Debit Voucher')
-                    ->where('YEAR(vaucher.voucherdate)',$year)
-                    ->where('cost_type.ct_id',$vtype)
-                    ->where('vaucher.compid',$_SESSION['compid'])
-                    ->group_by('vaucher.invoice')
-                    ->get()
-                    ->result();
-   }
-  return $query; 
+public function get_ycost_report_data($year, $vtype, $limit, $offset)
+{
+    if ($vtype == 'All') {
+        $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+                        ->from('vaucher')
+                        ->join('vaucher_particular', 'vaucher_particular.vuid = vaucher.vuid', 'left')
+                        ->join('cost_type', 'cost_type.ct_id = vaucher_particular.vutid', 'left')
+                        ->where('vaucher.vauchertype', 'Debit Voucher')
+                        ->where('YEAR(vaucher.voucherdate)', $year)
+                        ->where('vaucher.compid', $_SESSION['compid'])
+                        ->group_by('vaucher.invoice')
+                        ->limit($limit, $offset) // Add limit and offset here
+                        ->get()
+                        ->result();
+    } else {
+        $query = $this->db->select('any_value(vaucher.voucherdate) as voucherdate ,any_value(vaucher.invoice) as invoice,any_value(vaucher.reference) as reference,any_value(vaucher.accountType) as accountType,any_value(vaucher.totalamount) as totalamount, any_value(cost_type.costName) as costName')
+                        ->from('vaucher')
+                        ->join('vaucher_particular', 'vaucher_particular.vuid = vaucher.vuid', 'left')
+                        ->join('cost_type', 'cost_type.ct_id = vaucher_particular.vutid', 'left')
+                        ->where('vaucher.vauchertype', 'Debit Voucher')
+                        ->where('YEAR(vaucher.voucherdate)', $year)
+                        ->where('cost_type.ct_id', $vtype)
+                        ->where('vaucher.compid', $_SESSION['compid'])
+                        ->group_by('vaucher.invoice')
+                        ->limit($limit, $offset) // Add limit and offset here
+                        ->get()
+                        ->result();
+    }
+    return $query;
 }
 
-public function get_bank_purchase_data()
-  {
-  $query = $this->db->select('*')
-                    ->from('purchase')
-                    ->where('accountType','Bank')
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
 
-  return $query;  
+
+
+
+
+// public function get_bank_purchase_data()
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('purchase')
+//                     ->where('accountType','Bank')
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_sale_data()
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('accountType','Bank')
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_sreturn_data()
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('returns')
+//                     ->where('accountType','Bank')
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_preturn_data()
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('preturns')
+//                     ->where('accountType','Bank')
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_voucher_data()
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('vaucher')
+//                     ->where('accountType','Bank')
+//                     ->where('status',1)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_salary_data()
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('employee_payment')
+//                     ->where('accountType','Bank')
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dpurchase_data($sdate,$edate)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('purchase')
+//                     ->where('accountType','Bank')
+//                     ->where('purchaseDate >=',$sdate)
+//                     ->where('purchaseDate <=',$edate)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dsale_data($sdate,$edate)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('accountType','Bank')
+//                     ->where('saleDate >=',$sdate)
+//                     ->where('saleDate <=',$edate)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dsreturn_data($sdate,$edate)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('returns')
+//                     ->where('accountType','Bank')
+//                     ->where('returnDate >=',$sdate)
+//                     ->where('returnDate <=',$edate)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dpreturn_data($sdate,$edate)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('preturns')
+//                     ->where('accountType','Bank')
+//                     ->where('prDate >=',$sdate)
+//                     ->where('prDate <=',$edate)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dvoucher_data($sdate,$edate)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('vaucher')
+//                     ->where('accountType','Bank')
+//                     ->where('voucherdate >=',$sdate)
+//                     ->where('voucherdate <=',$edate)
+//                     ->where('status',1)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dsalary_data($sdate,$edate)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('employee_payment')
+//                     ->where('accountType','Bank')
+//                     ->where('regdate >=',$sdate)
+//                     ->where('regdate <=',$edate)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_mpurchase_data($month,$year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('purchase')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(purchaseDate)',$month)
+//                     ->where('YEAR(purchaseDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_msale_data($month,$year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(saleDate)',$month)
+//                     ->where('YEAR(saleDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_msreturn_data($month,$year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('returns')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(returnDate)',$month)
+//                     ->where('YEAR(returnDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_mpreturn_data($month,$year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('preturns')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(prDate)',$month)
+//                     ->where('YEAR(prDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_mvoucher_data($month,$year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('vaucher')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(voucherdate)',$month)
+//                     ->where('YEAR(voucherdate)',$year)
+//                     ->where('status',1)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_msalary_data($month,$year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('employee_payment')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(regdate)',$month)
+//                     ->where('YEAR(regdate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ypurchase_data($year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('purchase')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(purchaseDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ysale_data($year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(saleDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ysreturn_data($year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('returns')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(returnDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ypreturn_data($year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('preturns')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(prDate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_yvoucher_data($year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('vaucher')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(voucherdate)',$year)
+//                     ->where('status',1)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ysalary_data($year)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('employee_payment')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(regdate)',$year)
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function sales_due_paypent_ddata()
+//   {
+//   $query = $this->db->select('sales_payment.*,sales.invoice_no,customers.customerName,customers.mobile')
+//                     ->from('sales_payment')
+//                     ->join('sales','sales.saleID = sales_payment.saleID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function sales_ddue_paypent_ddata($sdate,$edate)
+//   {
+//   $query = $this->db->select('sales_payment.*,sales.invoice_no,customers.customerName,customers.mobile')
+//                     ->from('sales_payment')
+//                     ->join('sales','sales.saleID = sales_payment.saleID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('DATE(sales_payment.regdate) >=',$sdate)
+//                     ->where('DATE(sales_payment.regdate) <=',$edate)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function sales_mdue_paypent_ddata($month,$year)
+//   {
+//   $query = $this->db->select('sales_payment.*,sales.invoice_no,customers.customerName,customers.mobile')
+//                     ->from('sales_payment')
+//                     ->join('sales','sales.saleID = sales_payment.saleID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('MONTH(sales_payment.regdate)',$month)
+//                     ->where('YEAR(sales_payment.regdate)',$year)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function sales_ydue_paypent_ddata($year)
+//   {
+//   $query = $this->db->select('sales_payment.*,sales.invoice_no,customers.customerName,customers.mobile')
+//                     ->from('sales_payment')
+//                     ->join('sales','sales.saleID = sales_payment.saleID', 'left')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('YEAR(sales_payment.regdate)',$year)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+
+public function sales_due_paypent_ddata($limit = null, $offset = null)
+{
+    $this->db->select('sales_payment.*, sales.invoice_no, customers.customerName, customers.mobile')
+             ->from('sales_payment')
+             ->join('sales', 'sales.saleID = sales_payment.saleID', 'left')
+             ->join('customers', 'customers.customerID = sales.customerID', 'left')
+             ->where('sales.compid', $_SESSION['compid']);
+
+    // Apply pagination if limit and offset are provided
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;  
 }
 
-public function get_bank_sale_data()
-  {
-  $query = $this->db->select('*')
+public function sales_ddue_paypent_ddata($sdate, $edate, $limit = null, $offset = null)
+{
+    $this->db->select('sales_payment.*, sales.invoice_no, customers.customerName, customers.mobile')
+             ->from('sales_payment')
+             ->join('sales', 'sales.saleID = sales_payment.saleID', 'left')
+             ->join('customers', 'customers.customerID = sales.customerID', 'left')
+             ->where('sales.compid', $_SESSION['compid'])
+             ->where('DATE(sales_payment.regdate) >=', $sdate)
+             ->where('DATE(sales_payment.regdate) <=', $edate);
+
+    // Apply pagination if limit and offset are provided
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;  
+}
+
+public function sales_mdue_paypent_ddata($month, $year, $limit = null, $offset = null)
+{
+    $this->db->select('sales_payment.*, sales.invoice_no, customers.customerName, customers.mobile')
+             ->from('sales_payment')
+             ->join('sales', 'sales.saleID = sales_payment.saleID', 'left')
+             ->join('customers', 'customers.customerID = sales.customerID', 'left')
+             ->where('sales.compid', $_SESSION['compid'])
+             ->where('MONTH(sales_payment.regdate)', $month)
+             ->where('YEAR(sales_payment.regdate)', $year);
+
+    // Apply pagination if limit and offset are provided
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;  
+}
+
+public function sales_ydue_paypent_ddata($year, $limit = null, $offset = null)
+{
+    $this->db->select('sales_payment.*, sales.invoice_no, customers.customerName, customers.mobile')
+             ->from('sales_payment')
+             ->join('sales', 'sales.saleID = sales_payment.saleID', 'left')
+             ->join('customers', 'customers.customerID = sales.customerID', 'left')
+             ->where('sales.compid', $_SESSION['compid'])
+             ->where('YEAR(sales_payment.regdate)', $year);
+
+    // Apply pagination if limit and offset are provided
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;  
+}
+
+
+// public function get_sales_vat_data()
+//   {
+//   $query = $this->db->select('sales.*,customers.customerName,customers.mobile')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('sCost > 0')
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_sales_dvat_data($sdate,$edate)
+//   {
+//   $query = $this->db->select('sales.*,customers.customerName,customers.mobile')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('sCost > 0')
+//                     ->where('sales.saleDate >=',$sdate)
+//                     ->where('sales.saleDate <=',$edate)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_sales_mvat_data($month,$year)
+//   {
+//   $query = $this->db->select('sales.*,customers.customerName,customers.mobile')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('sCost > 0')
+//                     ->where('MONTH(sales.saleDate)',$month)
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_sales_yvat_data($year)
+//   {
+//   $query = $this->db->select('sales.*,customers.customerName,customers.mobile')
+//                     ->from('sales')
+//                     ->join('customers','customers.customerID = sales.customerID', 'left')
+//                     ->where('sales.compid',$_SESSION['compid'])
+//                     ->where('sCost > 0')
+//                     ->where('YEAR(sales.saleDate)',$year)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+
+public function get_sales_vat_data($offset = null, $limit = null)
+{
+    $query = $this->db->select('sales.*, customers.customerName, customers.mobile')
                     ->from('sales')
-                    ->where('accountType','Bank')
-                    ->where('compid',$_SESSION['compid'])
+                    ->join('customers', 'customers.customerID = sales.customerID', 'left')
+                    ->where('sales.compid', $_SESSION['compid'])
+                    ->where('sCost >', 0)
+                    ->limit($limit, $offset)
                     ->get()
                     ->result();
 
-  return $query;  
+    return $query;  
 }
 
-public function get_bank_sreturn_data()
-  {
-  $query = $this->db->select('*')
-                    ->from('returns')
-                    ->where('accountType','Bank')
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_preturn_data()
-  {
-  $query = $this->db->select('*')
-                    ->from('preturns')
-                    ->where('accountType','Bank')
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_voucher_data()
-  {
-  $query = $this->db->select('*')
-                    ->from('vaucher')
-                    ->where('accountType','Bank')
-                    ->where('status',1)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_salary_data()
-  {
-  $query = $this->db->select('*')
-                    ->from('employee_payment')
-                    ->where('accountType','Bank')
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_dpurchase_data($sdate,$edate)
-  {
-  $query = $this->db->select('*')
-                    ->from('purchase')
-                    ->where('accountType','Bank')
-                    ->where('purchaseDate >=',$sdate)
-                    ->where('purchaseDate <=',$edate)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_dsale_data($sdate,$edate)
-  {
-  $query = $this->db->select('*')
+public function get_sales_dvat_data($sdate, $edate, $offset, $limit)
+{
+    $query = $this->db->select('sales.*, customers.customerName, customers.mobile')
                     ->from('sales')
-                    ->where('accountType','Bank')
-                    ->where('saleDate >=',$sdate)
-                    ->where('saleDate <=',$edate)
-                    ->where('compid',$_SESSION['compid'])
+                    ->join('customers', 'customers.customerID = sales.customerID', 'left')
+                    ->where('sales.compid', $_SESSION['compid'])
+                    ->where('sCost >', 0)
+                    ->where('sales.saleDate >=', $sdate)
+                    ->where('sales.saleDate <=', $edate)
+                    ->limit($limit, $offset)
                     ->get()
                     ->result();
 
-  return $query;  
+    return $query;  
 }
 
-public function get_bank_dsreturn_data($sdate,$edate)
-  {
-  $query = $this->db->select('*')
-                    ->from('returns')
-                    ->where('accountType','Bank')
-                    ->where('returnDate >=',$sdate)
-                    ->where('returnDate <=',$edate)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_dpreturn_data($sdate,$edate)
-  {
-  $query = $this->db->select('*')
-                    ->from('preturns')
-                    ->where('accountType','Bank')
-                    ->where('prDate >=',$sdate)
-                    ->where('prDate <=',$edate)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_dvoucher_data($sdate,$edate)
-  {
-  $query = $this->db->select('*')
-                    ->from('vaucher')
-                    ->where('accountType','Bank')
-                    ->where('voucherdate >=',$sdate)
-                    ->where('voucherdate <=',$edate)
-                    ->where('status',1)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_dsalary_data($sdate,$edate)
-  {
-  $query = $this->db->select('*')
-                    ->from('employee_payment')
-                    ->where('accountType','Bank')
-                    ->where('regdate >=',$sdate)
-                    ->where('regdate <=',$edate)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_mpurchase_data($month,$year)
-  {
-  $query = $this->db->select('*')
-                    ->from('purchase')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(purchaseDate)',$month)
-                    ->where('YEAR(purchaseDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_msale_data($month,$year)
-  {
-  $query = $this->db->select('*')
+public function get_sales_mvat_data($month, $year, $offset, $limit)
+{
+    $query = $this->db->select('sales.*, customers.customerName, customers.mobile')
                     ->from('sales')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(saleDate)',$month)
-                    ->where('YEAR(saleDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
+                    ->join('customers', 'customers.customerID = sales.customerID', 'left')
+                    ->where('sales.compid', $_SESSION['compid'])
+                    ->where('sCost >', 0)
+                    ->where('MONTH(sales.saleDate)', $month)
+                    ->where('YEAR(sales.saleDate)', $year)
+                    ->limit($limit, $offset)
                     ->get()
                     ->result();
 
-  return $query;  
+    return $query;  
 }
 
-public function get_bank_msreturn_data($month,$year)
-  {
-  $query = $this->db->select('*')
-                    ->from('returns')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(returnDate)',$month)
-                    ->where('YEAR(returnDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_mpreturn_data($month,$year)
-  {
-  $query = $this->db->select('*')
-                    ->from('preturns')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(prDate)',$month)
-                    ->where('YEAR(prDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_mvoucher_data($month,$year)
-  {
-  $query = $this->db->select('*')
-                    ->from('vaucher')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(voucherdate)',$month)
-                    ->where('YEAR(voucherdate)',$year)
-                    ->where('status',1)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_msalary_data($month,$year)
-  {
-  $query = $this->db->select('*')
-                    ->from('employee_payment')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(regdate)',$month)
-                    ->where('YEAR(regdate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_ypurchase_data($year)
-  {
-  $query = $this->db->select('*')
-                    ->from('purchase')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(purchaseDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_ysale_data($year)
-  {
-  $query = $this->db->select('*')
+public function get_sales_yvat_data($year, $offset, $limit)
+{
+    $query = $this->db->select('sales.*, customers.customerName, customers.mobile')
                     ->from('sales')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(saleDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
+                    ->join('customers', 'customers.customerID = sales.customerID', 'left')
+                    ->where('sales.compid', $_SESSION['compid'])
+                    ->where('sCost >', 0)
+                    ->where('YEAR(sales.saleDate)', $year)
+                    ->limit($limit, $offset)
                     ->get()
                     ->result();
 
-  return $query;  
+    return $query;  
 }
 
-public function get_bank_ysreturn_data($year)
-  {
-  $query = $this->db->select('*')
-                    ->from('returns')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(returnDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
+
+// public function get_stock_product()
+//   {
+//   $emp = $this->db->select('productID')
+//         ->from('products')
+//         ->where('compid',$_SESSION['compid'])
+//         ->get()
+//         ->result_array();
+//     //var_dump($emp); exit();
+//   $emp_id = array_map (function($value){
+//   return $value['productID'];
+//   },$emp);
+//     //var_dump($emp_id); exit();
+//   if($emp_id == NULL)
+//       {
+//       $empid = 0;
+//       }
+//   else{
+//       $empid = $emp_id;
+//       }
+//     //var_dump($empid); exit();
+//   return $this->db->select('any_value(stock.stockID) as stockID,any_value(products.sprice) as sprice,any_value(stock.compid) as compid,any_value(stock.totalPices) as totalPices,any_value(stock.regby) as regby,any_value(stock.regdate) as regdate,any_value(stock.upby) as upby,any_value(stock.product) as product,any_value(products.productName) as productName,any_value(products.productcode) as productcode,any_value(products.pprice) as pprice,(sum(purchase_product.pprice)/ count(purchase_product.pp_id) * any_value(stock.totalPices)) as avg_purchase')
+//               ->from('stock')
+//               ->join('products','products.productID = stock.product','left')
+//               ->join('purchase_product','purchase_product.productID = stock.product','left')
+//               ->where_in('product',$empid)
+//               ->where('stock.compid',$_SESSION['compid'])
+//               ->group_by('stock.product')
+//               ->get()
+//               ->result();
+//               //  $query2=$this->db->last_query($sql);
+//               //  var_dump($query2);
+//               //  die();
+// }
+
+// public function get_stock_product($limit = null, $offset = null)
+// {
+//     $emp = $this->db->select('productID')
+//                     ->from('products')
+//                     ->where('compid', $_SESSION['compid'])
+//                     ->get()
+//                     ->result_array();
+                    
+//     $emp_id = array_map(function ($value) {
+//         return $value['productID'];
+//     }, $emp);
+
+//     $empid = ($emp_id == NULL) ? 0 : $emp_id;
+
+//     $query = $this->db->select('any_value(stock.stockID) as stockID, any_value(products.sprice) as sprice, any_value(stock.compid) as compid, any_value(stock.totalPices) as totalPices, any_value(stock.regby) as regby, any_value(stock.regdate) as regdate, any_value(stock.upby) as upby, any_value(stock.product) as product, any_value(products.productName) as productName, any_value(products.productcode) as productcode, any_value(products.pprice) as pprice, (sum(purchase_product.pprice) / count(purchase_product.pp_id) * any_value(stock.totalPices)) as avg_purchase')
+//                     ->from('stock')
+//                     ->join('products', 'products.productID = stock.product', 'left')
+//                     ->join('purchase_product', 'purchase_product.productID = stock.product', 'left')
+//                     ->where_in('product', $empid)
+//                     ->where('stock.compid', $_SESSION['compid'])
+//                     ->group_by('stock.product');
+
+//     // Apply pagination if limit and offset are provided
+//     if ($limit !== null && $offset !== null) {
+//         $query->limit($limit, $offset);
+//     }
+
+//     return $query->get()->result();
+// }
+
+public function get_stock_product($limit = null, $offset = null)
+{
+    $emp = $this->db->select('productID')
+                    ->from('products')
+                    ->where('compid', $_SESSION['compid'])
                     ->get()
-                    ->result();
+                    ->result_array();
+                    
+    $emp_id = array_map(function ($value) {
+        return $value['productID'];
+    }, $emp);
 
-  return $query;  
-}
+    $empid = ($emp_id == NULL) ? 0 : $emp_id;
 
-public function get_bank_ypreturn_data($year)
-  {
-  $query = $this->db->select('*')
-                    ->from('preturns')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(prDate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
+    $query = $this->db->select('any_value(stock.stockID) as stockID, any_value(products.sprice) as sprice, any_value(stock.compid) as compid, any_value(stock.totalPices) as totalPices, any_value(stock.regby) as regby, any_value(stock.regdate) as regdate, any_value(stock.upby) as upby, any_value(stock.product) as product, any_value(products.productName) as productName, any_value(products.productcode) as productcode, any_value(products.pprice) as pprice, (sum(purchase_product.pprice) / count(purchase_product.pp_id) * any_value(stock.totalPices)) as avg_purchase')
+                    ->from('stock')
+                    ->join('products', 'products.productID = stock.product', 'left')
+                    ->join('purchase_product', 'purchase_product.productID = stock.product', 'left')
+                    ->where_in('product', $empid)
+                    ->where('stock.compid', $_SESSION['compid'])
+                    ->group_by('stock.product');
 
-  return $query;  
-}
+    // Apply pagination if limit and offset are provided
+    if ($limit !== null && $offset !== null) {
+        $query->limit($limit, $offset);
+    }
 
-public function get_bank_yvoucher_data($year)
-  {
-  $query = $this->db->select('*')
-                    ->from('vaucher')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(voucherdate)',$year)
-                    ->where('status',1)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_bank_ysalary_data($year)
-  {
-  $query = $this->db->select('*')
-                    ->from('employee_payment')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(regdate)',$year)
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function sales_due_paypent_ddata()
-  {
-  $query = $this->db->select('sales_payment.*,sales.invoice_no,customers.customerName,customers.mobile')
-                    ->from('sales_payment')
-                    ->join('sales','sales.saleID = sales_payment.saleID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function sales_ddue_paypent_ddata($sdate,$edate)
-  {
-  $query = $this->db->select('sales_payment.*,sales.invoice_no,customers.customerName,customers.mobile')
-                    ->from('sales_payment')
-                    ->join('sales','sales.saleID = sales_payment.saleID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('DATE(sales_payment.regdate) >=',$sdate)
-                    ->where('DATE(sales_payment.regdate) <=',$edate)
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function sales_mdue_paypent_ddata($month,$year)
-  {
-  $query = $this->db->select('sales_payment.*,sales.invoice_no,customers.customerName,customers.mobile')
-                    ->from('sales_payment')
-                    ->join('sales','sales.saleID = sales_payment.saleID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('MONTH(sales_payment.regdate)',$month)
-                    ->where('YEAR(sales_payment.regdate)',$year)
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function sales_ydue_paypent_ddata($year)
-  {
-  $query = $this->db->select('sales_payment.*,sales.invoice_no,customers.customerName,customers.mobile')
-                    ->from('sales_payment')
-                    ->join('sales','sales.saleID = sales_payment.saleID', 'left')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('YEAR(sales_payment.regdate)',$year)
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_sales_vat_data()
-  {
-  $query = $this->db->select('sales.*,customers.customerName,customers.mobile')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('sCost > 0')
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_sales_dvat_data($sdate,$edate)
-  {
-  $query = $this->db->select('sales.*,customers.customerName,customers.mobile')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('sCost > 0')
-                    ->where('sales.saleDate >=',$sdate)
-                    ->where('sales.saleDate <=',$edate)
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_sales_mvat_data($month,$year)
-  {
-  $query = $this->db->select('sales.*,customers.customerName,customers.mobile')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('sCost > 0')
-                    ->where('MONTH(sales.saleDate)',$month)
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_sales_yvat_data($year)
-  {
-  $query = $this->db->select('sales.*,customers.customerName,customers.mobile')
-                    ->from('sales')
-                    ->join('customers','customers.customerID = sales.customerID', 'left')
-                    ->where('sales.compid',$_SESSION['compid'])
-                    ->where('sCost > 0')
-                    ->where('YEAR(sales.saleDate)',$year)
-                    ->get()
-                    ->result();
-
-  return $query;  
-}
-
-public function get_stock_product()
-  {
-  $emp = $this->db->select('productID')
-        ->from('products')
-        ->where('compid',$_SESSION['compid'])
-        ->get()
-        ->result_array();
-    //var_dump($emp); exit();
-  $emp_id = array_map (function($value){
-  return $value['productID'];
-  },$emp);
-    //var_dump($emp_id); exit();
-  if($emp_id == NULL)
-      {
-      $empid = 0;
-      }
-  else{
-      $empid = $emp_id;
-      }
-    //var_dump($empid); exit();
-  return $this->db->select('any_value(stock.stockID) as stockID,any_value(products.sprice) as sprice,any_value(stock.compid) as compid,any_value(stock.totalPices) as totalPices,any_value(stock.regby) as regby,any_value(stock.regdate) as regdate,any_value(stock.upby) as upby,any_value(stock.product) as product,any_value(products.productName) as productName,any_value(products.productcode) as productcode,any_value(products.pprice) as pprice,(sum(purchase_product.pprice)/ count(purchase_product.pp_id) * any_value(stock.totalPices)) as avg_purchase')
-              ->from('stock')
-              ->join('products','products.productID = stock.product','left')
-              ->join('purchase_product','purchase_product.productID = stock.product','left')
-              ->where_in('product',$empid)
-              ->where('stock.compid',$_SESSION['compid'])
-              ->group_by('stock.product')
-              ->get()
-              ->result();
-              //  $query2=$this->db->last_query($sql);
-              //  var_dump($query2);
-              //  die();
+    return $query->get()->result();
 }
 
 public function get_salesdata($sid)
@@ -5178,256 +5846,673 @@ public function get_cash_account_data($id)
 }
 
 
-public function get_bank_dlpurchase_data($sdate,$edate,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('purchase')
-                    ->where('accountType','Bank')
-                    ->where('purchaseDate >=',$sdate)
-                    ->where('purchaseDate <=',$edate)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+// public function get_bank_dlpurchase_data($sdate,$edate,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('purchase')
+//                     ->where('accountType','Bank')
+//                     ->where('purchaseDate >=',$sdate)
+//                     ->where('purchaseDate <=',$edate)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
 
-  return $query;  
+//   return $query;  
+// }
+
+// public function get_bank_dlsale_data($sdate,$edate,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('accountType','Bank')
+//                     ->where('saleDate >=',$sdate)
+//                     ->where('saleDate <=',$edate)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dlsreturn_data($sdate,$edate,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('returns')
+//                     ->where('accountType','Bank')
+//                     ->where('returnDate >=',$sdate)
+//                     ->where('returnDate <=',$edate)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dlvoucher_data($sdate,$edate,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('vaucher')
+//                     ->where('accountType','Bank')
+//                     ->where('voucherdate >=',$sdate)
+//                     ->where('voucherdate <=',$edate)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dlfbank_data($sdate,$edate,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('transfer_account')
+//                     ->where('facType','Bank')
+//                     ->where('DATE(regdate) >=',$sdate)
+//                     ->where('DATE(regdate) <=',$edate)
+//                     ->where('facAcno',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_dltbank_data($sdate,$edate,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('transfer_account')
+//                     ->where('sacType','Bank')
+//                     ->where('DATE(regdate) >=',$sdate)
+//                     ->where('DATE(regdate) <=',$edate)
+//                     ->where('sacAcno',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_mlpurchase_data($month,$year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('purchase')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(purchaseDate)',$month)
+//                     ->where('YEAR(purchaseDate)',$year)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_mlsale_data($month,$year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(saleDate)',$month)
+//                     ->where('YEAR(saleDate)',$year)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_mlsreturn_data($month,$year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('returns')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(returnDate)',$month)
+//                     ->where('YEAR(returnDate)',$year)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_mlvoucher_data($month,$year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('vaucher')
+//                     ->where('accountType','Bank')
+//                     ->where('MONTH(voucherdate)',$month)
+//                     ->where('YEAR(voucherdate)',$year)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_mlfbank_data($month,$year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('transfer_account')
+//                     ->where('facType','Bank')
+//                     ->where('MONTH(regdate)',$month)
+//                     ->where('YEAR(regdate)',$year)
+//                     ->where('facAcno',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_mltbank_data($month,$year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('transfer_account')
+//                     ->where('sacType','Bank')
+//                     ->where('MONTH(regdate)',$month)
+//                     ->where('YEAR(regdate)',$year)
+//                     ->where('sacAcno',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ylpurchase_data($year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('purchase')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(purchaseDate)',$year)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ylsale_data($year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(saleDate)',$year)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ylsreturn_data($year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('returns')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(returnDate)',$year)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ylvoucher_data($year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('vaucher')
+//                     ->where('accountType','Bank')
+//                     ->where('YEAR(voucherdate)',$year)
+//                     ->where('accountNo',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_ylfbank_data($year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('transfer_account')
+//                     ->where('facType','Bank')
+//                     ->where('YEAR(regdate)',$year)
+//                     ->where('facAcno',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+// public function get_bank_yltbank_data($year,$baid)
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('transfer_account')
+//                     ->where('sacType','Bank')
+//                     ->where('YEAR(regdate)',$year)
+//                     ->where('sacAcno',$baid)
+//                     ->get()
+//                     ->result();
+
+//   return $query;  
+// }
+
+public function get_bank_dlpurchase_data($sdate, $edate, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('purchase')
+             ->where('accountType', 'Bank')
+             ->where('purchaseDate >=', $sdate)
+             ->where('purchaseDate <=', $edate)
+             ->where('accountNo', $baid);
+
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_dlsale_data($sdate,$edate,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('sales')
-                    ->where('accountType','Bank')
-                    ->where('saleDate >=',$sdate)
-                    ->where('saleDate <=',$edate)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_dlsale_data($sdate, $edate, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('sales')
+             ->where('accountType', 'Bank')
+             ->where('saleDate >=', $sdate)
+             ->where('saleDate <=', $edate)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_dlsreturn_data($sdate,$edate,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('returns')
-                    ->where('accountType','Bank')
-                    ->where('returnDate >=',$sdate)
-                    ->where('returnDate <=',$edate)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_dlsreturn_data($sdate, $edate, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('returns')
+             ->where('accountType', 'Bank')
+             ->where('returnDate >=', $sdate)
+             ->where('returnDate <=', $edate)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_dlvoucher_data($sdate,$edate,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('vaucher')
-                    ->where('accountType','Bank')
-                    ->where('voucherdate >=',$sdate)
-                    ->where('voucherdate <=',$edate)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_dlvoucher_data($sdate, $edate, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('accountType', 'Bank')
+             ->where('voucherdate >=', $sdate)
+             ->where('voucherdate <=', $edate)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_dlfbank_data($sdate,$edate,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('transfer_account')
-                    ->where('facType','Bank')
-                    ->where('DATE(regdate) >=',$sdate)
-                    ->where('DATE(regdate) <=',$edate)
-                    ->where('facAcno',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_dlfbank_data($sdate, $edate, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('transfer_account')
+             ->where('facType', 'Bank')
+             ->where('DATE(regdate) >=', $sdate)
+             ->where('DATE(regdate) <=', $edate)
+             ->where('facAcno', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_dltbank_data($sdate,$edate,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('transfer_account')
-                    ->where('sacType','Bank')
-                    ->where('DATE(regdate) >=',$sdate)
-                    ->where('DATE(regdate) <=',$edate)
-                    ->where('sacAcno',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_dltbank_data($sdate, $edate, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('transfer_account')
+             ->where('sacType', 'Bank')
+             ->where('DATE(regdate) >=', $sdate)
+             ->where('DATE(regdate) <=', $edate)
+             ->where('sacAcno', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_mlpurchase_data($month,$year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('purchase')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(purchaseDate)',$month)
-                    ->where('YEAR(purchaseDate)',$year)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_mlpurchase_data($month, $year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('purchase')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(purchaseDate)', $month)
+             ->where('YEAR(purchaseDate)', $year)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_mlsale_data($month,$year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('sales')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(saleDate)',$month)
-                    ->where('YEAR(saleDate)',$year)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_mlsale_data($month, $year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('sales')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(saleDate)', $month)
+             ->where('YEAR(saleDate)', $year)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_mlsreturn_data($month,$year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('returns')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(returnDate)',$month)
-                    ->where('YEAR(returnDate)',$year)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_mlsreturn_data($month, $year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('returns')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(returnDate)', $month)
+             ->where('YEAR(returnDate)', $year)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_mlvoucher_data($month,$year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('vaucher')
-                    ->where('accountType','Bank')
-                    ->where('MONTH(voucherdate)',$month)
-                    ->where('YEAR(voucherdate)',$year)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_mlvoucher_data($month, $year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(voucherdate)', $month)
+             ->where('YEAR(voucherdate)', $year)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_mlfbank_data($month,$year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('transfer_account')
-                    ->where('facType','Bank')
-                    ->where('MONTH(regdate)',$month)
-                    ->where('YEAR(regdate)',$year)
-                    ->where('facAcno',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_mlfbank_data($month, $year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('transfer_account')
+             ->where('facType', 'Bank')
+             ->where('MONTH(regdate)', $month)
+             ->where('YEAR(regdate)', $year)
+             ->where('facAcno', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_mltbank_data($month,$year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('transfer_account')
-                    ->where('sacType','Bank')
-                    ->where('MONTH(regdate)',$month)
-                    ->where('YEAR(regdate)',$year)
-                    ->where('sacAcno',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_mltbank_data($month, $year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('transfer_account')
+             ->where('sacType', 'Bank')
+             ->where('MONTH(regdate)', $month)
+             ->where('YEAR(regdate)', $year)
+             ->where('sacAcno', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_ylpurchase_data($year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('purchase')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(purchaseDate)',$year)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_ylpurchase_data($year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('purchase')
+             ->where('accountType', 'Bank')
+             ->where('YEAR(purchaseDate)', $year)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_ylsale_data($year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('sales')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(saleDate)',$year)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_ylsale_data($year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('sales')
+             ->where('accountType', 'Bank')
+             ->where('YEAR(saleDate)', $year)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_ylsreturn_data($year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('returns')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(returnDate)',$year)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_ylsreturn_data($year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('returns')
+             ->where('accountType', 'Bank')
+             ->where('YEAR(returnDate)', $year)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_ylvoucher_data($year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('vaucher')
-                    ->where('accountType','Bank')
-                    ->where('YEAR(voucherdate)',$year)
-                    ->where('accountNo',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_ylvoucher_data($year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('accountType', 'Bank')
+             ->where('YEAR(voucherdate)', $year)
+             ->where('accountNo', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_ylfbank_data($year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('transfer_account')
-                    ->where('facType','Bank')
-                    ->where('YEAR(regdate)',$year)
-                    ->where('facAcno',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_ylfbank_data($year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('transfer_account')
+             ->where('facType', 'Bank')
+             ->where('YEAR(regdate)', $year)
+             ->where('facAcno', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
 
-public function get_bank_yltbank_data($year,$baid)
-  {
-  $query = $this->db->select('*')
-                    ->from('transfer_account')
-                    ->where('sacType','Bank')
-                    ->where('YEAR(regdate)',$year)
-                    ->where('sacAcno',$baid)
-                    ->get()
-                    ->result();
+public function get_bank_yltbank_data($year, $baid, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('transfer_account')
+             ->where('sacType', 'Bank')
+             ->where('YEAR(regdate)', $year)
+             ->where('sacAcno', $baid);
 
-  return $query;  
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
 }
+
 
 // ////////////employee attendance
-public function get_emp_attendance_data()
-  {
-  $query = $this->db->select('
+// public function get_emp_attendance_data()
+//   {
+//   $query = $this->db->select('
+//                         emp_dev_attendance.*,
+//                         employees.emp_id,
+//                         employees.employeeName,
+//                         department.dept_name')
+//                 ->from('emp_dev_attendance')
+//                 ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+//                 ->join('department','department.dpt_id = employees.dpt_id','left')
+//                 ->order_by('autoid','DESC')
+//                 ->where('emp_dev_attendance.compid',$_SESSION['compid'])
+//                 //->group_by('adate')
+//                 ->get()
+//                 ->result();
+//   return $query;  
+// }
+// public function get_emp_dattendance_data($empid,$sdate,$edate)
+//   {
+//     if($empid != 'All'){
+//                 $query = $this->db->select('
+//                                       emp_dev_attendance.*,
+//                                       employees.emp_id,
+//                                       employees.employeeName,
+//                                     department.dept_name')
+//                               ->from('emp_dev_attendance')
+//                               ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+//                               ->join('department','department.dpt_id = employees.dpt_id','left')
+//                               ->where('emp_dev_attendance.accid',$empid)
+//                               ->where('(emp_dev_attendance.adate) >=',$sdate)
+//                               ->where('(emp_dev_attendance.adate) <=',$edate)
+//                               ->get()
+//                               ->result();
+//     }else{
+//       $query = $this->db->select('
+//                                       emp_dev_attendance.*,
+//                                       employees.emp_id,
+//                                       employees.employeeName,
+//                                     department.dept_name')
+//                               ->from('emp_dev_attendance')
+//                               ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+//                               ->join('department','department.dpt_id = employees.dpt_id','left')
+//                               ->where('(emp_dev_attendance.adate) >=',$sdate)
+//                               ->where('(emp_dev_attendance.adate) <=',$edate)
+//                               ->get()
+//                               ->result();
+
+//     }
+//   return $query;  
+// }
+
+// public function get_emp_mattendance_data($empid,$year,$month)
+//   {
+//     if($empid != 'All'){
+//                     $query = $this->db->select('
+//                                           emp_dev_attendance.*,
+//                                           employees.emp_id,
+//                                           employees.employeeName,
+//                                           department.dept_name')
+//                                   ->from('emp_dev_attendance')
+//                                   ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+//                                   ->join('department','department.dpt_id = employees.dpt_id','left')
+//                                   ->where('emp_dev_attendance.accid',$empid)
+//                                   ->where('MONTH(emp_dev_attendance.adate)',$month)
+//                                   ->where('YEAR(emp_dev_attendance.adate)',$year)
+//                                   ->get()
+//                                   ->result();
+//     }else{
+//                     $query = $this->db->select('
+//                                       emp_dev_attendance.*,
+//                                       employees.emp_id,
+//                                       employees.employeeName,
+//                                       department.dept_name')
+//                               ->from('emp_dev_attendance')
+//                               ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+//                               ->join('department','department.dpt_id = employees.dpt_id','left')
+//                               ->where('MONTH(emp_dev_attendance.adate)',$month)
+//                               ->where('YEAR(emp_dev_attendance.adate)',$year)
+//                               ->get()
+//                               ->result();
+//     }
+//   return $query;  
+// }
+
+// public function get_emp_yattendance_data($empid,$year)
+//   {
+//     if($empid != 'All'){ 
+//                     $query = $this->db->select('
+//                                           emp_dev_attendance.*,
+//                                           employees.emp_id,
+//                                           employees.employeeName,
+//                                           department.dept_name')
+//                                   ->from('emp_dev_attendance')
+//                                   ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+//                                   ->join('department','department.dpt_id = employees.dpt_id','left')
+//                                   ->where('emp_dev_attendance.accid',$empid)
+//                                   ->where('YEAR(emp_dev_attendance.adate)',$year)
+//                                   ->get()
+//                                   ->result();
+//     }else{
+//                   $query = $this->db->select('
+//                                     emp_dev_attendance.*,
+//                                     employees.emp_id,
+//                                     employees.employeeName,
+//                                     department.dept_name')
+//                             ->from('emp_dev_attendance')
+//                             ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+//                             ->join('department','department.dpt_id = employees.dpt_id','left')
+//                             ->where('YEAR(emp_dev_attendance.adate)',$year)
+//                             ->get()
+//                             ->result();
+//     }
+//   return $query;  
+// }
+
+
+public function get_emp_attendance_data($offset, $limit)
+{
+    $query = $this->db->select('
                         emp_dev_attendance.*,
                         employees.emp_id,
                         employees.employeeName,
@@ -5438,106 +6523,114 @@ public function get_emp_attendance_data()
                 ->order_by('autoid','DESC')
                 ->where('emp_dev_attendance.compid',$_SESSION['compid'])
                 //->group_by('adate')
+                ->limit($limit, $offset)
                 ->get()
                 ->result();
-  return $query;  
+    return $query;  
 }
-public function get_emp_dattendance_data($empid,$sdate,$edate)
-  {
+
+public function get_emp_dattendance_data($empid, $sdate, $edate, $offset, $limit)
+{
     if($empid != 'All'){
-                $query = $this->db->select('
-                                      emp_dev_attendance.*,
-                                      employees.emp_id,
-                                      employees.employeeName,
-                                    department.dept_name')
-                              ->from('emp_dev_attendance')
-                              ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
-                              ->join('department','department.dpt_id = employees.dpt_id','left')
-                              ->where('emp_dev_attendance.accid',$empid)
-                              ->where('(emp_dev_attendance.adate) >=',$sdate)
-                              ->where('(emp_dev_attendance.adate) <=',$edate)
-                              ->get()
-                              ->result();
+        $query = $this->db->select('
+                              emp_dev_attendance.*,
+                              employees.emp_id,
+                              employees.employeeName,
+                              department.dept_name')
+                        ->from('emp_dev_attendance')
+                        ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+                        ->join('department','department.dpt_id = employees.dpt_id','left')
+                        ->where('emp_dev_attendance.accid',$empid)
+                        ->where('(emp_dev_attendance.adate) >=',$sdate)
+                        ->where('(emp_dev_attendance.adate) <=',$edate)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
     }else{
-      $query = $this->db->select('
-                                      emp_dev_attendance.*,
-                                      employees.emp_id,
-                                      employees.employeeName,
-                                    department.dept_name')
-                              ->from('emp_dev_attendance')
-                              ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
-                              ->join('department','department.dpt_id = employees.dpt_id','left')
-                              ->where('(emp_dev_attendance.adate) >=',$sdate)
-                              ->where('(emp_dev_attendance.adate) <=',$edate)
-                              ->get()
-                              ->result();
+        $query = $this->db->select('
+                              emp_dev_attendance.*,
+                              employees.emp_id,
+                              employees.employeeName,
+                              department.dept_name')
+                        ->from('emp_dev_attendance')
+                        ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+                        ->join('department','department.dpt_id = employees.dpt_id','left')
+                        ->where('(emp_dev_attendance.adate) >=',$sdate)
+                        ->where('(emp_dev_attendance.adate) <=',$edate)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
 
     }
-  return $query;  
+    return $query;  
 }
 
-public function get_emp_mattendance_data($empid,$year,$month)
-  {
+public function get_emp_mattendance_data($empid, $year, $month, $offset, $limit)
+{
     if($empid != 'All'){
-                    $query = $this->db->select('
-                                          emp_dev_attendance.*,
-                                          employees.emp_id,
-                                          employees.employeeName,
-                                          department.dept_name')
-                                  ->from('emp_dev_attendance')
-                                  ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
-                                  ->join('department','department.dpt_id = employees.dpt_id','left')
-                                  ->where('emp_dev_attendance.accid',$empid)
-                                  ->where('MONTH(emp_dev_attendance.adate)',$month)
-                                  ->where('YEAR(emp_dev_attendance.adate)',$year)
-                                  ->get()
-                                  ->result();
+        $query = $this->db->select('
+                              emp_dev_attendance.*,
+                              employees.emp_id,
+                              employees.employeeName,
+                              department.dept_name')
+                        ->from('emp_dev_attendance')
+                        ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+                        ->join('department','department.dpt_id = employees.dpt_id','left')
+                        ->where('emp_dev_attendance.accid',$empid)
+                        ->where('MONTH(emp_dev_attendance.adate)',$month)
+                        ->where('YEAR(emp_dev_attendance.adate)',$year)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
     }else{
-                    $query = $this->db->select('
-                                      emp_dev_attendance.*,
-                                      employees.emp_id,
-                                      employees.employeeName,
-                                      department.dept_name')
-                              ->from('emp_dev_attendance')
-                              ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
-                              ->join('department','department.dpt_id = employees.dpt_id','left')
-                              ->where('MONTH(emp_dev_attendance.adate)',$month)
-                              ->where('YEAR(emp_dev_attendance.adate)',$year)
-                              ->get()
-                              ->result();
+        $query = $this->db->select('
+                              emp_dev_attendance.*,
+                              employees.emp_id,
+                              employees.employeeName,
+                              department.dept_name')
+                        ->from('emp_dev_attendance')
+                        ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+                        ->join('department','department.dpt_id = employees.dpt_id','left')
+                        ->where('MONTH(emp_dev_attendance.adate)',$month)
+                        ->where('YEAR(emp_dev_attendance.adate)',$year)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
     }
-  return $query;  
+    return $query;  
 }
 
-public function get_emp_yattendance_data($empid,$year)
-  {
+public function get_emp_yattendance_data($empid, $year, $offset, $limit)
+{
     if($empid != 'All'){ 
-                    $query = $this->db->select('
-                                          emp_dev_attendance.*,
-                                          employees.emp_id,
-                                          employees.employeeName,
-                                          department.dept_name')
-                                  ->from('emp_dev_attendance')
-                                  ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
-                                  ->join('department','department.dpt_id = employees.dpt_id','left')
-                                  ->where('emp_dev_attendance.accid',$empid)
-                                  ->where('YEAR(emp_dev_attendance.adate)',$year)
-                                  ->get()
-                                  ->result();
+        $query = $this->db->select('
+                              emp_dev_attendance.*,
+                              employees.emp_id,
+                              employees.employeeName,
+                              department.dept_name')
+                        ->from('emp_dev_attendance')
+                        ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+                        ->join('department','department.dpt_id = employees.dpt_id','left')
+                        ->where('emp_dev_attendance.accid',$empid)
+                        ->where('YEAR(emp_dev_attendance.adate)',$year)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
     }else{
-                  $query = $this->db->select('
-                                    emp_dev_attendance.*,
-                                    employees.emp_id,
-                                    employees.employeeName,
-                                    department.dept_name')
-                            ->from('emp_dev_attendance')
-                            ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
-                            ->join('department','department.dpt_id = employees.dpt_id','left')
-                            ->where('YEAR(emp_dev_attendance.adate)',$year)
-                            ->get()
-                            ->result();
+        $query = $this->db->select('
+                              emp_dev_attendance.*,
+                              employees.emp_id,
+                              employees.employeeName,
+                              department.dept_name')
+                        ->from('emp_dev_attendance')
+                        ->join('employees','employees.employeeID = emp_dev_attendance.accid','left')
+                        ->join('department','department.dpt_id = employees.dpt_id','left')
+                        ->where('YEAR(emp_dev_attendance.adate)',$year)
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->result();
     }
-  return $query;  
+    return $query;  
 }
 
 public function cash_calculation($id){
@@ -5751,27 +6844,27 @@ public function get_service_data($productID){
 
 }
 
-public function get_all_purchase_data()
-  {
-  $query = $this->db->select('*')
-                    ->from('purchase')
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
-// var_dump($query);exit();
-  return $query;  
-}
+// public function get_all_purchase_data()
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('purchase')
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
+// // var_dump($query);exit();
+//   return $query;  
+// }
 
-public function get_all_sale_data()
-  {
-  $query = $this->db->select('*')
-                    ->from('sales')
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
+// public function get_all_sale_data()
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('sales')
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
 
-  return $query;  
-}
+//   return $query;  
+// }
 
 // public function get_all_service_data()
 //   {
@@ -5783,47 +6876,47 @@ public function get_all_sale_data()
 //   return $query;  
 // }
 
-public function get_all_voucher_data()
-  {
-  $query = $this->db->select('*')
-                    ->from('vaucher')
-                    ->where('compid',$_SESSION['compid'])
-                    ->get()
-                    ->result();
+// public function get_all_voucher_data()
+//   {
+//   $query = $this->db->select('*')
+//                     ->from('vaucher')
+//                     ->where('compid',$_SESSION['compid'])
+//                     ->get()
+//                     ->result();
 
-  return $query;  
-}
-public function get_all_dpurchase_data($sdate,$edate,$dparticular)
-  {
-    if($dparticular == 'purchase' || $dparticular == 'All' ){
+//   return $query;  
+// }
+// public function get_all_dpurchase_data($sdate,$edate,$dparticular)
+//   {
+//     if($dparticular == 'purchase' || $dparticular == 'All' ){
 
-        $query = $this->db->select('*')
-                          ->from('purchase')
-                          ->where('purchaseDate >=',$sdate)
-                          ->where('purchaseDate <=',$edate)
-                          ->where('compid',$_SESSION['compid'])
-                          ->get()
-                          ->result();
+//         $query = $this->db->select('*')
+//                           ->from('purchase')
+//                           ->where('purchaseDate >=',$sdate)
+//                           ->where('purchaseDate <=',$edate)
+//                           ->where('compid',$_SESSION['compid'])
+//                           ->get()
+//                           ->result();
 
-        return $query;  
-    }
-}
+//         return $query;  
+//     }
+// }
 
-public function get_all_dsale_data($sdate,$edate,$dparticular)
-  {
-    if($dparticular == 'sales' || $dparticular == 'All' ){
+// public function get_all_dsale_data($sdate,$edate,$dparticular)
+//   {
+//     if($dparticular == 'sales' || $dparticular == 'All' ){
 
-        $query = $this->db->select('*')
-                          ->from('sales')
-                          ->where('saleDate >=',$sdate)
-                          ->where('saleDate <=',$edate)
-                          ->where('compid',$_SESSION['compid'])
-                          ->get()
-                          ->result();
+//         $query = $this->db->select('*')
+//                           ->from('sales')
+//                           ->where('saleDate >=',$sdate)
+//                           ->where('saleDate <=',$edate)
+//                           ->where('compid',$_SESSION['compid'])
+//                           ->get()
+//                           ->result();
 
-        return $query;  
-    }
-}
+//         return $query;  
+//     }
+// }
 
 // public function get_all_dservice_data($sdate,$edate,$dparticular)
 //   {
@@ -5841,64 +6934,64 @@ public function get_all_dsale_data($sdate,$edate,$dparticular)
 // }
 
 
-public function get_all_dvoucher_data($sdate,$edate,$dparticular)
-  {
-    if($dparticular == 'Credit Voucher' || $dparticular == 'Debit Voucher' || $dparticular == 'Supplier Pay'){
+// public function get_all_dvoucher_data($sdate,$edate,$dparticular)
+//   {
+//     if($dparticular == 'Credit Voucher' || $dparticular == 'Debit Voucher' || $dparticular == 'Supplier Pay'){
 
-            $query = $this->db->select('*')
-                              ->from('vaucher')
-                              ->where('voucherdate >=',$sdate)
-                              ->where('voucherdate <=',$edate)
-                              ->where('vauchertype',$dparticular)
-                              ->where('compid',$_SESSION['compid'])
-                              ->get()
-                              ->result();
+//             $query = $this->db->select('*')
+//                               ->from('vaucher')
+//                               ->where('voucherdate >=',$sdate)
+//                               ->where('voucherdate <=',$edate)
+//                               ->where('vauchertype',$dparticular)
+//                               ->where('compid',$_SESSION['compid'])
+//                               ->get()
+//                               ->result();
 
-            return $query;  
-    }else if($dparticular == 'All'){
-            $query = $this->db->select('*')
-                              ->from('vaucher')
-                              ->where('voucherdate >=',$sdate)
-                              ->where('voucherdate <=',$edate)
-                              ->where('compid',$_SESSION['compid'])
-                              ->get()
-                              ->result();
+//             return $query;  
+//     }else if($dparticular == 'All'){
+//             $query = $this->db->select('*')
+//                               ->from('vaucher')
+//                               ->where('voucherdate >=',$sdate)
+//                               ->where('voucherdate <=',$edate)
+//                               ->where('compid',$_SESSION['compid'])
+//                               ->get()
+//                               ->result();
 
-            return $query;
-    }
-}
+//             return $query;
+//     }
+// }
 
-public function get_all_mpurchase_data($month,$year,$mparticular)
-  {
-    if($mparticular == 'purchase' || $mparticular == 'All' ){
+// public function get_all_mpurchase_data($month,$year,$mparticular)
+//   {
+//     if($mparticular == 'purchase' || $mparticular == 'All' ){
 
-        $query = $this->db->select('*')
-                          ->from('purchase')
-                          ->where('MONTH(purchaseDate)',$month)
-                          ->where('YEAR(purchaseDate)',$year)
-                          ->where('compid',$_SESSION['compid'])
-                          ->get()
-                          ->result();
+//         $query = $this->db->select('*')
+//                           ->from('purchase')
+//                           ->where('MONTH(purchaseDate)',$month)
+//                           ->where('YEAR(purchaseDate)',$year)
+//                           ->where('compid',$_SESSION['compid'])
+//                           ->get()
+//                           ->result();
 
-        return $query; 
-    } 
-}
+//         return $query; 
+//     } 
+// }
 
-public function get_all_msale_data($month,$year,$mparticular)
-  {
-    if($mparticular == 'sales' || $mparticular == 'All' ){
+// public function get_all_msale_data($month,$year,$mparticular)
+//   {
+//     if($mparticular == 'sales' || $mparticular == 'All' ){
 
-        $query = $this->db->select('*')
-                          ->from('sales')
-                          ->where('MONTH(saleDate)',$month)
-                          ->where('YEAR(saleDate)',$year)
-                          ->where('compid',$_SESSION['compid'])
-                          ->get()
-                          ->result();
+//         $query = $this->db->select('*')
+//                           ->from('sales')
+//                           ->where('MONTH(saleDate)',$month)
+//                           ->where('YEAR(saleDate)',$year)
+//                           ->where('compid',$_SESSION['compid'])
+//                           ->get()
+//                           ->result();
 
-        return $query;  
-    }
-}
+//         return $query;  
+//     }
+// }
 
 // public function get_all_mservice_data($month,$year,$mparticular)
 //   {
@@ -5915,63 +7008,62 @@ public function get_all_msale_data($month,$year,$mparticular)
 //     } 
 // }
 
+// public function get_all_mvoucher_data($month,$year,$mparticular)
+//   {
+//     if($mparticular == 'Credit Voucher' || $mparticular == 'Debit Voucher' || $mparticular == 'Supplier Pay'){
 
-public function get_all_mvoucher_data($month,$year,$mparticular)
-  {
-    if($mparticular == 'Credit Voucher' || $mparticular == 'Debit Voucher' || $mparticular == 'Supplier Pay'){
+//             $query = $this->db->select('*')
+//                               ->from('vaucher')
+//                               ->where('MONTH(voucherdate)',$month)
+//                               ->where('YEAR(voucherdate)',$year)
+//                               ->where('vauchertype',$mparticular)
+//                               ->where('compid',$_SESSION['compid'])
+//                               ->get()
+//                               ->result();
 
-            $query = $this->db->select('*')
-                              ->from('vaucher')
-                              ->where('MONTH(voucherdate)',$month)
-                              ->where('YEAR(voucherdate)',$year)
-                              ->where('vauchertype',$mparticular)
-                              ->where('compid',$_SESSION['compid'])
-                              ->get()
-                              ->result();
-
-            return $query; 
+//             return $query; 
   
-    }else if($mparticular == 'All'){
-            $query = $this->db->select('*')
-                          ->from('vaucher')
-                          ->where('MONTH(voucherdate)',$month)
-                          ->where('YEAR(voucherdate)',$year)
-                          ->where('compid',$_SESSION['compid'])
-                          ->get()
-                          ->result();
+//     }else if($mparticular == 'All'){
+//             $query = $this->db->select('*')
+//                           ->from('vaucher')
+//                           ->where('MONTH(voucherdate)',$month)
+//                           ->where('YEAR(voucherdate)',$year)
+//                           ->where('compid',$_SESSION['compid'])
+//                           ->get()
+//                           ->result();
 
-            return $query;
+//             return $query;
 
-    }
-}
+//     }
+// }
 
-public function get_all_ypurchase_data($year,$rparticular)
-  {
-    if($rparticular == 'purchase' || $rparticular == 'All'){
-      $query = $this->db->select('*')
-                        ->from('purchase')
-                        ->where('YEAR(purchaseDate)',$year)
-                        ->where('compid',$_SESSION['compid'])
-                        ->get()
-                        ->result();
+// public function get_all_ypurchase_data($year,$rparticular)
+//   {
+//     if($rparticular == 'purchase' || $rparticular == 'All'){
+//       $query = $this->db->select('*')
+//                         ->from('purchase')
+//                         ->where('YEAR(purchaseDate)',$year)
+//                         ->where('compid',$_SESSION['compid'])
+//                         ->get()
+//                         ->result();
 
-      return $query;
-    }  
-}
+//       return $query;
+//     }  
+// }
 
-public function get_all_ysale_data($year,$rparticular)
-  {
-  if($rparticular == 'sales' || $rparticular == 'All'){
-      $query = $this->db->select('*')
-                        ->from('sales')
-                        ->where('YEAR(saleDate)',$year)
-                        ->where('compid',$_SESSION['compid'])
-                        ->get()
-                        ->result();
+// public function get_all_ysale_data($year,$rparticular)
+//   {
+//   if($rparticular == 'sales' || $rparticular == 'All'){
+//       $query = $this->db->select('*')
+//                         ->from('sales')
+//                         ->where('YEAR(saleDate)',$year)
+//                         ->where('compid',$_SESSION['compid'])
+//                         ->get()
+//                         ->result();
 
-      return $query;  
-  }
-}
+//       return $query;  
+//   }
+// }
 
 // public function get_all_yservice_data($year,$rparticular)
 //   {
@@ -5988,30 +7080,30 @@ public function get_all_ysale_data($year,$rparticular)
 // }
 
 
-public function get_all_yvoucher_data($year,$rparticular)
-  {
-    if($rparticular == 'Credit Voucher' || $rparticular == 'Debit Voucher' || $rparticular == 'Supplier Pay'){
+// public function get_all_yvoucher_data($year,$rparticular)
+//   {
+//     if($rparticular == 'Credit Voucher' || $rparticular == 'Debit Voucher' || $rparticular == 'Supplier Pay'){
 
-              $query = $this->db->select('*')
-                                ->from('vaucher')
-                                ->where('YEAR(voucherdate)',$year)
-                                ->where('vauchertype',$rparticular)
-                                ->where('compid',$_SESSION['compid'])
-                                ->get()
-                                ->result();
+//               $query = $this->db->select('*')
+//                                 ->from('vaucher')
+//                                 ->where('YEAR(voucherdate)',$year)
+//                                 ->where('vauchertype',$rparticular)
+//                                 ->where('compid',$_SESSION['compid'])
+//                                 ->get()
+//                                 ->result();
 
-              return $query;  
-    }else if($rparticular == 'All'){
-              $query = $this->db->select('*')
-                                ->from('vaucher')
-                                ->where('YEAR(voucherdate)',$year)
-                                ->where('compid',$_SESSION['compid'])
-                                ->get()
-                                ->result();
+//               return $query;  
+//     }else if($rparticular == 'All'){
+//               $query = $this->db->select('*')
+//                                 ->from('vaucher')
+//                                 ->where('YEAR(voucherdate)',$year)
+//                                 ->where('compid',$_SESSION['compid'])
+//                                 ->get()
+//                                 ->result();
 
-              return $query; 
-    }
-}
+//               return $query; 
+//     }
+// }
 public function get_data_products($where){
   $query = $this->db->select('p.*,s.totalPices,(sum(pp.pprice)/ count(pp.pp_id)) as avg_purchase')
                     ->from('products p')
@@ -6618,5 +7710,819 @@ public function get_bank_balance($id){
  
                         
  }
+
+ public function get_all_purchase_data($limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('purchase')
+             ->where('compid', $_SESSION['compid']);
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_all_sale_data($limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('sales')
+             ->where('compid', $_SESSION['compid']);
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_all_voucher_data($limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('compid', $_SESSION['compid']);
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_all_dpurchase_data($sdate, $edate, $dparticular, $limit = null, $offset = null)
+{
+    if ($dparticular == 'purchase' || $dparticular == 'All') {
+        $this->db->select('*')
+                 ->from('purchase')
+                 ->where('purchaseDate >=', $sdate)
+                 ->where('purchaseDate <=', $edate)
+                 ->where('compid', $_SESSION['compid']);
+
+        if ($limit) {
+            $this->db->limit($limit, $offset);
+        }
+
+        $query = $this->db->get()->result();
+        return $query;
+    }
+}
+
+public function get_all_dsale_data($sdate, $edate, $dparticular, $limit = null, $offset = null)
+{
+    if ($dparticular == 'sales' || $dparticular == 'All') {
+        $this->db->select('*')
+                 ->from('sales')
+                 ->where('saleDate >=', $sdate)
+                 ->where('saleDate <=', $edate)
+                 ->where('compid', $_SESSION['compid']);
+
+        if ($limit) {
+            $this->db->limit($limit, $offset);
+        }
+
+        $query = $this->db->get()->result();
+        return $query;
+    }
+}
+
+public function get_all_dvoucher_data($sdate, $edate, $dparticular, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('voucherdate >=', $sdate)
+             ->where('voucherdate <=', $edate)
+             ->where('compid', $_SESSION['compid']);
+
+    if ($dparticular != 'All') {
+        $this->db->where('vauchertype', $dparticular);
+    }
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_all_mpurchase_data($month, $year, $mparticular, $limit = null, $offset = null)
+{
+    if ($mparticular == 'purchase' || $mparticular == 'All') {
+        $this->db->select('*')
+                 ->from('purchase')
+                 ->where('MONTH(purchaseDate)', $month)
+                 ->where('YEAR(purchaseDate)', $year)
+                 ->where('compid', $_SESSION['compid']);
+
+        if ($limit) {
+            $this->db->limit($limit, $offset);
+        }
+
+        $query = $this->db->get()->result();
+        return $query;
+    }
+}
+
+public function get_all_msale_data($month, $year, $mparticular, $limit = null, $offset = null)
+{
+    if ($mparticular == 'sales' || $mparticular == 'All') {
+        $this->db->select('*')
+                 ->from('sales')
+                 ->where('MONTH(saleDate)', $month)
+                 ->where('YEAR(saleDate)', $year)
+                 ->where('compid', $_SESSION['compid']);
+
+        if ($limit) {
+            $this->db->limit($limit, $offset);
+        }
+
+        $query = $this->db->get()->result();
+        return $query;
+    }
+}
+
+public function get_all_mvoucher_data($month, $year, $mparticular, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('MONTH(voucherdate)', $month)
+             ->where('YEAR(voucherdate)', $year)
+             ->where('compid', $_SESSION['compid']);
+
+    if ($mparticular != 'All') {
+        $this->db->where('vauchertype', $mparticular);
+    }
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_all_ypurchase_data($year, $rparticular, $limit = null, $offset = null)
+{
+    if ($rparticular == 'purchase' || $rparticular == 'All') {
+        $this->db->select('*')
+                 ->from('purchase')
+                 ->where('YEAR(purchaseDate)', $year)
+                 ->where('compid', $_SESSION['compid']);
+
+        if ($limit) {
+            $this->db->limit($limit, $offset);
+        }
+
+        $query = $this->db->get()->result();
+        return $query;
+    }
+}
+
+public function get_all_ysale_data($year, $rparticular, $limit = null, $offset = null)
+{
+    if ($rparticular == 'sales' || $rparticular == 'All') {
+        $this->db->select('*')
+                 ->from('sales')
+                 ->where('YEAR(saleDate)', $year)
+                 ->where('compid', $_SESSION['compid']);
+
+        if ($limit) {
+            $this->db->limit($limit, $offset);
+        }
+
+        $query = $this->db->get()->result();
+        return $query;
+    }
+}
+
+public function get_all_yvoucher_data($year, $rparticular, $limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('YEAR(voucherdate)', $year)
+             ->where('compid', $_SESSION['compid']);
+
+    if ($rparticular != 'All') {
+        $this->db->where('vauchertype', $rparticular);
+    }
+
+    if ($limit) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get()->result();
+    return $query;
+}
+
+public function get_voucher_data($limit = null, $offset = null)
+{
+    if ($limit !== null && $offset !== null) {
+        $query = $this->db->select("*")
+            ->from('vaucher')
+            ->where('compid', $_SESSION['compid'])
+            ->limit($limit, $offset)
+            ->get()
+            ->result();
+    } else {
+        $query = $this->db->select("*")
+            ->from('vaucher')
+            ->where('compid', $_SESSION['compid'])
+            ->get()
+            ->result();
+    }
+    return $query;
+}
+
+public function get_yall_voucher_data($year, $vtype, $limit = null, $offset = null)
+{
+    if ($vtype == 'All') {
+        if ($limit !== null && $offset !== null) {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('YEAR(voucherdate)', $year)
+                ->where('compid', $_SESSION['compid'])
+                ->limit($limit, $offset)
+                ->get()
+                ->result();
+        } else {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('YEAR(voucherdate)', $year)
+                ->where('compid', $_SESSION['compid'])
+                ->get()
+                ->result();
+        }
+    } else {
+        if ($limit !== null && $offset !== null) {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('YEAR(voucherdate)', $year)
+                ->where('vauchertype', $vtype)
+                ->where('compid', $_SESSION['compid'])
+                ->limit($limit, $offset)
+                ->get()
+                ->result();
+        } else {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('YEAR(voucherdate)', $year)
+                ->where('vauchertype', $vtype)
+                ->where('compid', $_SESSION['compid'])
+                ->get()
+                ->result();
+        }
+    }
+    return $query;
+}
+
+public function get_mall_voucher_data($month, $year, $vtype, $limit = null, $offset = null)
+{
+    if ($vtype == 'All') {
+        if ($limit !== null && $offset !== null) {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('MONTH(voucherdate)', $month)
+                ->where('YEAR(voucherdate)', $year)
+                ->where('compid', $_SESSION['compid'])
+                ->limit($limit, $offset)
+                ->get()
+                ->result();
+        } else {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('MONTH(voucherdate)', $month)
+                ->where('YEAR(voucherdate)', $year)
+                ->where('compid', $_SESSION['compid'])
+                ->get()
+                ->result();
+        }
+    } else {
+        if ($limit !== null && $offset !== null) {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('MONTH(voucherdate)', $month)
+                ->where('YEAR(voucherdate)', $year)
+                ->where('vauchertype', $vtype)
+                ->where('compid', $_SESSION['compid'])
+                ->limit($limit, $offset)
+                ->get()
+                ->result();
+        } else {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('MONTH(voucherdate)', $month)
+                ->where('YEAR(voucherdate)', $year)
+                ->where('vauchertype', $vtype)
+                ->where('compid', $_SESSION['compid'])
+                ->get()
+                ->result();
+        }
+    }
+    return $query;
+}
+
+public function get_dall_voucher_data($sdate, $edate, $vtype, $limit = null, $offset = null)
+{
+    if ($vtype == 'All') {
+        if ($limit !== null && $offset !== null) {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('voucherdate >=', $sdate)
+                ->where('voucherdate <=', $edate)
+                ->where('compid', $_SESSION['compid'])
+                ->limit($limit, $offset)
+                ->get()
+                ->result();
+        } else {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('voucherdate >=', $sdate)
+                ->where('voucherdate <=', $edate)
+                ->where('compid', $_SESSION['compid'])
+                ->get()
+                ->result();
+        }
+    } else {
+        if ($limit !== null && $offset !== null) {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('voucherdate >=', $sdate)
+                ->where('voucherdate <=', $edate)
+                ->where('vauchertype', $vtype)
+                ->where('compid', $_SESSION['compid'])
+                ->limit($limit, $offset)
+                ->get()
+                ->result();
+        } else {
+            $query = $this->db->select("*")
+                ->from('vaucher')
+                ->where('voucherdate >=', $sdate)
+                ->where('voucherdate <=', $edate)
+                ->where('vauchertype', $vtype)
+                ->where('compid', $_SESSION['compid'])
+                ->get()
+                ->result();
+        }
+    }
+    return $query;
+}
+
+// --------
+public function sales_ddata($sdate, $edate, $limit = null, $offset = null)
+{
+    $this->db->select("*")
+             ->from('sales')
+             ->where('saledate >=', $sdate)
+             ->where('saledate <=', $edate)
+             ->where('compid', $_SESSION['compid']);
+    
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function sales_mdata($month, $year, $limit = null, $offset = null)
+{
+    $this->db->select("*")
+             ->from('sales')
+             ->where('MONTH(saledate)', $month)
+             ->where('YEAR(saledate)', $year)
+             ->where('compid', $_SESSION['compid']);
+    
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function sales_ydata($year, $limit = null, $offset = null)
+{
+    $this->db->select("*")
+             ->from('sales')
+             ->where('YEAR(saledate)', $year)
+             ->where('compid', $_SESSION['compid']);
+    
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function sales_adata($limit = null, $offset = null)
+{
+    $this->db->select("*")
+             ->from('sales')
+             ->where('compid', $_SESSION['compid']);
+    
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+// -----------
+public function sales_due_ddata($sdate, $edate, $limit = null, $offset = null)
+{
+    $this->db->select("*")
+             ->from('sales')
+             ->where('saledate >=', $sdate)
+             ->where('saledate <=', $edate)
+             ->where('compid', $_SESSION['compid']);
+    
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function sales_due_mdata($month, $year, $limit = null, $offset = null)
+{
+    $this->db->select("*")
+             ->from('sales')
+             ->where('MONTH(saledate)', $month)
+             ->where('YEAR(saledate)', $year)
+             ->where('compid', $_SESSION['compid']);
+    
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function sales_due_ydata($year, $limit = null, $offset = null)
+{
+    $this->db->select("*")
+             ->from('sales')
+             ->where('YEAR(saledate)', $year)
+             ->where('compid', $_SESSION['compid']);
+    
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function sales_due_adata($limit = null, $offset = null)
+{
+    $this->db->select("*")
+             ->from('sales')
+             ->where('compid', $_SESSION['compid']);
+    
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+// --------------
+public function get_bank_sale_data($limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('sales')
+             ->where('accountType','Bank')
+             ->where('compid',$_SESSION['compid']);
+
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function get_bank_sreturn_data($limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('returns')
+             ->where('accountType','Bank')
+             ->where('compid',$_SESSION['compid']);
+
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function get_bank_preturn_data($limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('preturns')
+             ->where('accountType','Bank')
+             ->where('compid',$_SESSION['compid']);
+
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function get_bank_voucher_data($limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('accountType','Bank')
+             ->where('status',1)
+             ->where('compid',$_SESSION['compid']);
+
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+public function get_bank_salary_data($limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('employee_payment')
+             ->where('accountType','Bank')
+             ->where('compid',$_SESSION['compid']);
+
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    return $this->db->get()->result();
+}
+
+// -------------
+public function get_bank_dpurchase_data($sdate, $edate, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('purchase')
+             ->where('accountType', 'Bank')
+             ->where('purchaseDate >=', $sdate)
+             ->where('purchaseDate <=', $edate)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_dsale_data($sdate, $edate, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('sales')
+             ->where('accountType', 'Bank')
+             ->where('saleDate >=', $sdate)
+             ->where('saleDate <=', $edate)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_dsreturn_data($sdate, $edate, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('returns')
+             ->where('accountType', 'Bank')
+             ->where('returnDate >=', $sdate)
+             ->where('returnDate <=', $edate)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_dpreturn_data($sdate, $edate, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('preturns')
+             ->where('accountType', 'Bank')
+             ->where('prDate >=', $sdate)
+             ->where('prDate <=', $edate)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_dvoucher_data($sdate, $edate, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('accountType', 'Bank')
+             ->where('voucherdate >=', $sdate)
+             ->where('voucherdate <=', $edate)
+             ->where('status', 1)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_dsalary_data($sdate, $edate, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('employee_payment')
+             ->where('accountType', 'Bank')
+             ->where('regdate >=', $sdate)
+             ->where('regdate <=', $edate)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_mpurchase_data($month, $year, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('purchase')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(purchaseDate)', $month)
+             ->where('YEAR(purchaseDate)', $year)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_msale_data($month, $year, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('sales')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(saleDate)', $month)
+             ->where('YEAR(saleDate)', $year)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_msreturn_data($month, $year, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('returns')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(returnDate)', $month)
+             ->where('YEAR(returnDate)', $year)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_mpreturn_data($month, $year, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('preturns')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(prDate)', $month)
+             ->where('YEAR(prDate)', $year)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_mvoucher_data($month, $year, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('vaucher')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(voucherdate)', $month)
+             ->where('YEAR(voucherdate)', $year)
+             ->where('status', 1)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_msalary_data($month, $year, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('employee_payment')
+             ->where('accountType', 'Bank')
+             ->where('MONTH(regdate)', $month)
+             ->where('YEAR(regdate)', $year)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_ypurchase_data($year, $limit, $offset)
+{
+    $this->db->select('*')
+             ->from('purchase')
+             ->where('accountType', 'Bank')
+             ->where('YEAR(purchaseDate)', $year)
+             ->where('compid', $_SESSION['compid'])
+             ->limit($limit, $offset);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_ysale_data($year, $limit, $offset)
+{
+  $this->db->select('*')
+      ->from('sales')
+      ->where('accountType', 'Bank')
+      ->where('YEAR(saleDate)', $year)
+      ->where('compid',
+      $_SESSION['compid'])
+      ->limit($limit, $offset);
+
+  $query = $this->db->get();
+  return $query->result();
+}
+
+public function get_bank_ysreturn_data($year, $limit, $offset)
+{
+    $this->db->select('*')
+            ->from('returns')
+            ->where('accountType', 'Bank')
+            ->where('YEAR(returnDate)', $year)
+            ->where('compid', $_SESSION['compid'])
+            ->limit($limit, $offset);
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_ypreturn_data($year, $limit, $offset)
+{
+    $this->db->select('*')
+            ->from('preturns')
+            ->where('accountType', 'Bank')
+            ->where('YEAR(prDate)', $year)
+            ->where('compid', $_SESSION['compid'])
+            ->limit($limit, $offset);
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_yvoucher_data($year, $limit, $offset)
+{
+    $this->db->select('*')
+            ->from('vaucher')
+            ->where('accountType', 'Bank')
+            ->where('YEAR(voucherdate)', $year)
+            ->where('status', 1)
+            ->where('compid', $_SESSION['compid'])
+            ->limit($limit, $offset);
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_ysalary_data($year, $limit, $offset)
+{
+    $this->db->select('*')
+            ->from('employee_payment')
+            ->where('accountType', 'Bank')
+            ->where('YEAR(regdate)', $year)
+            ->where('compid', $_SESSION['compid'])
+            ->limit($limit, $offset);
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_bank_purchase_data($limit = null, $offset = null)
+{
+    $this->db->select('*')
+             ->from('purchase')
+             ->where('accountType', 'Bank')
+             ->where('compid', $_SESSION['compid']);
+
+    if ($limit !== null && $offset !== null) {
+        $this->db->limit($limit, $offset);
+    }
+
+    $query = $this->db->get();
+    return $query->result();
+}
 
 }

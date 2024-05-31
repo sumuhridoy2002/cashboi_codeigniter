@@ -18,6 +18,38 @@
         display: flex;
       }
     </style>
+
+    <?php if(!empty($store['FACEBOOK_PIXEL_ID'])) { ?>
+
+      <script>
+        console.log("FACEBOOK_PIXEL_ID", "<?= $store['FACEBOOK_PIXEL_ID']; ?>")
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', "<?= $store['FACEBOOK_PIXEL_ID']; ?>");
+        fbq('track', 'PageView');
+      </script>
+      <!-- <script>
+        // Track Add to Cart event
+        $('#add_to_cart_button').click(function() {
+          fbq('track', 'AddToCart', {
+            content_ids: ['PRODUCT_ID'],
+            content_type: 'product',
+            value: 'PRODUCT_PRICE',
+            currency: 'USD'
+          });
+        });
+      </script> -->
+      <noscript>
+        <img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"/>
+      </noscript>
+    <?php } ?>
 </head>
 <body>
   <div class="backdrop"></div>

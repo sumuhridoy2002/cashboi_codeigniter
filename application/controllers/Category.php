@@ -338,6 +338,13 @@ public function save_online_store()
     'sGoogle' => $info['sGoogle'],
     'sTwitter' => $info['sTwitter'],
     'sInstagram' => $info['sInstagram'],
+    'FACEBOOK_PIXEL_ID' => $info['FACEBOOK_PIXEL_ID'],
+    'PATHAO_USER_NAME' => $info['PATHAO_USER_NAME'],
+    'PATHAO_PASSWORD' => $info['PATHAO_PASSWORD'],
+    'PATHAO_CLIENT_ID' => $info['PATHAO_CLIENT_ID'],
+    'PATHAO_CLIENT_SECRET' => $info['PATHAO_CLIENT_SECRET'],
+    'STEADFAST_API_KEY' => $info['STEADFAST_API_KEY'],
+    'STEADFAST_API_SECRET' => $info['STEADFAST_API_SECRET'],
     'sbImage'    => $limg,
     'regby'       => $_SESSION['uid']
           ];

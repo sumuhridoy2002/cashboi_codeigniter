@@ -79,7 +79,14 @@
                             <input type="text" class="form-control" name="address" placeholder="Delivery Address *" required >
                           </div>
                           <div class="form-group">
-                            <input type="email" class="form-control" name="email" placeholder="Email(Optional)" >
+                            <input type="email" class="form-control" name="email" placeholder="Email (Optional)" >
+                          </div>
+                          <div class="form-group">
+                            <select name="courier_type" class="form-control" required>
+                              <option selected value="" disabled>Choose Courier Type</option>
+                              <option value="Pathao">Pathao</option>
+                              <option value="Steadfast">Steadfast</option>
+                            </select>
                           </div>
                         </div>
                         <div class="col-lg-8 col-md-8 col-12">

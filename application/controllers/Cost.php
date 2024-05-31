@@ -275,109 +275,183 @@ public function save_company_profile()
   redirect('Dashboard');
 }
 
-public function expense_report_list()
-  {
-  $data['title'] = 'Expense Report';
-  $cwhere = array('compid'=> $_SESSION['compid']);
-  $data['cost'] = $this->pm->get_data('cost_type',$cwhere);
+// public function expense_report_list()
+//   {
+//   $data['title'] = 'Expense Report';
+//   $cwhere = array('compid'=> $_SESSION['compid']);
+//   $data['cost'] = $this->pm->get_data('cost_type',$cwhere);
 
-  if(isset($_GET['search']))
-    {
-    $report = $_GET['reports'];
+//   if(isset($_GET['search']))
+//     {
+//     $report = $_GET['reports'];
         
-    if($report == 'dailyReports')
-      {
-      $sdate = date("Y-m-d", strtotime($_GET['sdate']));
-      $edate = date("Y-m-d", strtotime($_GET['edate']));
-      $data['sdate'] = $sdate;
-      $data['edate'] = $edate;
-      $data['report'] = $report;
-      $vtype = $_GET['dvtype'];
+//     if($report == 'dailyReports')
+//       {
+//       $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//       $edate = date("Y-m-d", strtotime($_GET['edate']));
+//       $data['sdate'] = $sdate;
+//       $data['edate'] = $edate;
+//       $data['report'] = $report;
+//       $vtype = $_GET['dvtype'];
       
-      $data['expense'] = $this->pm->get_dcost_report_data($sdate,$edate,$vtype);
-      }
-    else if ($report == 'monthlyReports')
-      {
-      $month = $_GET['month'];
-      $data['month'] = $month;
-      $year = $_GET['year'];
-      $data['year'] = $year;
-            //var_dump($data['month']); exit();
-      if($month == 1)
-        {
-        $name = 'January';
-        }
-      elseif ($month == 2)
-        {
-        $name = 'February';
-        }
-      elseif ($month == 3)
-        {
-        $name = 'March';
-        }
-      elseif ($month == 4)
-        {
-        $name = 'April';
-        }
-      elseif ($month == 5)
-        {
-        $name = 'May';
-        }
-      elseif ($month == 6)
-        {
-        $name = 'June';
-        }
-      elseif ($month == 7)
-        {
-        $name = 'July';
-        }
-      elseif ($month == 8)
-        {
-        $name = 'August';
-        }
-      elseif ($month == 9)
-        {
-        $name = 'September';
-        }
-      elseif ($month == 10)
-        {
-        $name = 'October';
-        }
-      elseif ($month == 11)
-        {
-        $name = 'November';
-        }
-      else
-        {
-        $name = 'December';
-        }
+//       $data['expense'] = $this->pm->get_dcost_report_data($sdate,$edate,$vtype);
+//       }
+//     else if ($report == 'monthlyReports')
+//       {
+//       $month = $_GET['month'];
+//       $data['month'] = $month;
+//       $year = $_GET['year'];
+//       $data['year'] = $year;
+//       if($month == 1)
+//         {
+//         $name = 'January';
+//         }
+//       elseif ($month == 2)
+//         {
+//         $name = 'February';
+//         }
+//       elseif ($month == 3)
+//         {
+//         $name = 'March';
+//         }
+//       elseif ($month == 4)
+//         {
+//         $name = 'April';
+//         }
+//       elseif ($month == 5)
+//         {
+//         $name = 'May';
+//         }
+//       elseif ($month == 6)
+//         {
+//         $name = 'June';
+//         }
+//       elseif ($month == 7)
+//         {
+//         $name = 'July';
+//         }
+//       elseif ($month == 8)
+//         {
+//         $name = 'August';
+//         }
+//       elseif ($month == 9)
+//         {
+//         $name = 'September';
+//         }
+//       elseif ($month == 10)
+//         {
+//         $name = 'October';
+//         }
+//       elseif ($month == 11)
+//         {
+//         $name = 'November';
+//         }
+//       else
+//         {
+//         $name = 'December';
+//         }
 
-      $data['name'] = $name;
-      $data['report'] = $report;
-      $vtype = $_GET['mvtype'];
+//       $data['name'] = $name;
+//       $data['report'] = $report;
+//       $vtype = $_GET['mvtype'];
       
-      $data['expense'] = $this->pm->get_mcost_report_data($month,$year,$vtype);
-      }
-    else if ($report == 'yearlyReports')
-      {
-      $year = $_GET['ryear'];
-      $data['year'] = $year;
-      $data['report'] = $report;
-      $vtype = $_GET['yvtype'];
+//       $data['expense'] = $this->pm->get_mcost_report_data($month,$year,$vtype);
+//       }
+//     else if ($report == 'yearlyReports')
+//       {
+//       $year = $_GET['ryear'];
+//       $data['year'] = $year;
+//       $data['report'] = $report;
+//       $vtype = $_GET['yvtype'];
       
-      $data['expense'] = $this->pm->get_ycost_report_data($year,$vtype);
-      }
-    }
-  else
-    {
-    $data['expense'] = $this->pm->get_cost_report_data();
-    }
+//       $data['expense'] = $this->pm->get_ycost_report_data($year,$vtype);
+//       }
+//     }
+//   else
+//     {
+//     $data['expense'] = $this->pm->get_cost_report_data();
+//     }
     
-  $this->load->view('costs/cost_report',$data);
+//   $this->load->view('costs/cost_report',$data);
+// }
+
+public function expense_report_list()
+{
+    $data['title'] = 'Expense Report';
+    $cwhere = array('compid' => $_SESSION['compid']);
+    $data['cost'] = $this->pm->get_data('cost_type', $cwhere);
+
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    if (isset($_GET['search'])) {
+        $report = $_GET['reports'];
+
+        if ($report == 'dailyReports') {
+            $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+            $edate = date("Y-m-d", strtotime($_GET['edate']));
+            $data['sdate'] = $sdate;
+            $data['edate'] = $edate;
+            $data['report'] = $report;
+            $vtype = $_GET['dvtype'];
+
+            $data['expense'] = $this->pm->get_dcost_report_data($sdate, $edate, $vtype, $limit, $offset);
+        } else if ($report == 'monthlyReports') {
+            $month = $_GET['month'];
+            $data['month'] = $month;
+            $year = $_GET['year'];
+            $data['year'] = $year;
+
+            $name = date("F", mktime(0, 0, 0, $month, 1, $year)); // Get month name from month number
+            $data['name'] = $name;
+
+            $data['report'] = $report;
+            $vtype = $_GET['mvtype'];
+
+            $data['expense'] = $this->pm->get_mcost_report_data($month, $year, $vtype, $limit, $offset);
+        } else if ($report == 'yearlyReports') {
+            $year = $_GET['ryear'];
+            $data['year'] = $year;
+            $data['report'] = $report;
+            $vtype = $_GET['yvtype'];
+
+            $data['expense'] = $this->pm->get_ycost_report_data($year, $vtype, $limit, $offset);
+        }
+    } else {
+        $data['expense'] = $this->pm->get_cost_report_data($limit, $offset);
+    }
+
+    // Paginate expense data
+    $total_expense = count($data['expense']);
+    $paginated_expense = array_slice($data['expense'], $offset, $limit);
+
+    $data['expense'] = $paginated_expense;
+
+    // Calculate total pages
+    $total_pages = ceil($total_expense / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('costs/cost_report', $data);
 }
-
-
-
-
 
 }

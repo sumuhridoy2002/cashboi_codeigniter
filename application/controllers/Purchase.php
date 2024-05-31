@@ -663,21 +663,232 @@ public function delete_purchases($id)
     redirect('Purchase');
 }
 
+// public function purchases_reports()
+//     {
+//     $data = ['title' => 'Purchase Reports'];
+//     $where = array('compid' => $_SESSION['compid']);
+
+//     $data['supplier'] = $this->pm->get_data('suppliers',$where);
+//     $data['users'] = $this->pm->get_data('users');
+//     $data['company'] = $this->pm->company_details();
+
+//     if(isset($_GET['search']))
+//         {
+//         $report = $_GET['reports'];
+        
+//         if($report == 'dailyReports')
+//             {
+//             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//             $edate = date("Y-m-d", strtotime($_GET['edate']));
+//             $supplier = $_GET['dsupplier'];
+//             $user = $_GET['demployee'];
+//             $data['sdate'] = $sdate;
+//             $data['edate'] = $edate;
+//             $data['report'] = $report;
+//             //var_dump($employee); exit();
+//             $data['purchase'] = $this->pm->get_dpurchses_data($sdate,$edate,$supplier,$user);
+//             }
+//         else if ($report == 'monthlyReports')
+//             {
+//             $month = $_GET['month'];
+//             $data['month'] = $month;
+//             $year = $_GET['year'];
+//             $data['year'] = $year;
+//             //var_dump($data['month']); exit();
+//             if($month == 01)
+//                 {
+//                 $name = 'January';
+//                 }
+//             elseif ($month == 02)
+//                 {
+//                 $name = 'February';
+//                 }
+//             elseif ($month == 03)
+//                 {
+//                 $name = 'March';
+//                 }
+//             elseif ($month == 04)
+//                 {
+//                 $name = 'April';
+//                 }
+//             elseif ($month == 05)
+//                 {
+//                 $name = 'May';
+//                 }
+//             elseif ($month == 06)
+//                 {
+//                 $name = 'June';
+//                 }
+//             elseif ($month == 07)
+//                 {
+//                 $name = 'July';
+//                 }
+//             elseif ($month == 8)
+//                 {
+//                 $name = 'August';
+//                 }
+//             elseif ($month == 9)
+//                 {
+//                 $name = 'September';
+//                 }
+//             elseif ($month == 10)
+//                 {
+//                 $name = 'October';
+//                 }
+//             elseif ($month == 11)
+//                 {
+//                 $name = 'November';
+//                 }
+//             else
+//                 {
+//                 $name = 'December';
+//                 }
+//             $supplier = $_GET['msupplier'];
+//             $user = $_GET['memployee'];
+//             $data['name'] = $name;
+//             $data['report'] = $report;
+
+//             $data['purchase'] = $this->pm->get_mpurchses_data($month,$year,$supplier,$user);
+//             }
+//         else if ($report == 'yearlyReports')
+//             {
+//             $year = $_GET['ryear'];
+//             $supplier = $_GET['ysupplier'];
+//             $user = $_GET['yemployee'];
+//             $data['year'] = $year;
+//             $data['report'] = $report;
+
+//             $data['purchase'] = $this->pm->get_ypurchses_data($year,$supplier,$user);
+//             }
+//         }
+//     else
+//         {
+//         $data['purchase'] = $this->pm->get_purchses_data();
+//         }
+
+//     $this->load->view('purchase/purchase_reports',$data);
+// }
+
+// public function purchases_reports()
+// {
+//     $data = ['title' => 'Purchase Reports'];
+//     $where = array('compid' => $_SESSION['compid']);
+
+//     $data['supplier'] = $this->pm->get_data('suppliers', $where);
+//     $data['users'] = $this->pm->get_data('users');
+//     $data['company'] = $this->pm->company_details();
+
+//     // Pagination variables
+//     $limit = 25; // Number of items per page
+//     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+//     $offset = ($page - 1) * $limit;
+
+//     // Initialize variables
+//     $purchase = [];
+//     $total_records = 0;
+
+//     if (isset($_GET['search'])) {
+//         $report = $_GET['reports'];
+
+//         if ($report == 'dailyReports') {
+//             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//             $edate = date("Y-m-d", strtotime($_GET['edate']));
+//             $supplier = $_GET['dsupplier'];
+//             $user = $_GET['demployee'];
+//             $data['sdate'] = $sdate;
+//             $data['edate'] = $edate;
+//             $data['report'] = $report;
+
+//             // Fetch total records
+//             $total_records = count($this->pm->get_dpurchses_data($sdate, $edate, $supplier, $user));
+
+//             // Fetch paginated data
+//             $purchase = $this->pm->get_dpurchses_data($sdate, $edate, $supplier, $user, $limit, $offset);
+//         } elseif ($report == 'monthlyReports') {
+//             $month = $_GET['month'];
+//             $year = $_GET['year'];
+//             $supplier = $_GET['msupplier'];
+//             $user = $_GET['memployee'];
+//             $data['month'] = $month;
+//             $data['year'] = $year;
+//             $data['report'] = $report;
+//             $data['name'] = date("F", mktime(0, 0, 0, $month, 10)); // Get month name
+
+//             // Fetch total records
+//             $total_records = count($this->pm->get_mpurchses_data($month, $year, $supplier, $user));
+
+//             // Fetch paginated data
+//             $purchase = $this->pm->get_mpurchses_data($month, $year, $supplier, $user, $limit, $offset);
+//         } elseif ($report == 'yearlyReports') {
+//             $year = $_GET['ryear'];
+//             $supplier = $_GET['ysupplier'];
+//             $user = $_GET['yemployee'];
+//             $data['year'] = $year;
+//             $data['report'] = $report;
+
+//             // Fetch total records
+//             $total_records = count($this->pm->get_ypurchses_data($year, $supplier, $user));
+
+//             // Fetch paginated data
+//             $purchase = $this->pm->get_ypurchses_data($year, $supplier, $user, $limit, $offset);
+//         }
+//     } else {
+//         // Fetch total records
+//         $total_records = count($this->pm->get_purchses_data());
+
+//         // Fetch paginated data
+//         $purchase = $this->pm->get_purchses_data($limit, $offset);
+//     }
+
+//     $data['purchase'] = $purchase;
+
+//     // Calculate total pages
+//     $total_pages = ceil($total_records / $limit);
+
+//     // Generate pagination HTML
+//     $pagination_html = '<ul class="pagination">';
+//     if ($page > 1) {
+//         $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+//     }
+//     for ($i = 1; $i <= $total_pages; $i++) {
+//         $pagination_html .= '<li class="paginated';
+//         if ($page == $i) {
+//             $pagination_html .= ' active'; // Adding "active" class for the current page
+//         }
+//         $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+//     }
+//     if ($page < $total_pages) {
+//         $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+//     }
+//     $pagination_html .= '</ul>';
+
+//     $data['pagination_html'] = $pagination_html;
+
+//     $this->load->view('purchase/purchase_reports', $data);
+// }
+
 public function purchases_reports()
-    {
+{
     $data = ['title' => 'Purchase Reports'];
     $where = array('compid' => $_SESSION['compid']);
 
-    $data['supplier'] = $this->pm->get_data('suppliers',$where);
+    $data['supplier'] = $this->pm->get_data('suppliers', $where);
     $data['users'] = $this->pm->get_data('users');
     $data['company'] = $this->pm->company_details();
 
-    if(isset($_GET['search']))
-        {
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    // Initialize variables
+    $purchase = [];
+    $total_records = 0;
+
+    if (isset($_GET['search'])) {
         $report = $_GET['reports'];
-        
-        if($report == 'dailyReports')
-            {
+
+        if ($report == 'dailyReports') {
             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
             $edate = date("Y-m-d", strtotime($_GET['edate']));
             $supplier = $_GET['dsupplier'];
@@ -685,88 +896,73 @@ public function purchases_reports()
             $data['sdate'] = $sdate;
             $data['edate'] = $edate;
             $data['report'] = $report;
-            //var_dump($employee); exit();
-            $data['purchase'] = $this->pm->get_dpurchses_data($sdate,$edate,$supplier,$user);
-            }
-        else if ($report == 'monthlyReports')
-            {
+
+            // Fetch total records
+            $total_records = count($this->pm->get_dpurchses_data($sdate, $edate, $supplier, $user));
+
+            // Fetch paginated data
+            $purchase = $this->pm->get_dpurchses_data($sdate, $edate, $supplier, $user, $limit, $offset);
+        } elseif ($report == 'monthlyReports') {
             $month = $_GET['month'];
-            $data['month'] = $month;
             $year = $_GET['year'];
-            $data['year'] = $year;
-            //var_dump($data['month']); exit();
-            if($month == 01)
-                {
-                $name = 'January';
-                }
-            elseif ($month == 02)
-                {
-                $name = 'February';
-                }
-            elseif ($month == 03)
-                {
-                $name = 'March';
-                }
-            elseif ($month == 04)
-                {
-                $name = 'April';
-                }
-            elseif ($month == 05)
-                {
-                $name = 'May';
-                }
-            elseif ($month == 06)
-                {
-                $name = 'June';
-                }
-            elseif ($month == 07)
-                {
-                $name = 'July';
-                }
-            elseif ($month == 8)
-                {
-                $name = 'August';
-                }
-            elseif ($month == 9)
-                {
-                $name = 'September';
-                }
-            elseif ($month == 10)
-                {
-                $name = 'October';
-                }
-            elseif ($month == 11)
-                {
-                $name = 'November';
-                }
-            else
-                {
-                $name = 'December';
-                }
             $supplier = $_GET['msupplier'];
             $user = $_GET['memployee'];
-            $data['name'] = $name;
+            $data['month'] = $month;
+            $data['year'] = $year;
             $data['report'] = $report;
+            $data['name'] = date("F", mktime(0, 0, 0, $month, 10)); // Get month name
 
-            $data['purchase'] = $this->pm->get_mpurchses_data($month,$year,$supplier,$user);
-            }
-        else if ($report == 'yearlyReports')
-            {
+            // Fetch total records
+            $total_records = count($this->pm->get_mpurchses_data($month, $year, $supplier, $user));
+
+            // Fetch paginated data
+            $purchase = $this->pm->get_mpurchses_data($month, $year, $supplier, $user, $limit, $offset);
+        } elseif ($report == 'yearlyReports') {
             $year = $_GET['ryear'];
             $supplier = $_GET['ysupplier'];
             $user = $_GET['yemployee'];
             $data['year'] = $year;
             $data['report'] = $report;
 
-            $data['purchase'] = $this->pm->get_ypurchses_data($year,$supplier,$user);
-            }
-        }
-    else
-        {
-        $data['purchase'] = $this->pm->get_purchses_data();
-        }
+            // Fetch total records
+            $total_records = count($this->pm->get_ypurchses_data($year, $supplier, $user));
 
-    $this->load->view('purchase/purchase_reports',$data);
+            // Fetch paginated data
+            $purchase = $this->pm->get_ypurchses_data($year, $supplier, $user, $limit, $offset);
+        }
+    } else {
+        // Fetch total records
+        $total_records = count($this->pm->get_purchses_data());
+
+        // Fetch paginated data
+        $purchase = $this->pm->get_purchses_data($limit, $offset);
+    }
+
+    $data['purchase'] = $purchase;
+
+    // Calculate total pages
+    $total_pages = ceil($total_records / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('purchase/purchase_reports', $data);
 }
 
 public function get_purchase_payment()

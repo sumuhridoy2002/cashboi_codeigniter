@@ -276,93 +276,297 @@ public function show_product_cart()
     return $output;
 }
 
-public function save_order_product()
-  {
-  $info = $this->input->post();
+// public function save_order_product()
+//   {
+//   $info = $this->input->post();
   
-  $query = $this->db->select('order_no')
-                ->from('order')
-                ->limit(1)
-                ->order_by('oid','DESC')
-                ->get()
-                ->row();
-  if($query)
-    {
-    $sn = substr($query->order_no,5)+1;
+//   $query = $this->db->select('order_no')
+//                 ->from('order')
+//                 ->limit(1)
+//                 ->order_by('oid','DESC')
+//                 ->get()
+//                 ->row();
+//   if($query)
+//     {
+//     $sn = substr($query->order_no,5)+1;
+//     }
+//   else
+//     {
+//     $sn = 1;
+//     }
+    
+//   $pc = sprintf("%'05d",$sn);
+
+//   $cusid = 'O-'.$pc;
+  
+//   $id = $info['sid'];
+//   $id2 = $info['sName'];
+
+//   $sale = array(
+//     'compid'     => $info['compid'],
+//     'order_no'   => $cusid,
+//     'custName'   => $info['name'],
+//     'custMobile' => $info['mobile'],
+//     'custEmail'  => $info['email'],
+//     'custAddres' => $info['address'],
+//     'tAmount'    => array_sum($info['tprice'])
+//             );
+//         //var_dump($sale); exit();
+//   $result = $this->pm->insert_data('order',$sale);
+       
+//   $length = count($info['product']);
+
+//   for($i = 0; $i < $length; $i++)
+//     {
+//     $spdata = array(
+//       'oid'      => $result,
+//       'product'  => $info['product'][$i],                    
+//       'quantity' => $info['quantity'][$i],
+//       'sprice'   => $info['price'][$i],
+//       'tPrice'   => $info['tprice'][$i]
+//           );
+
+//     $result2 = $this->pm->insert_data('order_product',$spdata); 
+//     }
+
+//   if($result2)
+//     {
+//     $sdata = [
+//       'exception' =>'<div class="alert alert-success alert-dismissible">
+//         <h4><i class="icon fa fa-check"></i> Product Order Place Successfully !</h4>
+//         </div>'
+//             ];  
+//     }
+//   else
+//     {
+//     $sdata = [
+//       'exception' =>'<div class="alert alert-danger alert-dismissible">
+//         <h4><i class="icon fa fa-ban"></i> Failed !</h4>
+//         </div>'
+//             ];
+//     }
+//   $this->session->set_userdata($sdata);
+
+//   $message = urlencode("A new order placed on your store.");
+//   $to = urlencode($info['shop_mobile']);
+//   $token = urlencode("yfynrvxm-erdvybul-5lkgcewi-ivyfmpg8-r220zvby");
+
+//   $url = "https://smsplus.sslwireless.com/api/v3/send-sms?api_token=$token&sid=NONSUNSHINEIT&sms=$message&msisdn=$to&csms_id=1";
+            
+//   $ch = curl_init();
+//   curl_setopt($ch, CURLOPT_URL,$url);
+//   curl_setopt($ch, CURLOPT_ENCODING, '');
+//   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//   $result = curl_exec($ch);
+
+//   print_r($result);
+
+//   $this->cart->destroy();
+//   redirect('store/'.$info['slug']);
+// }
+
+public function save_order_product()
+{
+    $info = $this->input->post();
+    $query = $this->db->select('order_no')
+                      ->from('order')
+                      ->limit(1)
+                      ->order_by('oid', 'DESC')
+                      ->get()
+                      ->row();
+
+    if($query) {
+        $sn = substr($query->order_no, 5) + 1;
+    } else {
+        $sn = 1;
     }
-  else
-    {
-    $sn = 1;
+
+    $pc = sprintf("%'05d", $sn);
+    $cusid = 'O-'.$pc;
+    
+    $id = $info['sid'];
+    $id2 = $info['sName'];
+
+    $sale = array(
+        'compid'     => $info['compid'],
+        'order_no'   => $cusid,
+        'custName'   => $info['name'],
+        'custMobile' => $info['mobile'],
+        'custEmail'  => $info['email'],
+        'custAddres' => $info['address'],
+        'tAmount'    => array_sum($info['tprice'])
+    );
+
+    $result = $this->pm->insert_data('order', $sale);
+
+    $length = count($info['product']);
+
+    for($i = 0; $i < $length; $i++) {
+        $spdata = array(
+            'oid'      => $result,
+            'product'  => $info['product'][$i],                    
+            'quantity' => $info['quantity'][$i],
+            'sprice'   => $info['price'][$i],
+            'tPrice'   => $info['tprice'][$i]
+        );
+
+        $result2 = $this->pm->insert_data('order_product', $spdata); 
+    }
+
+    if($result2) {
+        $sdata = [
+            'exception' =>'<div class="alert alert-success alert-dismissible">
+                <h4><i class="icon fa fa-check"></i> Product Order Place Successfully !</h4>
+            </div>'
+        ];  
+    } else {
+        $sdata = [
+            'exception' =>'<div class="alert alert-danger alert-dismissible">
+                <h4><i class="icon fa fa-ban"></i> Failed !</h4>
+            </div>'
+        ];
+    }
+
+    $this->session->set_userdata($sdata);
+
+    $store = $this->pm->get_data('store', ['sid' => $info['sid']])[0];
+    
+    if ($info['courier_type'] == "Pathao") {
+      // Static data for Pathao order
+      $pathaoOrderData = [
+        'recipient_name'    => $info['name'],
+        'recipient_phone'   => $info['mobile'],
+        'recipient_address' => $info['address'],
+        'recipient_city'    => 1, // Assuming Dhaka
+        'recipient_zone'    => 941, // Assuming Uttara Sector 10
+        'store_id'          => 194158, // Fixed for this store
+        'delivery_type'     => 48, // Normal Delivery
+        'amount_to_collect' => array_sum($info['tprice']), // Amount to collect
+        'item_quantity'     => count($info['product']), // Quantity of items
+        'item_weight'       => 0.5, // Assuming minimum weight
+        'item_type'         => 2, // Parcel
+        'invoice_id'        => uniqid() // Unique invoice ID
+      ];
+
+      // Call placePathaoOrder function and handle response
+      $isPathaoOrderPlaced = $this->placePathaoOrder($pathaoOrderData, $store['PATHAO_USER_NAME'], $store['PATHAO_PASSWORD'], $store['PATHAO_CLIENT_ID'], $store['PATHAO_CLIENT_SECRET']);
+
+      // echo "<pre>";
+      // var_dump($isPathaoOrderPlaced);
+      // die();
+    } elseif ($info['courier_type'] == "Steadfast") {
+      // Static data for Steadfast order
+      $steadfastOrderData = [
+        'recipient_name'    => $info['name'],
+        'recipient_phone'   => $info['mobile'],
+        'recipient_address' => $info['address'],
+        'cod_amount'        => array_sum($info['tprice']), // Amount to collect
+        'invoice'           => uniqid(), // Unique invoice ID,
+        'note'              => "An order to deliver from CashBoi."
+      ];
+
+      // Call placeSteadfastOrder function and handle response
+      $isSteadfastOrderPlaced = $this->placeSteadfastOrder($steadfastOrderData, $store['STEADFAST_API_KEY'], $store['STEADFAST_API_SECRET']);
+
+      // echo "<pre>";
+      // var_dump($isSteadfastOrderPlaced);
+      // die();
     }
     
-  $pc = sprintf("%'05d",$sn);
-
-  $cusid = 'O-'.$pc;
-  
-  $id = $info['sid'];
-  $id2 = $info['sName'];
-
-  $sale = array(
-    'compid'     => $info['compid'],
-    'order_no'   => $cusid,
-    'custName'   => $info['name'],
-    'custMobile' => $info['mobile'],
-    'custEmail'  => $info['email'],
-    'custAddres' => $info['address'],
-    'tAmount'    => array_sum($info['tprice'])
-            );
-        //var_dump($sale); exit();
-  $result = $this->pm->insert_data('order',$sale);
-       
-  $length = count($info['product']);
-
-  for($i = 0; $i < $length; $i++)
-    {
-    $spdata = array(
-      'oid'      => $result,
-      'product'  => $info['product'][$i],                    
-      'quantity' => $info['quantity'][$i],
-      'sprice'   => $info['price'][$i],
-      'tPrice'   => $info['tprice'][$i]
-          );
-
-    $result2 = $this->pm->insert_data('order_product',$spdata); 
+    if ((isset($isPathaoOrderPlaced) && $isPathaoOrderPlaced) || (isset($isSteadfastOrderPlaced) && $isSteadfastOrderPlaced)) {
+        $sdata = [
+            'exception' => '<div class="alert alert-success alert-dismissible">
+                <h4><i class="icon fa fa-check"></i> Product Order Place Successfully !</h4>
+            </div>'
+        ];
+    } else {
+        $sdata = [
+            'exception' => '<div class="alert alert-danger alert-dismissible">
+                <h4><i class="icon fa fa-ban"></i> Failed to place order !</h4>
+            </div>'
+        ];
     }
 
-  if($result2)
-    {
-    $sdata = [
-      'exception' =>'<div class="alert alert-success alert-dismissible">
-        <h4><i class="icon fa fa-check"></i> Product Order Place Successfully !</h4>
-        </div>'
-            ];  
+    $this->session->set_userdata($sdata);
+
+    $this->cart->destroy();
+    redirect('store/'.$info['slug']);
+}
+
+private function placePathaoOrder(array $data = [], string $PATHAO_USER_NAME = '', string $PATHAO_PASSWORD = '', string $PATHAO_CLIENT_ID = '', string $PATHAO_CLIENT_SECRET = ''): bool
+{
+    try {
+        // HTTP request to get access token
+        $accessTokenResponse = $this->curl_request('POST', 'https://api-hermes.pathao.com/aladdin/api/v1/issue-token', [
+            'grant_type' => 'password',
+            'username' => $PATHAO_USER_NAME,
+            'password' => $PATHAO_PASSWORD,
+            'client_id' => $PATHAO_CLIENT_ID,
+            'client_secret' => $PATHAO_CLIENT_SECRET
+        ]);
+
+        $accessToken = json_decode($accessTokenResponse, true)['access_token']; // Get access token
+
+        // HTTP request to place order
+        $orderResponse = $this->curl_request('POST', 'https://api-hermes.pathao.com/aladdin/api/v1/orders', $data, [
+            'Authorization: Bearer ' . $accessToken
+        ]);
+
+        return $orderResponse;
+
+        // Check response type
+        if ($orderResponse) {
+            return true;
+        }
+    } catch (\Exception $e) {
+        return false;
     }
-  else
-    {
-    $sdata = [
-      'exception' =>'<div class="alert alert-danger alert-dismissible">
-        <h4><i class="icon fa fa-ban"></i> Failed !</h4>
-        </div>'
-            ];
+
+    return false;
+}
+
+private function placeSteadfastOrder(array $data = [], string $STEADFAST_API_KEY = '', string $STEADFAST_API_SECRET = ''): bool
+{
+    try {
+        // HTTP request to place order
+        $orderResponse = $this->curl_request('POST', 'https://portal.steadfast.com.bd/api/v1/create_order', $data, [
+          'Api-Key'      => $STEADFAST_API_KEY,
+          'Secret-Key'   => $STEADFAST_API_SECRET,
+          'Content-Type' => "application/json"
+        ]);
+
+        // return $orderResponse;
+
+        // Check response type
+        if ($orderResponse) {
+            return true;
+        }
+    } catch (\Exception $e) {
+        return false;
     }
-  $this->session->set_userdata($sdata);
 
-  $message = urlencode("A new order placed on your store.");
-  $to = urlencode($info['shop_mobile']);
-  $token = urlencode("yfynrvxm-erdvybul-5lkgcewi-ivyfmpg8-r220zvby");
+    return false;
+}
 
-  $url = "https://smsplus.sslwireless.com/api/v3/send-sms?api_token=$token&sid=NONSUNSHINEIT&sms=$message&msisdn=$to&csms_id=1";
-            
-  $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL,$url);
-  curl_setopt($ch, CURLOPT_ENCODING, '');
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  $result = curl_exec($ch);
+protected function curl_request($method, $url, $params = [], $headers = []) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 
-  print_r($result);
+    if ($method === 'POST') {
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+    }
 
-  $this->cart->destroy();
-  redirect('store/'.$info['slug']);
+    if (!empty($headers)) {
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    }
+
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return $result;
 }
 
 public function order_product_list()

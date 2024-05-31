@@ -92,6 +92,43 @@
                       <label>Instagram Link</label>
                       <input type="text" class="form-control" name="sInstagram" placeholder="instagram Link" value="<?php if($store){ ?><?php echo $store[0]['sInstagram']; ?><?php } ?>" >
                     </div>
+
+                    <div class="form-group col-md-4 col-sm-4 col-12">
+                      <label>Facebook Pixel Id</label>
+                      <input type="text" class="form-control" name="FACEBOOK_PIXEL_ID" placeholder="Facebook Pixel Id" value="<?php if($store){ ?><?php echo $store[0]['FACEBOOK_PIXEL_ID']; ?><?php } ?>" >
+                    </div>
+
+                    <div class="form-group col-md-4 col-sm-4 col-12">
+                      <label>Pathao User Name</label>
+                      <input type="text" class="form-control" name="PATHAO_USER_NAME" placeholder="Pathao User Name" value="<?php if($store){ ?><?php echo $store[0]['PATHAO_USER_NAME']; ?><?php } ?>" >
+                    </div>
+
+                    <div class="form-group col-md-4 col-sm-4 col-12">
+                      <label>Pathao Password</label>
+                      <input type="text" class="form-control" name="PATHAO_PASSWORD" placeholder="Pathao Password" value="<?php if($store){ ?><?php echo $store[0]['PATHAO_PASSWORD']; ?><?php } ?>" >
+                    </div>
+
+                    <div class="form-group col-md-4 col-sm-4 col-12">
+                      <label>Pathao Client ID</label>
+                      <input type="text" class="form-control" name="PATHAO_CLIENT_ID" placeholder="Pathao Client ID" value="<?php if($store){ ?><?php echo $store[0]['PATHAO_CLIENT_ID']; ?><?php } ?>" >
+                    </div>
+
+                    <div class="form-group col-md-4 col-sm-4 col-12">
+                      <label>Pathao Client Secret</label>
+                      <input type="text" class="form-control" name="PATHAO_CLIENT_SECRET" placeholder="Pathao Client Secret" value="<?php if($store){ ?><?php echo $store[0]['PATHAO_CLIENT_SECRET']; ?><?php } ?>" >
+                    </div>
+
+                    <div class="form-group col-md-4 col-sm-4 col-12">
+                      <label>Steadfast API Key</label>
+                      <input type="text" class="form-control" name="STEADFAST_API_KEY" placeholder="Steadfast API Key" value="<?php if($store){ ?><?php echo $store[0]['STEADFAST_API_KEY']; ?><?php } ?>" >
+                    </div>
+
+                    <div class="form-group col-md-4 col-sm-4 col-12">
+                      <label>Steadfast API Secret</label>
+                      <input type="text" class="form-control" name="STEADFAST_API_SECRET" placeholder="Steadfast API Secret" value="<?php if($store){ ?><?php echo $store[0]['STEADFAST_API_SECRET']; ?><?php } ?>" >
+                    </div>
+
+                    
                     <div class="form-group col-md-4 col-sm-4 col-12">
                       <label>Banner  Image * <small style="color: red;">Size 1450X500 px</small></label>
                       <input type="file" name="userfile" required >

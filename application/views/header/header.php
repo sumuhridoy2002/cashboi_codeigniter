@@ -128,4 +128,60 @@
     }
     
 </style>
+
+<?php
+// Construct the full URL
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+$full_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+// Get the URI string (pathname)
+$uri_string = $_SERVER['REQUEST_URI'];
+
+// Array of allowed paths
+$allowed_paths = ["/stockReport", "/purchaseReport", "/saleReport", "/allTransaction", "/vReports", "/salesiReport", "/salesdReport", "/tsProduct", "/lowStock", "/bankTReport", "/costReport", "/saleProduct", "/salepReport", "/salevReport", "/bankLReport", "/employeePayReport", "/empAReport"];
+
+// Check if the URI starts with any of the allowed paths
+$path_starts_with_allowed_path = false;
+foreach ($allowed_paths as $path) {
+    if (strpos($uri_string, $path) === 0) {
+        $path_starts_with_allowed_path = true;
+        break;
+    }
+}
+
+// Conditionally include style tag if the current URI matches
+if ($path_starts_with_allowed_path) {
+    echo '
+    <style>
+        .dataTables_paginate {
+            display: none;
+        }
+    </style>
+    ';
+}
+?>
+
+<style>
+  .listed {
+    position: absolute;
+    will-change: transform;
+    /* top: 0px; */
+    left: -20px !important;
+    transform: translate3d(0px, 5px, 0px);
+  }
+
+  .pagination {
+    float: inline-end;
+  }
+
+  .paginated {
+    padding: 10px;
+    border: 1px solid gray;
+    font-weight: bolder;
+  }
+
+  .paginated.active {
+    background: #f5c593;
+  }
+</style>
 </head>

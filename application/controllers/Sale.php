@@ -741,23 +741,141 @@ public function delete_sales($id)
     redirect('Sale');
 }
 
+// public function all_sales_reports()
+//     {
+//     $data['title'] = 'Sales Report';
+
+//     $where = array(
+//         'compid' => $_SESSION['compid'],
+//             );
+//     $data['customer'] = $this->pm->get_data('customers',$where);
+//     $data['employee'] = $this->pm->get_data('users',$where);
+//     $data['company'] = $this->pm->company_details();
+
+//     if(isset($_GET['search']))
+//         {
+//         $report = $_GET['reports'];
+        
+//         if($report == 'dailyReports')
+//             {
+//             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//             $edate = date("Y-m-d", strtotime($_GET['edate']));
+//             $customer = $_GET['dcustomer'];
+//             $employee = $_GET['demployee'];
+//             $data['sdate'] = $sdate;
+//             $data['edate'] = $edate;
+//             $data['report'] = $report;
+//             //var_dump($employee); exit();
+//             $data['sales'] = $this->pm->get_dsales_data($sdate,$edate,$customer,$employee);
+//             }
+//         else if ($report == 'monthlyReports')
+//             {
+//             $month = $_GET['month'];
+//             $data['month'] = $month;
+//             $year = $_GET['year'];
+//             $data['year'] = $year;
+//             //var_dump($data['month']); exit();
+//             if($month == 01)
+//                 {
+//                 $name = 'January';
+//                 }
+//             elseif ($month == 02)
+//                 {
+//                 $name = 'February';
+//                 }
+//             elseif ($month == 03)
+//                 {
+//                 $name = 'March';
+//                 }
+//             elseif ($month == 04)
+//                 {
+//                 $name = 'April';
+//                 }
+//             elseif ($month == 05)
+//                 {
+//                 $name = 'May';
+//                 }
+//             elseif ($month == 06)
+//                 {
+//                 $name = 'June';
+//                 }
+//             elseif ($month == 07)
+//                 {
+//                 $name = 'July';
+//                 }
+//             elseif ($month == 8)
+//                 {
+//                 $name = 'August';
+//                 }
+//             elseif ($month == 9)
+//                 {
+//                 $name = 'September';
+//                 }
+//             elseif ($month == 10)
+//                 {
+//                 $name = 'October';
+//                 }
+//             elseif ($month == 11)
+//                 {
+//                 $name = 'November';
+//                 }
+//             else
+//                 {
+//                 $name = 'December';
+//                 }
+//             $customer = $_GET['mcustomer'];
+//             $employee = $_GET['memployee'];
+//             $data['name'] = $name;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->get_msales_data($month,$year,$customer,$employee);
+//             }
+//         else if ($report == 'yearlyReports')
+//             {
+//             $year = $_GET['ryear'];
+//             $customer = $_GET['ycustomer'];
+//             $employee = $_GET['yemployee'];
+//             $data['year'] = $year;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->get_ysales_data($year,$customer,$employee);
+//             }
+//         }
+//     else
+//         {
+//         $data['sales'] = $this->pm->get_sales_data();
+//         }
+
+//     $this->load->view('sale/all_sales',$data);
+// }
+
 public function all_sales_reports()
-    {
+{
     $data['title'] = 'Sales Report';
 
+    // Set up the basic where clause
     $where = array(
         'compid' => $_SESSION['compid'],
-            );
-    $data['customer'] = $this->pm->get_data('customers',$where);
-    $data['employee'] = $this->pm->get_data('users',$where);
+    );
+
+    // Fetch basic data
+    $data['customer'] = $this->pm->get_data('customers', $where);
+    $data['employee'] = $this->pm->get_data('users', $where);
     $data['company'] = $this->pm->company_details();
 
-    if(isset($_GET['search']))
-        {
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    // Initialize variables
+    $sales = [];
+    $total_records = 0;
+
+    if (isset($_GET['search'])) {
         $report = $_GET['reports'];
-        
-        if($report == 'dailyReports')
-            {
+
+        if ($report == 'dailyReports') {
             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
             $edate = date("Y-m-d", strtotime($_GET['edate']));
             $customer = $_GET['dcustomer'];
@@ -765,88 +883,73 @@ public function all_sales_reports()
             $data['sdate'] = $sdate;
             $data['edate'] = $edate;
             $data['report'] = $report;
-            //var_dump($employee); exit();
-            $data['sales'] = $this->pm->get_dsales_data($sdate,$edate,$customer,$employee);
-            }
-        else if ($report == 'monthlyReports')
-            {
+
+            // Fetch total records
+            $total_records = count($this->pm->get_dsales_data($sdate, $edate, $customer, $employee));
+
+            // Fetch paginated data
+            $sales = $this->pm->get_dsales_data($sdate, $edate, $customer, $employee, $limit, $offset);
+        } elseif ($report == 'monthlyReports') {
             $month = $_GET['month'];
-            $data['month'] = $month;
             $year = $_GET['year'];
-            $data['year'] = $year;
-            //var_dump($data['month']); exit();
-            if($month == 01)
-                {
-                $name = 'January';
-                }
-            elseif ($month == 02)
-                {
-                $name = 'February';
-                }
-            elseif ($month == 03)
-                {
-                $name = 'March';
-                }
-            elseif ($month == 04)
-                {
-                $name = 'April';
-                }
-            elseif ($month == 05)
-                {
-                $name = 'May';
-                }
-            elseif ($month == 06)
-                {
-                $name = 'June';
-                }
-            elseif ($month == 07)
-                {
-                $name = 'July';
-                }
-            elseif ($month == 8)
-                {
-                $name = 'August';
-                }
-            elseif ($month == 9)
-                {
-                $name = 'September';
-                }
-            elseif ($month == 10)
-                {
-                $name = 'October';
-                }
-            elseif ($month == 11)
-                {
-                $name = 'November';
-                }
-            else
-                {
-                $name = 'December';
-                }
             $customer = $_GET['mcustomer'];
             $employee = $_GET['memployee'];
-            $data['name'] = $name;
+            $data['month'] = $month;
+            $data['year'] = $year;
             $data['report'] = $report;
+            $data['name'] = date("F", mktime(0, 0, 0, $month, 10)); // Get month name
 
-            $data['sales'] = $this->pm->get_msales_data($month,$year,$customer,$employee);
-            }
-        else if ($report == 'yearlyReports')
-            {
+            // Fetch total records
+            $total_records = count($this->pm->get_msales_data($month, $year, $customer, $employee));
+
+            // Fetch paginated data
+            $sales = $this->pm->get_msales_data($month, $year, $customer, $employee, $limit, $offset);
+        } elseif ($report == 'yearlyReports') {
             $year = $_GET['ryear'];
             $customer = $_GET['ycustomer'];
             $employee = $_GET['yemployee'];
             $data['year'] = $year;
             $data['report'] = $report;
 
-            $data['sales'] = $this->pm->get_ysales_data($year,$customer,$employee);
-            }
-        }
-    else
-        {
-        $data['sales'] = $this->pm->get_sales_data();
-        }
+            // Fetch total records
+            $total_records = count($this->pm->get_ysales_data($year, $customer, $employee));
 
-    $this->load->view('sale/all_sales',$data);
+            // Fetch paginated data
+            $sales = $this->pm->get_ysales_data($year, $customer, $employee, $limit, $offset);
+        }
+    } else {
+        // Fetch total records
+        $total_records = count($this->pm->get_sales_data());
+
+        // Fetch paginated data
+        $sales = $this->pm->get_sales_data($limit, $offset);
+    }
+
+    $data['sales'] = $sales;
+
+    // Calculate total pages
+    $total_pages = ceil($total_records / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('sale/all_sales', $data);
 }
 
 public function get_sales_payment()
@@ -947,406 +1050,746 @@ public function view_sale_money_receipt($id)
   $this->load->view('sale/view_sale_payment',$data);
 }
 
+// public function sales_invoice_reports()
+//     {
+//     $data['title'] = 'Sales Report';
+
+
+//     if(isset($_GET['search']))
+//         {
+//         $report = $_GET['reports'];
+        
+//         if($report == 'dailyReports')
+//             {
+//             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//             $edate = date("Y-m-d", strtotime($_GET['edate']));
+//             $data['sdate'] = $sdate;
+//             $data['edate'] = $edate;
+//             $data['report'] = $report;
+//             //var_dump($employee); exit();
+//             $data['sales'] = $this->pm->sales_ddata($sdate,$edate);
+//             }
+//         else if ($report == 'monthlyReports')
+//             {
+//             $month = $_GET['month'];
+//             $data['month'] = $month;
+//             $year = $_GET['year'];
+//             $data['year'] = $year;
+//             //var_dump($data['month']); exit();
+//             if($month == 01)
+//                 {
+//                 $name = 'January';
+//                 }
+//             elseif ($month == 02)
+//                 {
+//                 $name = 'February';
+//                 }
+//             elseif ($month == 03)
+//                 {
+//                 $name = 'March';
+//                 }
+//             elseif ($month == 04)
+//                 {
+//                 $name = 'April';
+//                 }
+//             elseif ($month == 05)
+//                 {
+//                 $name = 'May';
+//                 }
+//             elseif ($month == 06)
+//                 {
+//                 $name = 'June';
+//                 }
+//             elseif ($month == 07)
+//                 {
+//                 $name = 'July';
+//                 }
+//             elseif ($month == 8)
+//                 {
+//                 $name = 'August';
+//                 }
+//             elseif ($month == 9)
+//                 {
+//                 $name = 'September';
+//                 }
+//             elseif ($month == 10)
+//                 {
+//                 $name = 'October';
+//                 }
+//             elseif ($month == 11)
+//                 {
+//                 $name = 'November';
+//                 }
+//             else
+//                 {
+//                 $name = 'December';
+//                 }
+//             $data['name'] = $name;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->sales_mdata($month,$year);
+//             }
+//         else if ($report == 'yearlyReports')
+//             {
+//             $year = $_GET['ryear'];
+//             $data['year'] = $year;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->sales_ydata($year);
+//             }
+//         }
+//     else
+//         {
+//         $data['sales'] = $this->pm->sales_adata();
+//         }
+    
+//     $data['company'] = $this->pm->company_details();
+
+//     $this->load->view('sale/sales_ireport',$data);
+// }
+
 public function sales_invoice_reports()
-    {
+{
     $data['title'] = 'Sales Report';
 
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
 
-    if(isset($_GET['search']))
-        {
+    if (isset($_GET['search'])) {
         $report = $_GET['reports'];
-        
-        if($report == 'dailyReports')
-            {
+
+        if ($report == 'dailyReports') {
             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
             $edate = date("Y-m-d", strtotime($_GET['edate']));
             $data['sdate'] = $sdate;
             $data['edate'] = $edate;
             $data['report'] = $report;
-            //var_dump($employee); exit();
-            $data['sales'] = $this->pm->sales_ddata($sdate,$edate);
-            }
-        else if ($report == 'monthlyReports')
-            {
+            
+            $total_records = count($this->pm->sales_ddata($sdate, $edate));
+            $data['sales'] = $this->pm->sales_ddata($sdate, $edate, $limit, $offset);
+        } else if ($report == 'monthlyReports') {
             $month = $_GET['month'];
-            $data['month'] = $month;
             $year = $_GET['year'];
+            $data['month'] = $month;
             $data['year'] = $year;
-            //var_dump($data['month']); exit();
-            if($month == 01)
-                {
-                $name = 'January';
-                }
-            elseif ($month == 02)
-                {
-                $name = 'February';
-                }
-            elseif ($month == 03)
-                {
-                $name = 'March';
-                }
-            elseif ($month == 04)
-                {
-                $name = 'April';
-                }
-            elseif ($month == 05)
-                {
-                $name = 'May';
-                }
-            elseif ($month == 06)
-                {
-                $name = 'June';
-                }
-            elseif ($month == 07)
-                {
-                $name = 'July';
-                }
-            elseif ($month == 8)
-                {
-                $name = 'August';
-                }
-            elseif ($month == 9)
-                {
-                $name = 'September';
-                }
-            elseif ($month == 10)
-                {
-                $name = 'October';
-                }
-            elseif ($month == 11)
-                {
-                $name = 'November';
-                }
-            else
-                {
-                $name = 'December';
-                }
+            
+            $name = date("F", mktime(0, 0, 0, $month, 10)); // Get month name
             $data['name'] = $name;
             $data['report'] = $report;
-
-            $data['sales'] = $this->pm->sales_mdata($month,$year);
-            }
-        else if ($report == 'yearlyReports')
-            {
+            
+            $total_records = count($this->pm->sales_mdata($month, $year));
+            $data['sales'] = $this->pm->sales_mdata($month, $year, $limit, $offset);
+        } else if ($report == 'yearlyReports') {
             $year = $_GET['ryear'];
             $data['year'] = $year;
             $data['report'] = $report;
+            
+            $total_records = count($this->pm->sales_ydata($year));
+            $data['sales'] = $this->pm->sales_ydata($year, $limit, $offset);
+        }
+    } else {
+        $total_records = count($this->pm->sales_adata());
+        $data['sales'] = $this->pm->sales_adata($limit, $offset);
+    }
 
-            $data['sales'] = $this->pm->sales_ydata($year);
-            }
-        }
-    else
-        {
-        $data['sales'] = $this->pm->sales_adata();
-        }
-    
     $data['company'] = $this->pm->company_details();
 
-    $this->load->view('sale/sales_ireport',$data);
+    // Calculate total pages
+    $total_pages = ceil($total_records / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('sale/sales_ireport', $data);
 }
+
+// public function sales_due_reports()
+//     {
+//     $data['title'] = 'Due Report';
+
+
+//     if(isset($_GET['search']))
+//         {
+//         $report = $_GET['reports'];
+        
+//         if($report == 'dailyReports')
+//             {
+//             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//             $edate = date("Y-m-d", strtotime($_GET['edate']));
+//             $data['sdate'] = $sdate;
+//             $data['edate'] = $edate;
+//             $data['report'] = $report;
+//             //var_dump($employee); exit();
+//             $data['sales'] = $this->pm->sales_due_ddata($sdate,$edate);
+//             }
+//         else if ($report == 'monthlyReports')
+//             {
+//             $month = $_GET['month'];
+//             $data['month'] = $month;
+//             $year = $_GET['year'];
+//             $data['year'] = $year;
+//             //var_dump($data['month']); exit();
+//             if($month == 01)
+//                 {
+//                 $name = 'January';
+//                 }
+//             elseif ($month == 02)
+//                 {
+//                 $name = 'February';
+//                 }
+//             elseif ($month == 03)
+//                 {
+//                 $name = 'March';
+//                 }
+//             elseif ($month == 04)
+//                 {
+//                 $name = 'April';
+//                 }
+//             elseif ($month == 05)
+//                 {
+//                 $name = 'May';
+//                 }
+//             elseif ($month == 06)
+//                 {
+//                 $name = 'June';
+//                 }
+//             elseif ($month == 07)
+//                 {
+//                 $name = 'July';
+//                 }
+//             elseif ($month == 8)
+//                 {
+//                 $name = 'August';
+//                 }
+//             elseif ($month == 9)
+//                 {
+//                 $name = 'September';
+//                 }
+//             elseif ($month == 10)
+//                 {
+//                 $name = 'October';
+//                 }
+//             elseif ($month == 11)
+//                 {
+//                 $name = 'November';
+//                 }
+//             else
+//                 {
+//                 $name = 'December';
+//                 }
+//             $data['name'] = $name;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->sales_due_mdata($month,$year);
+//             }
+//         else if ($report == 'yearlyReports')
+//             {
+//             $year = $_GET['ryear'];
+//             $data['year'] = $year;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->sales_due_ydata($year);
+//             }
+//         }
+//     else
+//         {
+//         $data['sales'] = $this->pm->sales_due_adata();
+//         }
+    
+//     $data['company'] = $this->pm->company_details();
+
+//     $this->load->view('sale/sales_dreport',$data);
+// }
 
 public function sales_due_reports()
-    {
+{
     $data['title'] = 'Due Report';
 
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
 
-    if(isset($_GET['search']))
-        {
+    if (isset($_GET['search'])) {
         $report = $_GET['reports'];
-        
-        if($report == 'dailyReports')
-            {
+
+        if ($report == 'dailyReports') {
             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
             $edate = date("Y-m-d", strtotime($_GET['edate']));
             $data['sdate'] = $sdate;
             $data['edate'] = $edate;
             $data['report'] = $report;
-            //var_dump($employee); exit();
-            $data['sales'] = $this->pm->sales_due_ddata($sdate,$edate);
-            }
-        else if ($report == 'monthlyReports')
-            {
+
+            $total_records = count($this->pm->sales_due_ddata($sdate, $edate));
+            $data['sales'] = $this->pm->sales_due_ddata($sdate, $edate, $limit, $offset);
+        } else if ($report == 'monthlyReports') {
             $month = $_GET['month'];
-            $data['month'] = $month;
             $year = $_GET['year'];
+            $data['month'] = $month;
             $data['year'] = $year;
-            //var_dump($data['month']); exit();
-            if($month == 01)
-                {
-                $name = 'January';
-                }
-            elseif ($month == 02)
-                {
-                $name = 'February';
-                }
-            elseif ($month == 03)
-                {
-                $name = 'March';
-                }
-            elseif ($month == 04)
-                {
-                $name = 'April';
-                }
-            elseif ($month == 05)
-                {
-                $name = 'May';
-                }
-            elseif ($month == 06)
-                {
-                $name = 'June';
-                }
-            elseif ($month == 07)
-                {
-                $name = 'July';
-                }
-            elseif ($month == 8)
-                {
-                $name = 'August';
-                }
-            elseif ($month == 9)
-                {
-                $name = 'September';
-                }
-            elseif ($month == 10)
-                {
-                $name = 'October';
-                }
-            elseif ($month == 11)
-                {
-                $name = 'November';
-                }
-            else
-                {
-                $name = 'December';
-                }
+
+            $name = date("F", mktime(0, 0, 0, $month, 10)); // Get month name
             $data['name'] = $name;
             $data['report'] = $report;
 
-            $data['sales'] = $this->pm->sales_due_mdata($month,$year);
-            }
-        else if ($report == 'yearlyReports')
-            {
+            $total_records = count($this->pm->sales_due_mdata($month, $year));
+            $data['sales'] = $this->pm->sales_due_mdata($month, $year, $limit, $offset);
+        } else if ($report == 'yearlyReports') {
             $year = $_GET['ryear'];
             $data['year'] = $year;
             $data['report'] = $report;
 
-            $data['sales'] = $this->pm->sales_due_ydata($year);
-            }
+            $total_records = count($this->pm->sales_due_ydata($year));
+            $data['sales'] = $this->pm->sales_due_ydata($year, $limit, $offset);
         }
-    else
-        {
-        $data['sales'] = $this->pm->sales_due_adata();
-        }
-    
+    } else {
+        $total_records = count($this->pm->sales_due_adata());
+        $data['sales'] = $this->pm->sales_due_adata($limit, $offset);
+    }
+
     $data['company'] = $this->pm->company_details();
 
-    $this->load->view('sale/sales_dreport',$data);
+    // Calculate total pages
+    $total_pages = ceil($total_records / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('sale/sales_dreport', $data);
 }
+
+// public function top_sale_product_report()
+//     {
+//     $data['title'] = 'Top Sale Product';
+
+//     $data['sales'] = $this->pm->get_top_sales_product_data();
+    
+//     $data['company'] = $this->pm->company_details();
+
+//     $this->load->view('sale/top_sale_product',$data);
+// }
 
 public function top_sale_product_report()
-    {
+{
     $data['title'] = 'Top Sale Product';
 
-    $data['sales'] = $this->pm->get_top_sales_product_data();
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    // Fetch total records for pagination calculation
+    $total_records = count($this->pm->get_top_sales_product_data());
+
+    // Fetch paginated data
+    $data['sales'] = $this->pm->get_top_sales_product_data($limit, $offset);
     
     $data['company'] = $this->pm->company_details();
 
-    $this->load->view('sale/top_sale_product',$data);
+    // Calculate total pages
+    $total_pages = ceil($total_records / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('sale/top_sale_product', $data);
 }
 
+// public function sales_payment_reports()
+//     {
+//     $data['title'] = 'Due Payment Report';
+
+
+//     if(isset($_GET['search']))
+//         {
+//         $report = $_GET['reports'];
+        
+//         if($report == 'dailyReports')
+//             {
+//             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//             $edate = date("Y-m-d", strtotime($_GET['edate']));
+//             $data['sdate'] = $sdate;
+//             $data['edate'] = $edate;
+//             $data['report'] = $report;
+//             //var_dump($employee); exit();
+//             $data['sales'] = $this->pm->sales_ddue_paypent_ddata($sdate,$edate);
+//             }
+//         else if ($report == 'monthlyReports')
+//             {
+//             $month = $_GET['month'];
+//             $data['month'] = $month;
+//             $year = $_GET['year'];
+//             $data['year'] = $year;
+//             //var_dump($data['month']); exit();
+//             if($month == 01)
+//                 {
+//                 $name = 'January';
+//                 }
+//             elseif ($month == 02)
+//                 {
+//                 $name = 'February';
+//                 }
+//             elseif ($month == 03)
+//                 {
+//                 $name = 'March';
+//                 }
+//             elseif ($month == 04)
+//                 {
+//                 $name = 'April';
+//                 }
+//             elseif ($month == 05)
+//                 {
+//                 $name = 'May';
+//                 }
+//             elseif ($month == 06)
+//                 {
+//                 $name = 'June';
+//                 }
+//             elseif ($month == 07)
+//                 {
+//                 $name = 'July';
+//                 }
+//             elseif ($month == 8)
+//                 {
+//                 $name = 'August';
+//                 }
+//             elseif ($month == 9)
+//                 {
+//                 $name = 'September';
+//                 }
+//             elseif ($month == 10)
+//                 {
+//                 $name = 'October';
+//                 }
+//             elseif ($month == 11)
+//                 {
+//                 $name = 'November';
+//                 }
+//             else
+//                 {
+//                 $name = 'December';
+//                 }
+//             $data['name'] = $name;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->sales_mdue_paypent_ddata($month,$year);
+//             }
+//         else if ($report == 'yearlyReports')
+//             {
+//             $year = $_GET['ryear'];
+//             $data['year'] = $year;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->sales_ydue_paypent_ddata($year);
+//             }
+//         }
+//     else
+//         {
+//         $data['sales'] = $this->pm->sales_due_paypent_ddata();
+//         }
+    
+//     $data['company'] = $this->pm->company_details();
+
+//     $this->load->view('sale/sales_preport',$data);
+// }
+
 public function sales_payment_reports()
-    {
+{
     $data['title'] = 'Due Payment Report';
 
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
 
     if(isset($_GET['search']))
-        {
+    {
         $report = $_GET['reports'];
-        
+
         if($report == 'dailyReports')
-            {
+        {
             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
             $edate = date("Y-m-d", strtotime($_GET['edate']));
             $data['sdate'] = $sdate;
             $data['edate'] = $edate;
             $data['report'] = $report;
-            //var_dump($employee); exit();
-            $data['sales'] = $this->pm->sales_ddue_paypent_ddata($sdate,$edate);
-            }
+            // Fetch sales data with pagination
+            $data['sales'] = $this->pm->sales_ddue_paypent_ddata($sdate,$edate, $limit, $offset);
+        }
         else if ($report == 'monthlyReports')
-            {
+        {
             $month = $_GET['month'];
             $data['month'] = $month;
             $year = $_GET['year'];
             $data['year'] = $year;
-            //var_dump($data['month']); exit();
-            if($month == 01)
-                {
-                $name = 'January';
-                }
-            elseif ($month == 02)
-                {
-                $name = 'February';
-                }
-            elseif ($month == 03)
-                {
-                $name = 'March';
-                }
-            elseif ($month == 04)
-                {
-                $name = 'April';
-                }
-            elseif ($month == 05)
-                {
-                $name = 'May';
-                }
-            elseif ($month == 06)
-                {
-                $name = 'June';
-                }
-            elseif ($month == 07)
-                {
-                $name = 'July';
-                }
-            elseif ($month == 8)
-                {
-                $name = 'August';
-                }
-            elseif ($month == 9)
-                {
-                $name = 'September';
-                }
-            elseif ($month == 10)
-                {
-                $name = 'October';
-                }
-            elseif ($month == 11)
-                {
-                $name = 'November';
-                }
-            else
-                {
-                $name = 'December';
-                }
-            $data['name'] = $name;
-            $data['report'] = $report;
-
-            $data['sales'] = $this->pm->sales_mdue_paypent_ddata($month,$year);
-            }
+            // Fetch sales data with pagination
+            $data['sales'] = $this->pm->sales_mdue_paypent_ddata($month,$year, $limit, $offset);
+        }
         else if ($report == 'yearlyReports')
-            {
+        {
             $year = $_GET['ryear'];
             $data['year'] = $year;
             $data['report'] = $report;
-
-            $data['sales'] = $this->pm->sales_ydue_paypent_ddata($year);
-            }
+            // Fetch sales data with pagination
+            $data['sales'] = $this->pm->sales_ydue_paypent_ddata($year, $limit, $offset);
         }
+    }
     else
-        {
-        $data['sales'] = $this->pm->sales_due_paypent_ddata();
-        }
-    
+    {
+        // Fetch sales data with pagination
+        $data['sales'] = $this->pm->sales_due_paypent_ddata($limit, $offset);
+    }
+
     $data['company'] = $this->pm->company_details();
+
+    // Calculate total pages
+    $total_sales = count($data['sales']);
+    $total_pages = ceil($total_sales / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
 
     $this->load->view('sale/sales_preport',$data);
 }
 
-public function sales_vat_reports()
-    {
-    $data['title'] = 'Sales Report';
+// public function sales_vat_reports()
+//     {
+//     $data['title'] = 'Sales Report';
 
+//     $data['company'] = $this->pm->company_details();
+
+//     if(isset($_GET['search']))
+//         {
+//         $report = $_GET['reports'];
+        
+//         if($report == 'dailyReports')
+//             {
+//             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//             $edate = date("Y-m-d", strtotime($_GET['edate']));
+//             $data['sdate'] = $sdate;
+//             $data['edate'] = $edate;
+//             $data['report'] = $report;
+//             //var_dump($employee); exit();
+//             $data['sales'] = $this->pm->get_sales_dvat_data($sdate,$edate);
+//             }
+//         else if ($report == 'monthlyReports')
+//             {
+//             $month = $_GET['month'];
+//             $data['month'] = $month;
+//             $year = $_GET['year'];
+//             $data['year'] = $year;
+//             //var_dump($data['month']); exit();
+//             if($month == 01)
+//                 {
+//                 $name = 'January';
+//                 }
+//             elseif ($month == 02)
+//                 {
+//                 $name = 'February';
+//                 }
+//             elseif ($month == 03)
+//                 {
+//                 $name = 'March';
+//                 }
+//             elseif ($month == 04)
+//                 {
+//                 $name = 'April';
+//                 }
+//             elseif ($month == 05)
+//                 {
+//                 $name = 'May';
+//                 }
+//             elseif ($month == 06)
+//                 {
+//                 $name = 'June';
+//                 }
+//             elseif ($month == 07)
+//                 {
+//                 $name = 'July';
+//                 }
+//             elseif ($month == 8)
+//                 {
+//                 $name = 'August';
+//                 }
+//             elseif ($month == 9)
+//                 {
+//                 $name = 'September';
+//                 }
+//             elseif ($month == 10)
+//                 {
+//                 $name = 'October';
+//                 }
+//             elseif ($month == 11)
+//                 {
+//                 $name = 'November';
+//                 }
+//             else
+//                 {
+//                 $name = 'December';
+//                 }
+//             $data['name'] = $name;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->get_sales_mvat_data($month,$year);
+//             }
+//         else if ($report == 'yearlyReports')
+//             {
+//             $year = $_GET['ryear'];
+//             $data['year'] = $year;
+//             $data['report'] = $report;
+
+//             $data['sales'] = $this->pm->get_sales_yvat_data($year);
+//             }
+//         }
+//     else
+//         {
+//         $data['sales'] = $this->pm->get_sales_vat_data();
+//         }
+
+//     $this->load->view('sale/sales_vreports',$data);
+// }
+
+public function sales_vat_reports()
+{
+    $data['title'] = 'Sales Report';
     $data['company'] = $this->pm->company_details();
 
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
     if(isset($_GET['search']))
-        {
+    {
         $report = $_GET['reports'];
         
         if($report == 'dailyReports')
-            {
+        {
             $sdate = date("Y-m-d", strtotime($_GET['sdate']));
             $edate = date("Y-m-d", strtotime($_GET['edate']));
             $data['sdate'] = $sdate;
             $data['edate'] = $edate;
             $data['report'] = $report;
-            //var_dump($employee); exit();
-            $data['sales'] = $this->pm->get_sales_dvat_data($sdate,$edate);
-            }
-        else if ($report == 'monthlyReports')
-            {
+            $data['sales'] = $this->pm->get_sales_dvat_data($sdate, $edate, $offset, $limit);
+        }
+        elseif ($report == 'monthlyReports')
+        {
             $month = $_GET['month'];
             $data['month'] = $month;
             $year = $_GET['year'];
             $data['year'] = $year;
-            //var_dump($data['month']); exit();
-            if($month == 01)
-                {
-                $name = 'January';
-                }
-            elseif ($month == 02)
-                {
-                $name = 'February';
-                }
-            elseif ($month == 03)
-                {
-                $name = 'March';
-                }
-            elseif ($month == 04)
-                {
-                $name = 'April';
-                }
-            elseif ($month == 05)
-                {
-                $name = 'May';
-                }
-            elseif ($month == 06)
-                {
-                $name = 'June';
-                }
-            elseif ($month == 07)
-                {
-                $name = 'July';
-                }
-            elseif ($month == 8)
-                {
-                $name = 'August';
-                }
-            elseif ($month == 9)
-                {
-                $name = 'September';
-                }
-            elseif ($month == 10)
-                {
-                $name = 'October';
-                }
-            elseif ($month == 11)
-                {
-                $name = 'November';
-                }
-            else
-                {
-                $name = 'December';
-                }
+            
+            // Your month name logic here
+            
             $data['name'] = $name;
             $data['report'] = $report;
-
-            $data['sales'] = $this->pm->get_sales_mvat_data($month,$year);
-            }
-        else if ($report == 'yearlyReports')
-            {
+            $data['sales'] = $this->pm->get_sales_mvat_data($month, $year, $offset, $limit);
+        }
+        elseif ($report == 'yearlyReports')
+        {
             $year = $_GET['ryear'];
             $data['year'] = $year;
             $data['report'] = $report;
-
-            $data['sales'] = $this->pm->get_sales_yvat_data($year);
-            }
+            $data['sales'] = $this->pm->get_sales_yvat_data($year, $offset, $limit);
         }
+    }
     else
-        {
-        $data['sales'] = $this->pm->get_sales_vat_data();
-        }
+    {
+        $data['sales'] = $this->pm->get_sales_vat_data($offset, $limit);
+    }
 
-    $this->load->view('sale/sales_vreports',$data);
+    // Count total sales for pagination
+    $total_sales = count($this->pm->get_sales_vat_data());
+
+    // Calculate total pages
+    $total_pages = ceil($total_sales / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('sale/sales_vreports', $data);
 }
 
 ########### Pos Sales start ##################################
@@ -1610,104 +2053,202 @@ public function get_pos_sale_details_with_code($code){
      echo json_encode($products);
 }
 
-public function sales_product_reports()
-  {
-  $data['title'] = 'Sales Product Report';
+// public function sales_product_reports()
+//   {
+//   $data['title'] = 'Sales Product Report';
   
-  $data['product'] = $this->pm->get_data('products',false);
-  $data['company'] = $this->pm->company_details();
+//   $data['product'] = $this->pm->get_data('products',false);
+//   $data['company'] = $this->pm->company_details();
 
-  if(isset($_GET['search']))
-    {
-    $report = $_GET['reports'];
+//   if(isset($_GET['search']))
+//     {
+//     $report = $_GET['reports'];
     
-    if($report == 'dailyReports')
-        {
-        $sdate = date("Y-m-d", strtotime($_GET['sdate']));
-        $edate = date("Y-m-d", strtotime($_GET['edate']));
-        $pid = $_GET['dproduct'];
-        $data['sdate'] = $sdate;
-        $data['edate'] = $edate;
-        $data['report'] = $report;
-        //var_dump($data); exit();
-        $data['sales'] = $this->pm->get_dsales_product_data($sdate,$edate,$pid);
-        }
-    else if ($report == 'monthlyReports')
-        {
-        $month = $_GET['month'];
-        $data['month'] = $month;
-        $year = $_GET['year'];
-        $data['year'] = $year;
-        //var_dump($data['month']); exit();
-        if($month == 01)
-            {
-            $name = 'January';
-            }
-        elseif ($month == 02)
-            {
-            $name = 'February';
-            }
-        elseif ($month == 03)
-            {
-            $name = 'March';
-            }
-        elseif ($month == 04)
-            {
-            $name = 'April';
-            }
-        elseif ($month == 05)
-            {
-            $name = 'May';
-            }
-        elseif ($month == 06)
-            {
-            $name = 'June';
-            }
-        elseif ($month == 07)
-            {
-            $name = 'July';
-            }
-        elseif ($month == 8)
-            {
-            $name = 'August';
-            }
-        elseif ($month == 9)
-            {
-            $name = 'September';
-            }
-        elseif ($month == 10)
-            {
-            $name = 'October';
-            }
-        elseif ($month == 11)
-            {
-            $name = 'November';
-            }
-        else
-            {
-            $name = 'December';
-            }
-        $data['name'] = $name;
-        $data['report'] = $report;
-        $pid = $_GET['mproduct'];
+//     if($report == 'dailyReports')
+//         {
+//         $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+//         $edate = date("Y-m-d", strtotime($_GET['edate']));
+//         $pid = $_GET['dproduct'];
+//         $data['sdate'] = $sdate;
+//         $data['edate'] = $edate;
+//         $data['report'] = $report;
+//         //var_dump($data); exit();
+//         $data['sales'] = $this->pm->get_dsales_product_data($sdate,$edate,$pid);
+//         }
+//     else if ($report == 'monthlyReports')
+//         {
+//         $month = $_GET['month'];
+//         $data['month'] = $month;
+//         $year = $_GET['year'];
+//         $data['year'] = $year;
+//         //var_dump($data['month']); exit();
+//         if($month == 01)
+//             {
+//             $name = 'January';
+//             }
+//         elseif ($month == 02)
+//             {
+//             $name = 'February';
+//             }
+//         elseif ($month == 03)
+//             {
+//             $name = 'March';
+//             }
+//         elseif ($month == 04)
+//             {
+//             $name = 'April';
+//             }
+//         elseif ($month == 05)
+//             {
+//             $name = 'May';
+//             }
+//         elseif ($month == 06)
+//             {
+//             $name = 'June';
+//             }
+//         elseif ($month == 07)
+//             {
+//             $name = 'July';
+//             }
+//         elseif ($month == 8)
+//             {
+//             $name = 'August';
+//             }
+//         elseif ($month == 9)
+//             {
+//             $name = 'September';
+//             }
+//         elseif ($month == 10)
+//             {
+//             $name = 'October';
+//             }
+//         elseif ($month == 11)
+//             {
+//             $name = 'November';
+//             }
+//         else
+//             {
+//             $name = 'December';
+//             }
+//         $data['name'] = $name;
+//         $data['report'] = $report;
+//         $pid = $_GET['mproduct'];
 
-        $data['sales'] = $this->pm->get_msales_product_data($month,$year,$pid);
-        }
-    else if ($report == 'yearlyReports')
-        {
-        $year = $_GET['ryear'];
-        $data['year'] = $year;
-        $data['report'] = $report;
-        $pid = $_GET['yproduct'];
+//         $data['sales'] = $this->pm->get_msales_product_data($month,$year,$pid);
+//         }
+//     else if ($report == 'yearlyReports')
+//         {
+//         $year = $_GET['ryear'];
+//         $data['year'] = $year;
+//         $data['report'] = $report;
+//         $pid = $_GET['yproduct'];
 
-        $data['sales'] = $this->pm->get_ysales_product_data($year,$pid);
+//         $data['sales'] = $this->pm->get_ysales_product_data($year,$pid);
+//         }
+//     }
+//   else
+//     {
+//     $data['sales'] = $this->pm->get_sales_product_data();
+//     }
+
+//     $this->load->view('sale/sales_product',$data);
+// }
+
+public function sales_product_reports()
+{
+    $data['title'] = 'Sales Product Report';
+  
+    $data['product'] = $this->pm->get_data('products', false);
+    $data['company'] = $this->pm->company_details();
+
+    // Pagination variables
+    $limit = 25; // Number of items per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    if (isset($_GET['search'])) {
+        $report = $_GET['reports'];
+
+        if ($report == 'dailyReports') {
+            $sdate = date("Y-m-d", strtotime($_GET['sdate']));
+            $edate = date("Y-m-d", strtotime($_GET['edate']));
+            $pid = $_GET['dproduct'];
+            $data['sdate'] = $sdate;
+            $data['edate'] = $edate;
+            $data['report'] = $report;
+            $data['sales'] = $this->pm->get_dsales_product_data($sdate, $edate, $pid, $limit, $offset);
+        } else if ($report == 'monthlyReports') {
+            $month = $_GET['month'];
+            $data['month'] = $month;
+            $year = $_GET['year'];
+            $data['year'] = $year;
+
+            if ($month == 1) {
+                $name = 'January';
+            } elseif ($month == 2) {
+                $name = 'February';
+            } elseif ($month == 3) {
+                $name = 'March';
+            } elseif ($month == 4) {
+                $name = 'April';
+            } elseif ($month == 5) {
+                $name = 'May';
+            } elseif ($month == 6) {
+                $name = 'June';
+            } elseif ($month == 7) {
+                $name = 'July';
+            } elseif ($month == 8) {
+                $name = 'August';
+            } elseif ($month == 9) {
+                $name = 'September';
+            } elseif ($month == 10) {
+                $name = 'October';
+            } elseif ($month == 11) {
+                $name = 'November';
+            } else {
+                $name = 'December';
+            }
+            $data['name'] = $name;
+            $data['report'] = $report;
+            $pid = $_GET['mproduct'];
+
+            $data['sales'] = $this->pm->get_msales_product_data($month, $year, $pid, $limit, $offset);
+        } else if ($report == 'yearlyReports') {
+            $year = $_GET['ryear'];
+            $data['year'] = $year;
+            $data['report'] = $report;
+            $pid = $_GET['yproduct'];
+
+            $data['sales'] = $this->pm->get_ysales_product_data($year, $pid, $limit, $offset);
         }
+    } else {
+        $data['sales'] = $this->pm->get_sales_product_data($limit, $offset);
     }
-  else
-    {
-    $data['sales'] = $this->pm->get_sales_product_data();
-    }
 
-    $this->load->view('sale/sales_product',$data);
+    // Calculate total pages
+    $total_sales = count($data['sales']);
+    $total_pages = ceil($total_sales / $limit);
+
+    // Generate pagination HTML
+    $pagination_html = '<ul class="pagination">';
+    if ($page > 1) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+    }
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $pagination_html .= '<li class="paginated';
+        if ($page == $i) {
+            $pagination_html .= ' active'; // Adding "active" class for the current page
+        }
+        $pagination_html .= '"><a href="?page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($page < $total_pages) {
+        $pagination_html .= '<li class="paginated"><a href="?page=' . ($page + 1) . '">Next</a></li>';
+    }
+    $pagination_html .= '</ul>';
+
+    $data['pagination_html'] = $pagination_html;
+
+    $this->load->view('sale/sales_product', $data);
 }
+
 }

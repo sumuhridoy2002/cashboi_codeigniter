@@ -214,6 +214,8 @@
                       </tr>
                     </tfoot>
                   </table>
+                  <!-- Pagination -->
+                  <?php echo $pagination_html; ?>
                 </div><br>
                 <div class="form-group col-md-12" style="text-align: center;margin-top: 20px">
                   <a href="javascript:void(0)" style="width: 100px;" value="Print" onclick="printDiv('print')" class="btn btn-primary"><i class="fa fa-print"> </i>  Print</a>

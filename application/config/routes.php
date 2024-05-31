@@ -110,7 +110,6 @@ $route['editTransAccount/(:num)'] = 'CashAccount/edit_transfer_account/$1';
 $route['adjustment_list'] = 'CashAccount/adjustment_list';
 $route['balance_adjustment'] = 'CashAccount/balance_adjustment';
 
-
 $route['BankAccount'] = 'BankAccount';
 $route['bankReport'] = 'BankAccount/mobile_reports';
 $route['bankTReport'] = 'BankAccount/bank_transation_reports';
