@@ -76,17 +76,24 @@
                       <input type="hidden" class="form-control" name="amount" id="pAmount" value="0"required  >
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-12 col-12" style="margin-top: 30px;" >
-                    <h5><b>Payment Method</b></h5><hr>
+                  <div class="col-sm-4 col-md-4 col-12" style="margin-top: 30px;" >
+                    <h5><b>Select Payment Method *</b></h5>
+                    <select name="payment_method" class="form-control">
+                      <option value="Bkash">Bkash</option>
+                      <option value="SslCommerz">SslCommerz</option>
+                    </select>
                   </div>
-                  <div class="col-sm-12 col-md-12 col-12" >
+
+                  <!-- <div class="col-sm-12 col-md-12 col-12" >
                     <img src="<?php echo base_url().'assets/pby.png'; ?>" style="height:auto; width: 60%;">
-                  </div>
+                  </div> -->
+
+                  <hr>
                   <div class="col-sm-12 col-md-12 col-12" style="margin-top: 20px;" >
                     <input type="checkbox" name="checkbox" value="1" required > I have read and agree to the website terms and conditions, Privacy Policy, Return and Refund Policy*
                   </div>
                  <div class="form-group col-md-12 col-sm-12 col-xs-12" style="text-align: center; margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary">Confirm Order</button>
+                    <button type="submit" class="btn btn-primary">Pay Bill</button>
                   </div>
                 </form>
               </div>

@@ -253,3 +253,6 @@ $route['fail'] = 'Payment/fail_payment';
 $route['cancel'] = 'Payment/cancel_payment';
 $route['ipn'] = 'Payment/ipn_listener';
 $route['allTransaction'] = 'Home/all_transaction_report';
+
+# Bkash - Hridoy
+$route['bkash/callback'] = 'Payment/bkashCallback';

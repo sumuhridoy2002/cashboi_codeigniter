@@ -1380,10 +1380,8 @@ public function user_bill_list()
 }
 
 public function user_bill_payment()
-    {
+{
     $data['title'] = 'Bill Pay';
-
-    //var_dump($data['users']); exit();
     $this->load->view('vouchers/pay_user_bill',$data);
 }
 
