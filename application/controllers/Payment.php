@@ -92,6 +92,17 @@ class Payment extends CI_Controller
       $responseData = json_decode($response, true);
 
       if (isset($responseData['bkashURL'])) {
+        $where = ['uid' => $_SESSION['uid']];
+        $payment = $this->db->select('*')->from('user_payments')->where('uid', $_SESSION['uid'])->where('pstatus', 1)->order_by('up_id', 'desc')->get()->row();
+        $user = $this->pm->get_data('users', $where);
+        
+        if($payment) $pcdate = date('Y-m-d h:i:s',strtotime($payment->pdate));
+        else $pcdate = date('Y-m-d h:i:s',strtotime($user[0]['regdate']));
+        if($info['ptime'] == 1) $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 1 months'));
+        elseif($info['ptime'] == 2) $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 3 months'));
+        elseif($info['ptime'] == 3) $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 6 months'));
+        elseif($info['ptime'] == 4) $pdate = date('Y-m-d h:i:s',strtotime($pcdate. ' + 1 year'));
+
         $paymentData = [
           'compid'  => $_SESSION['compid'],
           'package' => $info['utype'],
@@ -99,12 +110,19 @@ class Payment extends CI_Controller
           'uid'     => $_SESSION['uid'],
           'ptime'   => $info['ptime'],
           'pstatus' => 0,
-          'pdate'   => date('Y-m-d H:i:s'),
+          'pdate'   => $pdate,
           'regby'   => $_SESSION['uid']
         ];
         $result = $this->pm->insert_data('user_payments', $paymentData);
         $this->session->set_userdata('paymentId', $result);
         $this->session->set_userdata('bkashPaymentID', $responseData['paymentID']);
+        $userId=$_SESSION['uid'];
+        $this->session->set_userdata('userId', $userId);
+        $x = [
+          'tran_id'  => "SSLC".uniqid(),
+          'amount'   => $info['amount'],
+          'currency' => "BDT"];
+        $this->session->set_userdata('tarndata',$x);
         redirect($responseData['bkashURL']);
       } else {
         echo 'Error: ' . json_encode($responseData);

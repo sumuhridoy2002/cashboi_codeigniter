@@ -20,7 +20,7 @@ Product Details Page
 
 Checkout Page
 
-2) Bkash Payment Gateway ad kore Dite hobe // user der Monthly or Yearly Subscription paynet naoyer jonno NOT-DONE
+2) Bkash Payment Gateway ad kore Dite hobe // user der Monthly or Yearly Subscription paynet naoyer jonno DONE
 
 Bkash Payment gateway id pass:
 
@@ -62,7 +62,7 @@ Sms Send
 
 5) Monthly Package Subsction chalu hole + bondo hole DONE
 
-4) Pathao Courier + Steed fast Courier Payment api (Online Order or Menual Order gulu ) NOT-DONE
+4) Pathao Courier + Steed fast Courier Payment api (Online Order or Menual Order gulu ) DONE
 
 5) Ecommerce Website jonno akta Pixel setup opton kore dite hobe user wise landing page api DONE
 
